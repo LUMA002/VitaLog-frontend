@@ -89,10 +89,13 @@ copilot-instructions.md
 .cursor/
 .cursorrules
 .cursorignore
+*.mdc
 .aix/
 .ai/
 *.ai-chat
 *.prompt
+.github/instructions/
+*.instructions.md
 
 # Environment Variables & Secrets
 # (Files to save URLs for APIs and other public keys)
