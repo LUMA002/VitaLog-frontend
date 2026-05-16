@@ -1,5 +1,5 @@
 name: vita_log
-description: "A new Flutter project."
+description: "VitaLog (V2) Offline-First App"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -35,6 +35,40 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+# --- UI, Navigation and Localization ---
+  go_router: ^17.2.3 # Standard for complex navigation and Deep Links
+  slang_flutter: ^4.4.1 # Fastest and strictest typed localization (i18n)
+  
+  # --- State Management ---
+  flutter_riverpod: ^3.3.1 # State management
+  riverpod_annotation: ^4.0.2 # Annotations for code generation Riverpod 3.0
+  
+  # --- Local DB (Offline-First) ---
+  drift: ^2.22.0 #  SQLite ORM for Flutter
+  sqlite3_flutter_libs: ^0.6.0+eol # Native SQLite libraries for different OSs
+  path_provider: ^2.1.5 # Access to the file system
+  path: ^1.9.0 # Work with file paths
+
+  # --- Data Models ---
+  freezed_annotation: ^3.1.0 # Annotations for immutable classes
+  json_annotation: ^4.9.0 # Serialization DTO to JSON and back
+  uuid: ^4.5.1 # Generation of unique IDs (v4)
+  intl: ^0.20.2 # Formatting dates and numbers
+
+  # --- Network and Synchronization ---
+  dio: ^5.9.2 # HTTP client
+  connectivity_plus: ^7.1.1 # Check for WiFi/Mobile network presence
+  internet_connection_checker_plus: ^3.0.0 # PING: Check for real internet access
+  
+  # --- Security and Logging ---
+  flutter_secure_storage: ^10.2.0 # Encrypted storage for JWT tokens
+  talker_flutter: ^5.1.17 # Logger with UI for viewing errors directly in the app
+  talker_dio_logger: ^5.1.17 # Automatic logging of all HTTP requests/responses
+
+  # --- Notifications (Sliding Window) ---
+  flutter_local_notifications: ^21.0.0 # Local notifications
+  timezone: ^0.11.0 # Timezone for scheduling notifications
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,6 +79,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+
+  # --- Code Generation ---
+  build_runner: ^2.4.15 # Runner for all generators
+  riverpod_generator: ^4.0.3 # Generates providers
+  drift_dev: ^2.22.0 # Generates DB classes
+  freezed: ^3.2.5 # Generates `copyWith`, `==`, `hashCode`
+  json_serializable: ^6.9.5 # Generates `fromJson` / `toJson`
+  slang_build_runner: ^4.4.1 # Generates translations from JSON files
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
