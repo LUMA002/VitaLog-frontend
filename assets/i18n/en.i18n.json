@@ -1,0 +1,105 @@
+{
+  "appName": "VitaLog",
+  "nav": {
+    "today": "Today",
+    "history": "History",
+    "courses": "Courses",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Today's Plan",
+    "empty": "No courses scheduled for today.",
+    "quickLog": "Log intake"
+  },
+  "logs": {
+    "title": "History",
+    "tabs": {
+      "intake": "Intake",
+      "wellbeing": "Wellbeing"
+    },
+    "empty": "No logs yet."
+  },
+  "courses": {
+    "title": "Courses",
+    "new": "New Course",
+    "edit": "Edit Course",
+    "empty": "No active courses.",
+    "fields": {
+      "product": "Product",
+      "servingSize": "Serving size",
+      "timeOfDay": "Time of day",
+      "startDate": "Start date",
+      "endDate": "End date (optional)"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "new": "New Product",
+    "global": "Global",
+    "custom": "Custom"
+  },
+  "settings": {
+    "title": "Settings",
+    "account": {
+      "title": "Account",
+      "guest": "Guest",
+      "signInCta": "Sign in to enable cloud sync",
+      "logout": "Sign out",
+      "keepData": "Keep local data",
+      "eraseData": "Erase synced data"
+    },
+    "sync": {
+      "title": "Synchronization",
+      "lastSync": "Last sync",
+      "syncNow": "Sync now",
+      "wifiOnly": "Wi-Fi only",
+      "never": "Never"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "rebuild": "Rebuild schedule"
+    },
+    "developer": {
+      "title": "Developer",
+      "viewLogs": "View logs"
+    },
+    "danger": {
+      "title": "Danger Zone",
+      "eraseDb": "Erase local database"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account? Register"
+    },
+    "register": {
+      "title": "Create Account",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account? Sign In"
+    }
+  },
+  "errors": {
+    "network": "Network error. Please check your connection.",
+    "auth": {
+      "expired": "Session expired. Please sign in again.",
+      "unauthorized": "Unauthorized."
+    },
+    "sync": "Sync failed. Will retry automatically.",
+    "unknown": "Something went wrong.",
+    "deviceTime": "Please check your device time and try again."
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "retry": "Retry"
+  }
+}
