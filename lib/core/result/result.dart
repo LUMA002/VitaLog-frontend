@@ -1,3 +1,10 @@
+/// Represents the absence of a meaningful return value in [Result].
+/// Use as the success type for operations that return nothing on success.
+final class Unit {
+  const Unit._();
+  static const instance = Unit._();
+}
+
 sealed class Result<T, E> {
   const Result();
 }

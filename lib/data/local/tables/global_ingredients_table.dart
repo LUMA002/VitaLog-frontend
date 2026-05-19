@@ -4,8 +4,8 @@ import 'syncable.dart';
 
 /// Server-seeded catalog of known nutrients (Vitamin C, Magnesium, etc.).
 ///
-/// [category] maps to the backend's `IngredientCategory` enum by index:
-///   0 = Vitamin, 1 = Mineral, 2 = Supplement, 3 = Nootropic.
+/// [category] maps to the backend's `IngredientCategory` enum (1-based):
+///   1 = Vitamin, 2 = Mineral, 3 = Supplement.
 ///
 /// This table is read-mostly on the client. Writes happen exclusively via
 /// the sync pull path ([GlobalIngredientsDao.upsertBatch]).
@@ -14,7 +14,7 @@ class GlobalIngredients extends Table with Syncable {
   TextColumn get name => text()();
   TextColumn get defaultUnit => text()();
 
-  /// [IngredientCategory] enum index. See domain model for mapping.
+  /// Backend [IngredientCategory] value (1 = vitamin, 2 = mineral, 3 = supplement).
   IntColumn get category => integer()();
 
   @override

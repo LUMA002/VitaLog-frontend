@@ -43,6 +43,11 @@ class ProductsDao extends DatabaseAccessor<AppDatabase>
             ..where((t) => t.productId.equals(productId)))
           .watch();
 
+  /// Single product ingredient by UUID. Returns null if not found.
+  Future<ProductIngredientsData?> getIngredientById(String id) =>
+      (select(productIngredients)..where((t) => t.id.equals(id)))
+          .getSingleOrNull();
+
   /// Ingredient rows awaiting push, oldest first.
   Future<List<ProductIngredientsData>> getPendingIngredientSync() =>
       (select(productIngredients)

@@ -2084,7 +2084,7 @@ class IntakeLogsData extends DataClass implements Insertable<IntakeLogsData> {
   final double actualServingSize;
 
   /// Exact UTC moment the supplement was taken.
-  /// Column<int> = SQL INTEGER; data class exposes `DateTime` via converter.
+  /// `Column<int>` = SQL INTEGER; data class exposes `DateTime` via converter.
   final DateTime takenAt;
   const IntakeLogsData({
     required this.id,
@@ -3135,7 +3135,7 @@ class WellbeingLogData extends DataClass
   final String id;
 
   /// The date this entry describes (not the time it was created).
-  /// Column<int> = SQL INTEGER; data class exposes `DateTime` via converter.
+  /// `Column<int>` = SQL INTEGER; data class exposes `DateTime` via converter.
   final DateTime recordedAt;
 
   /// Subjective mood score: 1 (terrible) – 5 (great).
@@ -3625,7 +3625,7 @@ class SyncMetaData extends DataClass implements Insertable<SyncMetaData> {
   final int id;
 
   /// UTC timestamp of the last successful sync. NULL before first sync.
-  /// Column<int> = SQL INTEGER; data class exposes `DateTime?` via converter.
+  /// `Column<int>` = SQL INTEGER; data class exposes `DateTime?` via converter.
   final DateTime? lastSyncAt;
 
   /// Duration of the last sync operation in milliseconds.
