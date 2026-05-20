@@ -4,12 +4,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../core/logger/talker.dart';
+import '../../features/auth/application/auth_controller.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
+import '../../features/courses/presentation/course_form_screen.dart';
 import '../../features/courses/presentation/courses_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/logs/presentation/logs_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../i18n/strings.g.dart';
 import 'routes.dart';
 
 part 'app_router.g.dart';
@@ -21,13 +24,15 @@ GoRouter appRouter(Ref ref) {
     observers: [TalkerRouteObserver(talker)],
     routes: [
       StatefulShellRoute.indexedStack(
-        builder: (context, state, shell) => _ShellScaffold(shell: shell),
+        builder: (context, state, shell) =>
+            _ShellScaffold(shell: shell),
         branches: [
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: AppRoutes.dashboard,
-                builder: (context, state) => const DashboardScreen(),
+                builder: (context, state) =>
+                    const DashboardScreen(),
               ),
             ],
           ),
@@ -48,12 +53,13 @@ GoRouter appRouter(Ref ref) {
                   GoRoute(
                     path: 'new',
                     builder: (context, state) =>
-                        const _PlaceholderScreen(title: 'New Course'),
+                        const CourseFormScreen(),
                   ),
                   GoRoute(
                     path: ':id/edit',
-                    builder: (context, state) =>
-                        const _PlaceholderScreen(title: 'Edit Course'),
+                    builder: (context, state) => CourseFormScreen(
+                      courseId: state.pathParameters['id'],
+                    ),
                   ),
                 ],
               ),
@@ -63,7 +69,8 @@ GoRouter appRouter(Ref ref) {
             routes: [
               GoRoute(
                 path: AppRoutes.settings,
-                builder: (context, state) => const SettingsScreen(),
+                builder: (context, state) =>
+                    const SettingsScreen(),
               ),
             ],
           ),
@@ -93,15 +100,26 @@ GoRouter appRouter(Ref ref) {
       ),
     ],
     redirect: (context, state) {
-      // Phase 1: no redirect - guest mode is always allowed.
-      // Phase 4 will add: protect /settings/sync behind auth.
+      // Guest mode is always allowed — only protect the sync sub-route.
+      if (state.matchedLocation == AppRoutes.settingsSync) {
+        final authState =
+            ref.read(authControllerProvider).value;
+        if (authState is! Authenticated) {
+          return AppRoutes.authLogin;
+        }
+      }
       return null;
     },
   );
 
+  // Refresh the router (re-runs redirect) whenever auth state changes.
+  ref.listen(authControllerProvider, (_, _) => router.refresh());
+
   ref.onDispose(router.dispose);
   return router;
 }
+
+// ── Shell scaffold (adaptive) ─────────────────────────────────────────────────
 
 class _ShellScaffold extends StatelessWidget {
   const _ShellScaffold({required this.shell});
@@ -110,37 +128,79 @@ class _ShellScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final width = MediaQuery.of(context).size.width;
+
+    final destinations = [
+      (
+        icon: Icons.today_outlined,
+        selectedIcon: Icons.today_rounded,
+        label: t.nav.today,
+      ),
+      (
+        icon: Icons.history_outlined,
+        selectedIcon: Icons.history_rounded,
+        label: t.nav.history,
+      ),
+      (
+        icon: Icons.medication_outlined,
+        selectedIcon: Icons.medication_rounded,
+        label: t.nav.courses,
+      ),
+      (
+        icon: Icons.settings_outlined,
+        selectedIcon: Icons.settings_rounded,
+        label: t.nav.settings,
+      ),
+    ];
+
+    if (width >= 600) {
+      // Tablet / Desktop: NavigationRail on the left.
+      return Scaffold(
+        body: Row(
+          children: [
+            NavigationRail(
+              selectedIndex: shell.currentIndex,
+              onDestinationSelected: shell.goBranch,
+              extended: width >= 1000,
+              destinations: destinations
+                  .map(
+                    (d) => NavigationRailDestination(
+                      icon: Icon(d.icon),
+                      selectedIcon: Icon(d.selectedIcon),
+                      label: Text(d.label),
+                    ),
+                  )
+                  .toList(),
+            ),
+            const VerticalDivider(width: 1, thickness: 1),
+            Expanded(child: shell),
+          ],
+        ),
+      );
+    }
+
+    // Mobile: bottom NavigationBar.
     return Scaffold(
       body: shell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
         onDestinationSelected: shell.goBranch,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.today_outlined),
-            selectedIcon: Icon(Icons.today),
-            label: 'Today',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.history_outlined),
-            selectedIcon: Icon(Icons.history),
-            label: 'History',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.medication_outlined),
-            selectedIcon: Icon(Icons.medication),
-            label: 'Courses',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
+        destinations: destinations
+            .map(
+              (d) => NavigationDestination(
+                icon: Icon(d.icon),
+                selectedIcon: Icon(d.selectedIcon),
+                label: d.label,
+              ),
+            )
+            .toList(),
       ),
     );
   }
 }
+
+// ── Placeholder ───────────────────────────────────────────────────────────────
 
 class _PlaceholderScreen extends StatelessWidget {
   const _PlaceholderScreen({required this.title});

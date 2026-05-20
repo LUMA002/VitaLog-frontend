@@ -606,3 +606,306 @@ final class WellbeingLogRepositoryProvider
 
 String _$wellbeingLogRepositoryHash() =>
     r'703c72cb265627ba45100eaa1d94f428e49a06c7';
+
+/// Stream of active courses for [userId] (null = guest mode).
+
+@ProviderFor(activeCourseStream)
+final activeCourseStreamProvider = ActiveCourseStreamFamily._();
+
+/// Stream of active courses for [userId] (null = guest mode).
+
+final class ActiveCourseStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Course>>,
+          List<Course>,
+          Stream<List<Course>>
+        >
+    with $FutureModifier<List<Course>>, $StreamProvider<List<Course>> {
+  /// Stream of active courses for [userId] (null = guest mode).
+  ActiveCourseStreamProvider._({
+    required ActiveCourseStreamFamily super.from,
+    required String? super.argument,
+  }) : super(
+         retry: null,
+         name: r'activeCourseStreamProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$activeCourseStreamHash();
+
+  @override
+  String toString() {
+    return r'activeCourseStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Course>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Course>> create(Ref ref) {
+    final argument = this.argument as String?;
+    return activeCourseStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ActiveCourseStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$activeCourseStreamHash() =>
+    r'492226ed9b5c291274b323288e07062c221dc0c0';
+
+/// Stream of active courses for [userId] (null = guest mode).
+
+final class ActiveCourseStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<Course>>, String?> {
+  ActiveCourseStreamFamily._()
+    : super(
+        retry: null,
+        name: r'activeCourseStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Stream of active courses for [userId] (null = guest mode).
+
+  ActiveCourseStreamProvider call(String? userId) =>
+      ActiveCourseStreamProvider._(argument: userId, from: this);
+
+  @override
+  String toString() => r'activeCourseStreamProvider';
+}
+
+/// Stream of all intake logs for [userId] (null = guest mode).
+
+@ProviderFor(userIntakeLogStream)
+final userIntakeLogStreamProvider = UserIntakeLogStreamFamily._();
+
+/// Stream of all intake logs for [userId] (null = guest mode).
+
+final class UserIntakeLogStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<IntakeLog>>,
+          List<IntakeLog>,
+          Stream<List<IntakeLog>>
+        >
+    with $FutureModifier<List<IntakeLog>>, $StreamProvider<List<IntakeLog>> {
+  /// Stream of all intake logs for [userId] (null = guest mode).
+  UserIntakeLogStreamProvider._({
+    required UserIntakeLogStreamFamily super.from,
+    required String? super.argument,
+  }) : super(
+         retry: null,
+         name: r'userIntakeLogStreamProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$userIntakeLogStreamHash();
+
+  @override
+  String toString() {
+    return r'userIntakeLogStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<IntakeLog>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<IntakeLog>> create(Ref ref) {
+    final argument = this.argument as String?;
+    return userIntakeLogStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserIntakeLogStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$userIntakeLogStreamHash() =>
+    r'6de7c373b04883b55567faf94b9c67ba2d560afb';
+
+/// Stream of all intake logs for [userId] (null = guest mode).
+
+final class UserIntakeLogStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<IntakeLog>>, String?> {
+  UserIntakeLogStreamFamily._()
+    : super(
+        retry: null,
+        name: r'userIntakeLogStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Stream of all intake logs for [userId] (null = guest mode).
+
+  UserIntakeLogStreamProvider call(String? userId) =>
+      UserIntakeLogStreamProvider._(argument: userId, from: this);
+
+  @override
+  String toString() => r'userIntakeLogStreamProvider';
+}
+
+/// Stream of all products (global + custom), soft-deleted excluded by repo.
+
+@ProviderFor(allProductStream)
+final allProductStreamProvider = AllProductStreamProvider._();
+
+/// Stream of all products (global + custom), soft-deleted excluded by repo.
+
+final class AllProductStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Product>>,
+          List<Product>,
+          Stream<List<Product>>
+        >
+    with $FutureModifier<List<Product>>, $StreamProvider<List<Product>> {
+  /// Stream of all products (global + custom), soft-deleted excluded by repo.
+  AllProductStreamProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allProductStreamProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allProductStreamHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Product>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Product>> create(Ref ref) {
+    return allProductStream(ref);
+  }
+}
+
+String _$allProductStreamHash() => r'6020a8a1cf2711851559a95e0bb888db814c7bd5';
+
+/// Stream of all wellbeing log entries, newest first.
+
+@ProviderFor(allWellbeingLogStream)
+final allWellbeingLogStreamProvider = AllWellbeingLogStreamProvider._();
+
+/// Stream of all wellbeing log entries, newest first.
+
+final class AllWellbeingLogStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<WellbeingLog>>,
+          List<WellbeingLog>,
+          Stream<List<WellbeingLog>>
+        >
+    with
+        $FutureModifier<List<WellbeingLog>>,
+        $StreamProvider<List<WellbeingLog>> {
+  /// Stream of all wellbeing log entries, newest first.
+  AllWellbeingLogStreamProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allWellbeingLogStreamProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allWellbeingLogStreamHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<WellbeingLog>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<WellbeingLog>> create(Ref ref) {
+    return allWellbeingLogStream(ref);
+  }
+}
+
+String _$allWellbeingLogStreamHash() =>
+    r'7709b868b19cba1e7246e4630790cd90a976376d';
+
+/// Stream of the last successful sync timestamp from [SyncMeta].
+/// Emits `null` before the first sync has ever run.
+
+@ProviderFor(lastSyncAtStream)
+final lastSyncAtStreamProvider = LastSyncAtStreamProvider._();
+
+/// Stream of the last successful sync timestamp from [SyncMeta].
+/// Emits `null` before the first sync has ever run.
+
+final class LastSyncAtStreamProvider
+    extends
+        $FunctionalProvider<AsyncValue<DateTime?>, DateTime?, Stream<DateTime?>>
+    with $FutureModifier<DateTime?>, $StreamProvider<DateTime?> {
+  /// Stream of the last successful sync timestamp from [SyncMeta].
+  /// Emits `null` before the first sync has ever run.
+  LastSyncAtStreamProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'lastSyncAtStreamProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$lastSyncAtStreamHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<DateTime?> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<DateTime?> create(Ref ref) {
+    return lastSyncAtStream(ref);
+  }
+}
+
+String _$lastSyncAtStreamHash() => r'34f5a6886d16a2ef64288e78eab7aefa8b5cc104';

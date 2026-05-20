@@ -21,7 +21,7 @@
   },
   "courses": {
     "title": "Courses",
-    "new": "New Course",
+    "create": "New Course",
     "edit": "Edit Course",
     "empty": "No active courses.",
     "fields": {

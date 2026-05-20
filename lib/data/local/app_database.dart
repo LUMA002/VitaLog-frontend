@@ -4,6 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:sqlite3/sqlite3.dart';
+import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 import 'converters/microsecond_datetime_converter.dart';
 import 'daos/courses_dao.dart';
@@ -137,5 +139,12 @@ class AppDatabase extends _$AppDatabase {
 LazyDatabase _openConnection() => LazyDatabase(() async {
   final dbFolder = await getApplicationDocumentsDirectory();
   final file = File(p.join(dbFolder.path, 'vita_log.sqlite'));
+
+  if (Platform.isAndroid) {
+    await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
+    // Android has no /tmp dir, use app temp dir instead (Drift docs).
+    sqlite3.tempDirectory = (await getTemporaryDirectory()).path;
+  }
+
   return NativeDatabase.createInBackground(file);
 });

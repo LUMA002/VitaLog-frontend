@@ -2618,7 +2618,7 @@ class GlobalIngredientsData extends DataClass
   final String name;
   final String defaultUnit;
 
-  /// [IngredientCategory] enum index. See domain model for mapping.
+  /// Backend [IngredientCategory] value (1 = vitamin, 2 = mineral, 3 = supplement).
   final int category;
   const GlobalIngredientsData({
     required this.id,

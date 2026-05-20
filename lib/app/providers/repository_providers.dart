@@ -13,6 +13,10 @@ import '../../data/repositories/drift_intake_log_repository.dart';
 import '../../data/repositories/drift_product_ingredient_repository.dart';
 import '../../data/repositories/drift_product_repository.dart';
 import '../../data/repositories/drift_wellbeing_log_repository.dart';
+import '../../domain/models/course.dart';
+import '../../domain/models/intake_log.dart';
+import '../../domain/models/product.dart';
+import '../../domain/models/wellbeing_log.dart';
 import '../../domain/repositories/i_course_repository.dart';
 import '../../domain/repositories/i_global_ingredient_repository.dart';
 import '../../domain/repositories/i_intake_log_repository.dart';
@@ -84,3 +88,35 @@ IGlobalIngredientRepository globalIngredientRepository(Ref ref) =>
 @Riverpod(keepAlive: true)
 IWellbeingLogRepository wellbeingLogRepository(Ref ref) =>
     DriftWellbeingLogRepository(ref.watch(wellbeingLogsDaoProvider));
+
+// ── Shared stream providers ─────────────────────────────────────────────────
+// Defined here so multiple features can share the same Drift stream
+// subscription without creating duplicate listeners.
+
+/// Stream of active courses for [userId] (null = guest mode).
+@Riverpod(keepAlive: true)
+Stream<List<Course>> activeCourseStream(Ref ref, String? userId) =>
+    ref.watch(courseRepositoryProvider).watchActiveForUser(userId);
+
+/// Stream of all intake logs for [userId] (null = guest mode).
+@Riverpod(keepAlive: true)
+Stream<List<IntakeLog>> userIntakeLogStream(Ref ref, String? userId) =>
+    ref.watch(intakeLogRepositoryProvider).watchForUser(userId);
+
+/// Stream of all products (global + custom), soft-deleted excluded by repo.
+@Riverpod(keepAlive: true)
+Stream<List<Product>> allProductStream(Ref ref) =>
+    ref.watch(productRepositoryProvider).watchAll();
+
+/// Stream of all wellbeing log entries, newest first.
+@Riverpod(keepAlive: true)
+Stream<List<WellbeingLog>> allWellbeingLogStream(Ref ref) =>
+    ref.watch(wellbeingLogRepositoryProvider).watchAll();
+
+/// Stream of the last successful sync timestamp from [SyncMeta].
+/// Emits `null` before the first sync has ever run.
+@Riverpod(keepAlive: true)
+Stream<DateTime?> lastSyncAtStream(Ref ref) => ref
+    .watch(syncMetaDaoProvider)
+    .watchSyncMeta()
+    .map((row) => row?.lastSyncAt);

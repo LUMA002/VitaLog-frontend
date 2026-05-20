@@ -1,13 +1,3 @@
-targets:
-  $default:
-    builders:
-      slang_build_runner:
-        options:
-          base_locale: en
-          input_directory: assets/i18n
-          output_directory: lib/i18n
-          output_file_name: strings.g.dart
-          translate_var: t
-          enum_name: AppLocale
-          translation_class_visibility: public
-          key_case: camel
+# Slang i18n is generated via `dart run slang` (see slang.yaml).
+# slang_build_runner is intentionally not used here — it conflicts with
+# build_runner ("Asset already exists" on strings.g.dart).

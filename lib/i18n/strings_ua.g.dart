@@ -94,7 +94,7 @@ class TranslationsCoursesUa implements TranslationsCoursesEn {
 
 	// Translations
 	@override String get title => 'Курси';
-	@override String get kNew => 'Новий курс';
+	@override String get create => 'Новий курс';
 	@override String get edit => 'Редагувати курс';
 	@override String get empty => 'Активних курсів немає.';
 	@override late final TranslationsCoursesFieldsUa fields = TranslationsCoursesFieldsUa._(_root);
@@ -148,7 +148,7 @@ class TranslationsErrorsUa implements TranslationsErrorsEn {
 	// Translations
 	@override String get network => 'Помилка мережі. Перевірте підключення.';
 	@override late final TranslationsErrorsAuthUa auth = TranslationsErrorsAuthUa._(_root);
-	@override String get sync => 'Синхронізація не вдалась. Повторна спроба автоматично.';
+	@override String get sync => 'Синхронізація не вдалась. Ми спробуємо ще раз.';
 	@override String get unknown => 'Щось пішло не так.';
 	@override String get deviceTime => 'Перевірте час на пристрої та спробуйте знову.';
 }
@@ -315,7 +315,7 @@ extension on TranslationsUa {
 			'logs.tabs.wellbeing' => 'Самопочуття',
 			'logs.empty' => 'Записів ще немає.',
 			'courses.title' => 'Курси',
-			'courses.kNew' => 'Новий курс',
+			'courses.create' => 'Новий курс',
 			'courses.edit' => 'Редагувати курс',
 			'courses.empty' => 'Активних курсів немає.',
 			'courses.fields.product' => 'Продукт',
@@ -358,7 +358,7 @@ extension on TranslationsUa {
 			'errors.network' => 'Помилка мережі. Перевірте підключення.',
 			'errors.auth.expired' => 'Сесія закінчилась. Будь ласка, увійдіть знову.',
 			'errors.auth.unauthorized' => 'Доступ заборонено.',
-			'errors.sync' => 'Синхронізація не вдалась. Повторна спроба автоматично.',
+			'errors.sync' => 'Синхронізація не вдалась. Ми спробуємо ще раз.',
 			'errors.unknown' => 'Щось пішло не так.',
 			'errors.deviceTime' => 'Перевірте час на пристрої та спробуйте знову.',
 			'common.cancel' => 'Скасувати',

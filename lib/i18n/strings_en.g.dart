@@ -123,7 +123,7 @@ class TranslationsCoursesEn {
 	String get title => 'Courses';
 
 	/// en: 'New Course'
-	String get kNew => 'New Course';
+	String get create => 'New Course';
 
 	/// en: 'Edit Course'
 	String get edit => 'Edit Course';
@@ -453,7 +453,7 @@ extension on Translations {
 			'logs.tabs.wellbeing' => 'Wellbeing',
 			'logs.empty' => 'No logs yet.',
 			'courses.title' => 'Courses',
-			'courses.kNew' => 'New Course',
+			'courses.create' => 'New Course',
 			'courses.edit' => 'Edit Course',
 			'courses.empty' => 'No active courses.',
 			'courses.fields.product' => 'Product',

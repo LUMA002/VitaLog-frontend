@@ -8,45 +8,71 @@ part of 'dashboard_controller.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Derives today's supplement schedule by joining active [Course]s,
+/// today's [IntakeLog]s and the [Product] catalogue.
+///
+/// Whenever any of the three underlying Drift streams emit, [build] re-runs
+/// and the dashboard re-renders automatically with zero explicit refresh calls.
 
-@ProviderFor(DashboardController)
-final dashboardControllerProvider = DashboardControllerProvider._();
+@ProviderFor(DashboardSchedule)
+final dashboardScheduleProvider = DashboardScheduleProvider._();
 
-final class DashboardControllerProvider
-    extends $AsyncNotifierProvider<DashboardController, void> {
-  DashboardControllerProvider._()
+/// Derives today's supplement schedule by joining active [Course]s,
+/// today's [IntakeLog]s and the [Product] catalogue.
+///
+/// Whenever any of the three underlying Drift streams emit, [build] re-runs
+/// and the dashboard re-renders automatically with zero explicit refresh calls.
+final class DashboardScheduleProvider
+    extends $AsyncNotifierProvider<DashboardSchedule, List<ScheduledIntake>> {
+  /// Derives today's supplement schedule by joining active [Course]s,
+  /// today's [IntakeLog]s and the [Product] catalogue.
+  ///
+  /// Whenever any of the three underlying Drift streams emit, [build] re-runs
+  /// and the dashboard re-renders automatically with zero explicit refresh calls.
+  DashboardScheduleProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'dashboardControllerProvider',
+        name: r'dashboardScheduleProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$dashboardControllerHash();
+  String debugGetCreateSourceHash() => _$dashboardScheduleHash();
 
   @$internal
   @override
-  DashboardController create() => DashboardController();
+  DashboardSchedule create() => DashboardSchedule();
 }
 
-String _$dashboardControllerHash() =>
-    r'b05d88ef7aff79a6d89c3e7b523780604b8f59d9';
+String _$dashboardScheduleHash() => r'bd77901ebb5591f6adf002eec66f3a8014c1484c';
 
-abstract class _$DashboardController extends $AsyncNotifier<void> {
-  FutureOr<void> build();
+/// Derives today's supplement schedule by joining active [Course]s,
+/// today's [IntakeLog]s and the [Product] catalogue.
+///
+/// Whenever any of the three underlying Drift streams emit, [build] re-runs
+/// and the dashboard re-renders automatically with zero explicit refresh calls.
+
+abstract class _$DashboardSchedule
+    extends $AsyncNotifier<List<ScheduledIntake>> {
+  FutureOr<List<ScheduledIntake>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<List<ScheduledIntake>>, List<ScheduledIntake>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<void>, void>,
-              AsyncValue<void>,
+              AnyNotifier<
+                AsyncValue<List<ScheduledIntake>>,
+                List<ScheduledIntake>
+              >,
+              AsyncValue<List<ScheduledIntake>>,
               Object?,
               Object?
             >;
