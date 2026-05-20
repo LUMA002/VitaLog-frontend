@@ -108,7 +108,9 @@ class TranslationsProductsUa implements TranslationsProductsEn {
 
 	// Translations
 	@override String get title => 'Продукти';
-	@override String get kNew => 'Новий продукт';
+	@override String get createTitle => 'Новий продукт';
+	@override String get create => 'Створити';
+	@override String get nameLabel => 'Назва продукту';
 	@override String get global => 'Загальний';
 	@override String get custom => 'Власний';
 }
@@ -324,7 +326,9 @@ extension on TranslationsUa {
 			'courses.fields.startDate' => 'Дата початку',
 			'courses.fields.endDate' => 'Дата закінчення (необов\'язково)',
 			'products.title' => 'Продукти',
-			'products.kNew' => 'Новий продукт',
+			'products.createTitle' => 'Новий продукт',
+			'products.create' => 'Створити',
+			'products.nameLabel' => 'Назва продукту',
 			'products.global' => 'Загальний',
 			'products.custom' => 'Власний',
 			'settings.title' => 'Налаштування',

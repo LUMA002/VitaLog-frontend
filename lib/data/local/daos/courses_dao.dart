@@ -3,14 +3,23 @@ import 'package:drift/drift.dart';
 import '../app_database.dart';
 import '../tables/courses_table.dart';
 import '../tables/intake_logs_table.dart';
+import '../tables/products_table.dart';
 
 part 'courses_dao.g.dart';
+
+/// Row returned by [CoursesDao.watchIntakeHistoryForUser] (Drift join).
+class IntakeHistoryRow {
+  const IntakeHistoryRow({required this.log, this.productName});
+
+  final IntakeLogsData log;
+  final String? productName;
+}
 
 /// Data access for [Courses] and [IntakeLogs].
 ///
 /// These two entities are grouped in one DAO because IntakeLogs are always
 /// queried in the context of a course (dashboard plan, history timeline).
-@DriftAccessor(tables: [Courses, IntakeLogs])
+@DriftAccessor(tables: [Courses, IntakeLogs, Products])
 class CoursesDao extends DatabaseAccessor<AppDatabase>
     with _$CoursesDaoMixin {
   CoursesDao(super.db);
@@ -71,4 +80,31 @@ class CoursesDao extends DatabaseAccessor<AppDatabase>
   /// Insert or replace a batch of intake logs.
   Future<void> upsertIntakeLogBatch(List<IntakeLogsCompanion> rows) =>
       batch((b) => b.insertAllOnConflictUpdate(intakeLogs, rows));
+
+  /// Intake history with product names via LEFT JOIN (includes soft-deleted
+  /// courses and products so historical labels stay intact).
+  Stream<List<IntakeHistoryRow>> watchIntakeHistoryForUser(String? userId) {
+    final joined = select(intakeLogs).join([
+      leftOuterJoin(courses, courses.id.equalsExp(intakeLogs.courseId)),
+      leftOuterJoin(products, products.id.equalsExp(courses.productId)),
+    ]);
+
+    if (userId == null) {
+      joined.where(intakeLogs.userId.isNull());
+    } else {
+      joined.where(intakeLogs.userId.equals(userId));
+    }
+
+    return joined.watch().map(
+      (rows) => rows
+          .map(
+            (row) => IntakeHistoryRow(
+              log: row.readTable(intakeLogs),
+              productName: row.readTableOrNull(products)?.name,
+            ),
+          )
+          .where((r) => r.log.deletedAt == null)
+          .toList(),
+    );
+  }
 }

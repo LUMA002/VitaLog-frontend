@@ -15,6 +15,7 @@ import '../../data/repositories/drift_product_repository.dart';
 import '../../data/repositories/drift_wellbeing_log_repository.dart';
 import '../../domain/models/course.dart';
 import '../../domain/models/intake_log.dart';
+import '../../domain/models/intake_log_history_entry.dart';
 import '../../domain/models/product.dart';
 import '../../domain/models/wellbeing_log.dart';
 import '../../domain/repositories/i_course_repository.dart';
@@ -102,6 +103,14 @@ Stream<List<Course>> activeCourseStream(Ref ref, String? userId) =>
 @Riverpod(keepAlive: true)
 Stream<List<IntakeLog>> userIntakeLogStream(Ref ref, String? userId) =>
     ref.watch(intakeLogRepositoryProvider).watchForUser(userId);
+
+/// Intake history with product names (LEFT JOIN, keeps deleted course labels).
+@Riverpod(keepAlive: true)
+Stream<List<IntakeLogHistoryEntry>> intakeHistoryStream(
+  Ref ref,
+  String? userId,
+) =>
+    ref.watch(intakeLogRepositoryProvider).watchHistoryForUser(userId);
 
 /// Stream of all products (global + custom), soft-deleted excluded by repo.
 @Riverpod(keepAlive: true)

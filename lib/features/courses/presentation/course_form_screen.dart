@@ -4,7 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/repository_providers.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../core/result/result.dart';
+import '../../../core/utils/uuid.dart';
+import '../../../domain/models/product.dart';
 import '../../../i18n/strings.g.dart';
+import '../../auth/application/auth_controller.dart';
 import '../application/course_form_controller.dart';
 import '../application/course_form_state.dart';
 
@@ -249,6 +253,51 @@ class _ProductListSheet extends ConsumerWidget {
   final ScrollController scrollController;
   final void Function(String id, String name) onSelect;
 
+  Future<void> _showCreateProductDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final name = await showDialog<String>(
+      context: context,
+      builder: (_) => const _CreateProductDialog(),
+    );
+
+    if (!context.mounted) return;
+    if (name == null || name.isEmpty) return;
+
+    final clock = ref.read(clockProvider);
+    final nowUtc = clock.nowUtc();
+    final authState = ref.read(authControllerProvider).value;
+    final creatorUserId = switch (authState) {
+      Authenticated(:final userId) => userId,
+      _ => null,
+    };
+
+    final product = Product(
+      id: newUuid(),
+      name: name,
+      description: null,
+      creatorUserId: creatorUserId,
+      isLocalDraft: true,
+      updatedAtUtc: nowUtc,
+      deletedAtUtc: null,
+    );
+
+    final result =
+        await ref.read(productRepositoryProvider).upsert(product);
+
+    if (!context.mounted) return;
+
+    result.when(
+      success: (_) {},
+      failure: (failure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message)),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = Translations.of(context);
@@ -257,10 +306,24 @@ class _ProductListSheet extends ConsumerWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Text(
-            t.products.title,
-            style: Theme.of(context).textTheme.titleMedium,
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    t.products.title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add_rounded),
+                tooltip: t.products.create,
+                onPressed: () => _showCreateProductDialog(context, ref),
+              ),
+            ],
           ),
         ),
         const Divider(height: 16),
@@ -275,17 +338,17 @@ class _ProductListSheet extends ConsumerWidget {
               itemCount: products.length,
               itemBuilder: (_, i) {
                 final p = products[i];
+                final isCustom =
+                    p.isLocalDraft || p.creatorUserId != null;
                 return ListTile(
                   leading: Icon(
-                    p.creatorUserId == null
-                        ? Icons.public_rounded
-                        : Icons.person_rounded,
+                    isCustom
+                        ? Icons.person_rounded
+                        : Icons.public_rounded,
                   ),
                   title: Text(p.name),
                   subtitle: Text(
-                    p.creatorUserId == null
-                        ? t.products.global
-                        : t.products.custom,
+                    isCustom ? t.products.custom : t.products.global,
                     style: const TextStyle(fontSize: 12),
                   ),
                   onTap: () => onSelect(p.id, p.name),
@@ -293,6 +356,65 @@ class _ProductListSheet extends ConsumerWidget {
               },
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Create product dialog ─────────────────────────────────────────────────────
+
+class _CreateProductDialog extends StatefulWidget {
+  const _CreateProductDialog();
+
+  @override
+  State<_CreateProductDialog> createState() => _CreateProductDialogState();
+}
+
+class _CreateProductDialogState extends State<_CreateProductDialog> {
+  late final TextEditingController _nameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return;
+    Navigator.of(context).pop(name);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return AlertDialog(
+      title: Text(t.products.createTitle),
+      content: TextField(
+        controller: _nameController,
+        autofocus: true,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          labelText: t.products.nameLabel,
+        ),
+        onSubmitted: (_) => _submit(),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(t.common.cancel),
+        ),
+        FilledButton(
+          onPressed: _submit,
+          child: Text(t.common.save),
         ),
       ],
     );

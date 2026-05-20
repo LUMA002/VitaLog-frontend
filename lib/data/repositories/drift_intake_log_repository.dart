@@ -2,6 +2,7 @@ import '../../core/failure/app_failure.dart';
 import '../../core/result/result.dart';
 import '../../data/local/daos/courses_dao.dart';
 import '../../domain/models/intake_log.dart';
+import '../../domain/models/intake_log_history_entry.dart';
 import '../../domain/repositories/i_intake_log_repository.dart';
 import 'mappers/intake_log_mapper.dart';
 
@@ -19,6 +20,20 @@ final class DriftIntakeLogRepository implements IIntakeLogRepository {
               .where((r) => r.deletedAt == null)
               .map((r) => r.toDomain())
               .toList(),
+    );
+  }
+
+  @override
+  Stream<List<IntakeLogHistoryEntry>> watchHistoryForUser(String? userId) {
+    return _dao.watchIntakeHistoryForUser(userId).map(
+      (rows) => rows
+          .map(
+            (row) => IntakeLogHistoryEntry(
+              log: row.log.toDomain(),
+              productName: row.productName ?? '—',
+            ),
+          )
+          .toList(),
     );
   }
 

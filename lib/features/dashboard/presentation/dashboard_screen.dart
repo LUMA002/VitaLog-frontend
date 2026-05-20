@@ -6,7 +6,6 @@ import '../../../app/providers/repository_providers.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../i18n/strings.g.dart';
 import '../application/dashboard_controller.dart';
-import '../application/scheduled_intake.dart';
 import 'widgets/time_slot_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -62,7 +61,7 @@ class DashboardScreen extends ConsumerWidget {
                 );
               }
               return SliverPadding(
-                padding: const EdgeInsets.only(bottom: 100),
+                padding: const EdgeInsets.only(bottom: 24),
                 sliver: SliverList.builder(
                   itemCount: schedule.length,
                   itemBuilder: (_, i) {
@@ -83,87 +82,6 @@ class DashboardScreen extends ConsumerWidget {
             },
           ),
         ],
-      ),
-      floatingActionButton: scheduleAsync.whenOrNull(
-        data: (schedule) {
-          final pending =
-              schedule.where((i) => !i.isTaken).toList();
-          if (pending.isEmpty) return null;
-          return _QuickLogFab(pendingIntakes: pending);
-        },
-      ),
-    );
-  }
-}
-
-// ── Quick Log FAB ─────────────────────────────────────────────────────────────
-
-class _QuickLogFab extends ConsumerWidget {
-  const _QuickLogFab({required this.pendingIntakes});
-
-  final List<ScheduledIntake> pendingIntakes;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final t = Translations.of(context);
-    return FloatingActionButton.extended(
-      onPressed: () => _handleTap(context, ref),
-      icon: const Icon(Icons.add_rounded),
-      label: Text(t.dashboard.quickLog),
-    );
-  }
-
-  void _handleTap(BuildContext context, WidgetRef ref) {
-    if (pendingIntakes.length == 1) {
-      ref
-          .read(dashboardScheduleProvider.notifier)
-          .logIntake(pendingIntakes.first.courseId);
-      return;
-    }
-    _showPickerSheet(context, ref);
-  }
-
-  void _showPickerSheet(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 8),
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .extension<SemanticColors>()!
-                    .pendingText
-                    .withAlpha(0x66),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...pendingIntakes.map(
-              (intake) => ListTile(
-                leading: const Icon(Icons.medication_outlined),
-                title: Text(intake.productName),
-                subtitle: Text(
-                  TimeOfDay(
-                    hour: intake.timeOfDay.inHours % 24,
-                    minute: intake.timeOfDay.inMinutes % 60,
-                  ).format(context),
-                ),
-                onTap: () {
-                  Navigator.of(ctx).pop();
-                  ref
-                      .read(dashboardScheduleProvider.notifier)
-                      .logIntake(intake.courseId);
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
       ),
     );
   }

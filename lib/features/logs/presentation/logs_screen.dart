@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/providers/repository_providers.dart';
 import '../../../domain/models/intake_log.dart';
-import '../../../domain/models/product.dart';
 import '../../../i18n/strings.g.dart';
 import '../../dashboard/presentation/widgets/time_slot_card.dart';
 import '../application/logs_providers.dart';
@@ -67,11 +65,6 @@ class _IntakeLogsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = Translations.of(context);
     final logsAsync = ref.watch(intakeLogsControllerProvider);
-    final productsAsync = ref.watch(allProductStreamProvider);
-    final productsById = productsAsync.whenOrNull(
-          data: (list) => {for (final Product p in list) p.id: p},
-        ) ??
-        {};
 
     return logsAsync.when(
       loading: () =>
@@ -92,12 +85,11 @@ class _IntakeLogsTab extends ConsumerWidget {
           padding: const EdgeInsets.only(top: 4, bottom: 80),
           itemCount: logs.length,
           itemBuilder: (_, i) {
-            final log = logs[i];
+            final item = logs[i];
             return _DismissibleIntakeLog(
-              key: Key(log.id),
-              log: log,
-              productName:
-                  productsById[log.courseId]?.name ?? '—',
+              key: Key(item.log.id),
+              log: item.log,
+              productName: item.productName,
             );
           },
         );

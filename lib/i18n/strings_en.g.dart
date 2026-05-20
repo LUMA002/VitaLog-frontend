@@ -146,7 +146,13 @@ class TranslationsProductsEn {
 	String get title => 'Products';
 
 	/// en: 'New Product'
-	String get kNew => 'New Product';
+	String get createTitle => 'New Product';
+
+	/// en: 'Create'
+	String get create => 'Create';
+
+	/// en: 'Product Name'
+	String get nameLabel => 'Product Name';
 
 	/// en: 'Global'
 	String get global => 'Global';
@@ -462,7 +468,9 @@ extension on Translations {
 			'courses.fields.startDate' => 'Start date',
 			'courses.fields.endDate' => 'End date (optional)',
 			'products.title' => 'Products',
-			'products.kNew' => 'New Product',
+			'products.createTitle' => 'New Product',
+			'products.create' => 'Create',
+			'products.nameLabel' => 'Product Name',
 			'products.global' => 'Global',
 			'products.custom' => 'Custom',
 			'settings.title' => 'Settings',

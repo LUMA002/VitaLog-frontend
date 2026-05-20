@@ -10,22 +10,22 @@ part of 'logs_providers.dart';
 // ignore_for_file: type=lint, type=warning
 /// Manages the full intake-log list for the current user.
 ///
-/// Delegates soft-deletion to [IIntakeLogRepository] — streams auto-refresh
-/// the UI via the underlying Drift subscription.
+/// Joins intake logs with courses and products so the history UI can show
+/// product names without duplicating lookup logic in widgets.
 
 @ProviderFor(IntakeLogsController)
 final intakeLogsControllerProvider = IntakeLogsControllerProvider._();
 
 /// Manages the full intake-log list for the current user.
 ///
-/// Delegates soft-deletion to [IIntakeLogRepository] — streams auto-refresh
-/// the UI via the underlying Drift subscription.
+/// Joins intake logs with courses and products so the history UI can show
+/// product names without duplicating lookup logic in widgets.
 final class IntakeLogsControllerProvider
-    extends $AsyncNotifierProvider<IntakeLogsController, List<IntakeLog>> {
+    extends $AsyncNotifierProvider<IntakeLogsController, List<IntakeLogItem>> {
   /// Manages the full intake-log list for the current user.
   ///
-  /// Delegates soft-deletion to [IIntakeLogRepository] — streams auto-refresh
-  /// the UI via the underlying Drift subscription.
+  /// Joins intake logs with courses and products so the history UI can show
+  /// product names without duplicating lookup logic in widgets.
   IntakeLogsControllerProvider._()
     : super(
         from: null,
@@ -46,24 +46,26 @@ final class IntakeLogsControllerProvider
 }
 
 String _$intakeLogsControllerHash() =>
-    r'b916bf0007cb1510be3806ee6b3f673424729ef1';
+    r'a25b7f8ef391fe568db4191180081133284060b4';
 
 /// Manages the full intake-log list for the current user.
 ///
-/// Delegates soft-deletion to [IIntakeLogRepository] — streams auto-refresh
-/// the UI via the underlying Drift subscription.
+/// Joins intake logs with courses and products so the history UI can show
+/// product names without duplicating lookup logic in widgets.
 
-abstract class _$IntakeLogsController extends $AsyncNotifier<List<IntakeLog>> {
-  FutureOr<List<IntakeLog>> build();
+abstract class _$IntakeLogsController
+    extends $AsyncNotifier<List<IntakeLogItem>> {
+  FutureOr<List<IntakeLogItem>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<IntakeLog>>, List<IntakeLog>>;
+    final ref =
+        this.ref as $Ref<AsyncValue<List<IntakeLogItem>>, List<IntakeLogItem>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<IntakeLog>>, List<IntakeLog>>,
-              AsyncValue<List<IntakeLog>>,
+              AnyNotifier<AsyncValue<List<IntakeLogItem>>, List<IntakeLogItem>>,
+              AsyncValue<List<IntakeLogItem>>,
               Object?,
               Object?
             >;

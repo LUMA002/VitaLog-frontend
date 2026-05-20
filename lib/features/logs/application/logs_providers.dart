@@ -7,27 +7,43 @@ import '../../auth/application/auth_controller.dart';
 
 part 'logs_providers.g.dart';
 
+// ── Intake log list item ──────────────────────────────────────────────────────
+
+/// Intake log row enriched with the resolved product name (via course).
+class IntakeLogItem {
+  const IntakeLogItem({required this.log, required this.productName});
+
+  final IntakeLog log;
+  final String productName;
+}
+
 // ── Intake Logs ───────────────────────────────────────────────────────────────
 
 /// Manages the full intake-log list for the current user.
 ///
-/// Delegates soft-deletion to [IIntakeLogRepository] — streams auto-refresh
-/// the UI via the underlying Drift subscription.
+/// Joins intake logs with courses and products so the history UI can show
+/// product names without duplicating lookup logic in widgets.
 @riverpod
 class IntakeLogsController extends _$IntakeLogsController {
   @override
-  FutureOr<List<IntakeLog>> build() async {
+  FutureOr<List<IntakeLogItem>> build() async {
     final authState = ref.watch(authControllerProvider).value;
     final userId = switch (authState) {
       Authenticated(:final userId) => userId,
       _ => null,
     };
 
-    // Sort newest first for the history list.
-    final logs =
-        await ref.watch(userIntakeLogStreamProvider(userId).future);
-    return logs
-      ..sort((a, b) => b.takenAtUtc.compareTo(a.takenAtUtc));
+    final entries =
+        await ref.watch(intakeHistoryStreamProvider(userId).future);
+
+    final items = entries
+        .map(
+          (e) => IntakeLogItem(log: e.log, productName: e.productName),
+        )
+        .toList()
+      ..sort((a, b) => b.log.takenAtUtc.compareTo(a.log.takenAtUtc));
+
+    return items;
   }
 
   Future<void> softDelete(String id) async {

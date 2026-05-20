@@ -1,3 +1,5 @@
+import 'package:vita_log/domain/models/intake_log_history_entry.dart';
+
 import '../../core/failure/app_failure.dart';
 import '../../core/result/result.dart';
 import '../../domain/models/intake_log.dart';
@@ -8,6 +10,10 @@ import '../../domain/repositories/i_intake_log_repository.dart';
 /// Stub — to be implemented in Phase 6 (Web/Thin client).
 final class ApiIntakeLogRepository implements IIntakeLogRepository {
   const ApiIntakeLogRepository();
+
+  @override
+  Stream<List<IntakeLogHistoryEntry>> watchHistoryForUser(String? userId) =>
+      throw UnimplementedError('ApiIntakeLogRepository is not yet implemented.');
 
   @override
   Stream<List<IntakeLog>> watchForUser(String? userId) =>

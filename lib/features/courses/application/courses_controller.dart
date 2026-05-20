@@ -16,7 +16,7 @@ final class CourseItem {
     required this.course,
     required this.productName,
 
-    /// True when [Product.creatorUserId] is null (global/server-seeded product).
+    /// True when the product is global (not local draft and no owner).
     required this.isGlobalProduct,
   });
 
@@ -47,10 +47,12 @@ class CoursesController extends _$CoursesController {
 
     return courses.map((c) {
       final product = productsById[c.productId];
+      final isCustom = product != null &&
+          (product.isLocalDraft || product.creatorUserId != null);
       return CourseItem(
         course: c,
         productName: product?.name ?? '—',
-        isGlobalProduct: product?.creatorUserId == null,
+        isGlobalProduct: !isCustom,
       );
     }).toList()
       ..sort((a, b) => a.course.timeOfDay.compareTo(b.course.timeOfDay));

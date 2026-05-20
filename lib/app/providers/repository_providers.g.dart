@@ -777,6 +777,97 @@ final class UserIntakeLogStreamFamily extends $Family
   String toString() => r'userIntakeLogStreamProvider';
 }
 
+/// Intake history with product names (LEFT JOIN, keeps deleted course labels).
+
+@ProviderFor(intakeHistoryStream)
+final intakeHistoryStreamProvider = IntakeHistoryStreamFamily._();
+
+/// Intake history with product names (LEFT JOIN, keeps deleted course labels).
+
+final class IntakeHistoryStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<IntakeLogHistoryEntry>>,
+          List<IntakeLogHistoryEntry>,
+          Stream<List<IntakeLogHistoryEntry>>
+        >
+    with
+        $FutureModifier<List<IntakeLogHistoryEntry>>,
+        $StreamProvider<List<IntakeLogHistoryEntry>> {
+  /// Intake history with product names (LEFT JOIN, keeps deleted course labels).
+  IntakeHistoryStreamProvider._({
+    required IntakeHistoryStreamFamily super.from,
+    required String? super.argument,
+  }) : super(
+         retry: null,
+         name: r'intakeHistoryStreamProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$intakeHistoryStreamHash();
+
+  @override
+  String toString() {
+    return r'intakeHistoryStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<IntakeLogHistoryEntry>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<IntakeLogHistoryEntry>> create(Ref ref) {
+    final argument = this.argument as String?;
+    return intakeHistoryStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is IntakeHistoryStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$intakeHistoryStreamHash() =>
+    r'be8d5e2936d66a56dc0ae59ed49cd1cd74058e3b';
+
+/// Intake history with product names (LEFT JOIN, keeps deleted course labels).
+
+final class IntakeHistoryStreamFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+          Stream<List<IntakeLogHistoryEntry>>,
+          String?
+        > {
+  IntakeHistoryStreamFamily._()
+    : super(
+        retry: null,
+        name: r'intakeHistoryStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Intake history with product names (LEFT JOIN, keeps deleted course labels).
+
+  IntakeHistoryStreamProvider call(String? userId) =>
+      IntakeHistoryStreamProvider._(argument: userId, from: this);
+
+  @override
+  String toString() => r'intakeHistoryStreamProvider';
+}
+
 /// Stream of all products (global + custom), soft-deleted excluded by repo.
 
 @ProviderFor(allProductStream)
