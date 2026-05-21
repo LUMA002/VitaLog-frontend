@@ -10,34 +10,34 @@ part of 'auth_controller.dart';
 // ignore_for_file: type=lint, type=warning
 /// Manages the global authentication session.
 ///
-/// Kept alive for the lifetime of the app. Starts as [Guest] and can
-/// transition to [Authenticated] after login (Phase 5).
-///
 /// Architectural contract:
 /// - NEVER blocks navigation — Guest mode gives full access to local features.
 /// - Protects only `/settings/sync` (requires [Authenticated]).
+/// - [dioProvider] injects an [AuthInterceptor] that calls
+///   `ref.invalidate(authControllerProvider)` on 401/expired, which causes
+///   this notifier to rebuild and re-evaluate the stored session.
 
 @ProviderFor(AuthController)
 final authControllerProvider = AuthControllerProvider._();
 
 /// Manages the global authentication session.
 ///
-/// Kept alive for the lifetime of the app. Starts as [Guest] and can
-/// transition to [Authenticated] after login (Phase 5).
-///
 /// Architectural contract:
 /// - NEVER blocks navigation — Guest mode gives full access to local features.
 /// - Protects only `/settings/sync` (requires [Authenticated]).
+/// - [dioProvider] injects an [AuthInterceptor] that calls
+///   `ref.invalidate(authControllerProvider)` on 401/expired, which causes
+///   this notifier to rebuild and re-evaluate the stored session.
 final class AuthControllerProvider
     extends $AsyncNotifierProvider<AuthController, AuthState> {
   /// Manages the global authentication session.
   ///
-  /// Kept alive for the lifetime of the app. Starts as [Guest] and can
-  /// transition to [Authenticated] after login (Phase 5).
-  ///
   /// Architectural contract:
   /// - NEVER blocks navigation — Guest mode gives full access to local features.
   /// - Protects only `/settings/sync` (requires [Authenticated]).
+  /// - [dioProvider] injects an [AuthInterceptor] that calls
+  ///   `ref.invalidate(authControllerProvider)` on 401/expired, which causes
+  ///   this notifier to rebuild and re-evaluate the stored session.
   AuthControllerProvider._()
     : super(
         from: null,
@@ -57,16 +57,16 @@ final class AuthControllerProvider
   AuthController create() => AuthController();
 }
 
-String _$authControllerHash() => r'82d170e43a04bdcac2f613f9e32ca10e28076acc';
+String _$authControllerHash() => r'f55d36034f54c46a0cf7a14304cc06a1e385c6e1';
 
 /// Manages the global authentication session.
-///
-/// Kept alive for the lifetime of the app. Starts as [Guest] and can
-/// transition to [Authenticated] after login (Phase 5).
 ///
 /// Architectural contract:
 /// - NEVER blocks navigation — Guest mode gives full access to local features.
 /// - Protects only `/settings/sync` (requires [Authenticated]).
+/// - [dioProvider] injects an [AuthInterceptor] that calls
+///   `ref.invalidate(authControllerProvider)` on 401/expired, which causes
+///   this notifier to rebuild and re-evaluate the stored session.
 
 abstract class _$AuthController extends $AsyncNotifier<AuthState> {
   FutureOr<AuthState> build();
