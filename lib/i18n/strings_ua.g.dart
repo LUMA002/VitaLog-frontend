@@ -125,6 +125,7 @@ class TranslationsSettingsUa implements TranslationsSettingsEn {
 	@override String get title => 'Налаштування';
 	@override late final TranslationsSettingsAccountUa account = TranslationsSettingsAccountUa._(_root);
 	@override late final TranslationsSettingsSyncUa sync = TranslationsSettingsSyncUa._(_root);
+	@override late final TranslationsSettingsLanguageUa language = TranslationsSettingsLanguageUa._(_root);
 	@override late final TranslationsSettingsNotificationsUa notifications = TranslationsSettingsNotificationsUa._(_root);
 	@override late final TranslationsSettingsDeveloperUa developer = TranslationsSettingsDeveloperUa._(_root);
 	@override late final TranslationsSettingsDangerUa danger = TranslationsSettingsDangerUa._(_root);
@@ -223,6 +224,18 @@ class TranslationsSettingsSyncUa implements TranslationsSettingsSyncEn {
 	@override String get syncNow => 'Синхронізувати зараз';
 	@override String get wifiOnly => 'Тільки Wi-Fi';
 	@override String get never => 'Ніколи';
+}
+
+// Path: settings.language
+class TranslationsSettingsLanguageUa implements TranslationsSettingsLanguageEn {
+	TranslationsSettingsLanguageUa._(this._root);
+
+	final TranslationsUa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Мова';
+	@override String get en => 'Англійська';
+	@override String get ua => 'Українська';
 }
 
 // Path: settings.notifications
@@ -365,6 +378,9 @@ extension on TranslationsUa {
 			'settings.sync.syncNow' => 'Синхронізувати зараз',
 			'settings.sync.wifiOnly' => 'Тільки Wi-Fi',
 			'settings.sync.never' => 'Ніколи',
+			'settings.language.title' => 'Мова',
+			'settings.language.en' => 'Англійська',
+			'settings.language.ua' => 'Українська',
 			'settings.notifications.title' => 'Сповіщення',
 			'settings.notifications.rebuild' => 'Оновити розклад',
 			'settings.developer.title' => 'Розробник',

@@ -174,6 +174,7 @@ class TranslationsSettingsEn {
 
 	late final TranslationsSettingsAccountEn account = TranslationsSettingsAccountEn._(_root);
 	late final TranslationsSettingsSyncEn sync = TranslationsSettingsSyncEn._(_root);
+	late final TranslationsSettingsLanguageEn language = TranslationsSettingsLanguageEn._(_root);
 	late final TranslationsSettingsNotificationsEn notifications = TranslationsSettingsNotificationsEn._(_root);
 	late final TranslationsSettingsDeveloperEn developer = TranslationsSettingsDeveloperEn._(_root);
 	late final TranslationsSettingsDangerEn danger = TranslationsSettingsDangerEn._(_root);
@@ -329,6 +330,24 @@ class TranslationsSettingsSyncEn {
 
 	/// en: 'Never'
 	String get never => 'Never';
+}
+
+// Path: settings.language
+class TranslationsSettingsLanguageEn {
+	TranslationsSettingsLanguageEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Language'
+	String get title => 'Language';
+
+	/// en: 'English'
+	String get en => 'English';
+
+	/// en: 'Ukrainian'
+	String get ua => 'Ukrainian';
 }
 
 // Path: settings.notifications
@@ -531,6 +550,9 @@ extension on Translations {
 			'settings.sync.syncNow' => 'Sync now',
 			'settings.sync.wifiOnly' => 'Wi-Fi only',
 			'settings.sync.never' => 'Never',
+			'settings.language.title' => 'Language',
+			'settings.language.en' => 'English',
+			'settings.language.ua' => 'Ukrainian',
 			'settings.notifications.title' => 'Notifications',
 			'settings.notifications.rebuild' => 'Rebuild schedule',
 			'settings.developer.title' => 'Developer',

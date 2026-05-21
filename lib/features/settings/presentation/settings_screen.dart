@@ -9,6 +9,7 @@ import '../../../app/router/routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../i18n/strings.g.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../sync/application/sync_service.dart';
 import '../application/settings_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -20,7 +21,10 @@ class SettingsScreen extends ConsumerWidget {
     final authAsync = ref.watch(authControllerProvider);
     final authState = authAsync.value;
     final lastSyncAsync = ref.watch(lastSyncAtStreamProvider);
-    final wifiOnly = ref.watch(wifiOnlyProvider);
+    final settingsAsync = ref.watch(settingsProvider);
+    final syncAsync = ref.watch(syncServiceProvider);
+    final isSyncing = syncAsync.isLoading;
+    final currentLocale = LocaleSettings.currentLocale;
 
     return Scaffold(
       appBar: AppBar(title: Text(t.settings.title)),
@@ -31,58 +35,77 @@ class SettingsScreen extends ConsumerWidget {
           _SectionHeader(title: t.settings.account.title),
           switch (authState) {
             Authenticated(:final email) => _AccountTile(
-                email: email,
-                onLogout: () =>
-                    _showLogoutDialog(context, ref),
-              ),
+              email: email,
+              onLogout: () => _showLogoutDialog(context, ref),
+            ),
             _ => _GuestTile(
-                label: t.settings.account.guest,
-                cta: t.settings.account.signInCta,
-                onTap: () => context.push(AppRoutes.authLogin),
-              ),
+              label: t.settings.account.guest,
+              cta: t.settings.account.signInCta,
+              onTap: () => context.push(AppRoutes.authLogin),
+            ),
           },
           const Divider(height: 1),
 
           // ── Sync ─────────────────────────────────────────────────────────
           _SectionHeader(title: t.settings.sync.title),
           ListTile(
-            leading: const Icon(Icons.sync_rounded),
-            title: Text(t.settings.sync.lastSync),
+            leading: const Icon(Icons.cloud_sync_rounded),
+            title: Text(t.settings.sync.syncNow),
             subtitle: Text(
               lastSyncAsync.when(
                 data: (at) => at != null
-                    ? DateFormat.yMd()
-                        .add_jm()
-                        .format(at.toLocal())
+                    ? DateFormat.yMd().add_jm().format(at.toLocal())
                     : t.settings.sync.never,
                 loading: () => '…',
                 error: (_, _) => t.settings.sync.never,
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.cloud_sync_rounded),
-            title: Text(t.settings.sync.syncNow),
-            enabled: authState is Authenticated,
+            enabled: authState is Authenticated && !isSyncing,
             onTap: authState is Authenticated
-                ? () => _stubAction(context, 'Sync — Phase 5')
+                ? () => ref.read(syncServiceProvider.notifier).runOnce()
                 : null,
-            trailing: authState is! Authenticated
-                ? Icon(
-                    Icons.lock_outline_rounded,
-                    size: 18,
-                    color: Theme.of(context)
-                        .extension<SemanticColors>()!
-                        .pendingText,
-                  )
-                : null,
+            trailing: _SyncTrailing(
+              isSyncing: isSyncing,
+              isGuest: authState is! Authenticated,
+            ),
           ),
-          SwitchListTile(
-            secondary: const Icon(Icons.wifi_rounded),
-            title: Text(t.settings.sync.wifiOnly),
-            value: wifiOnly,
-            onChanged: (v) =>
-                ref.read(wifiOnlyProvider.notifier).set(v),
+          settingsAsync.when(
+            data: (settings) => SwitchListTile(
+              secondary: const Icon(Icons.wifi_rounded),
+              title: Text(t.settings.sync.wifiOnly),
+              value: settings.wifiOnlySync,
+              onChanged: (v) =>
+                  ref.read(settingsProvider.notifier).setWifiOnlySync(v),
+            ),
+            loading: () => SwitchListTile(
+              secondary: const Icon(Icons.wifi_rounded),
+              title: Text(t.settings.sync.wifiOnly),
+              value: false,
+              onChanged: null,
+            ),
+            error: (_, _) => const SizedBox.shrink(),
+          ),
+          const Divider(height: 1),
+
+          _SectionHeader(title: t.settings.language.title),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: SegmentedButton<AppLocale>(
+              segments: [
+                ButtonSegment(
+                  value: AppLocale.en,
+                  label: Text(t.settings.language.en),
+                ),
+                ButtonSegment(
+                  value: AppLocale.ua,
+                  label: Text(t.settings.language.ua),
+                ),
+              ],
+              selected: {currentLocale},
+              onSelectionChanged: (selected) {
+                LocaleSettings.setLocale(selected.first);
+              },
+            ),
           ),
           const Divider(height: 1),
 
@@ -108,23 +131,18 @@ class SettingsScreen extends ConsumerWidget {
           ],
 
           // ── Danger Zone ───────────────────────────────────────────────────
-          _SectionHeader(
-            title: t.settings.danger.title,
-            isDestructive: true,
-          ),
+          _SectionHeader(title: t.settings.danger.title, isDestructive: true),
           ListTile(
             leading: Icon(
               Icons.delete_forever_rounded,
-              color: Theme.of(context)
-                  .extension<SemanticColors>()!
-                  .destructive,
+              color: Theme.of(context).extension<SemanticColors>()!.destructive,
             ),
             title: Text(
               t.settings.danger.eraseDb,
               style: TextStyle(
-                color: Theme.of(context)
-                    .extension<SemanticColors>()!
-                    .destructive,
+                color: Theme.of(
+                  context,
+                ).extension<SemanticColors>()!.destructive,
               ),
             ),
             onTap: () => _showEraseDbDialog(context, ref),
@@ -135,13 +153,12 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _stubAction(BuildContext context, String label) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$label: coming soon.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('$label: coming soon.')));
   }
 
-  Future<void> _showLogoutDialog(
-      BuildContext context, WidgetRef ref) async {
+  Future<void> _showLogoutDialog(BuildContext context, WidgetRef ref) async {
     final t = Translations.of(context);
     final choice = await showDialog<bool>(
       context: context,
@@ -165,14 +182,13 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
     if (choice != null) {
-      await ref.read(authControllerProvider.notifier).logout(
-            eraseData: !choice,
-          );
+      await ref
+          .read(authControllerProvider.notifier)
+          .logout(eraseData: !choice);
     }
   }
 
-  Future<void> _showEraseDbDialog(
-      BuildContext context, WidgetRef ref) async {
+  Future<void> _showEraseDbDialog(BuildContext context, WidgetRef ref) async {
     final t = Translations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
@@ -189,9 +205,9 @@ class SettingsScreen extends ConsumerWidget {
           ),
           FilledButton(
             style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context)
-                  .extension<SemanticColors>()!
-                  .destructive,
+              backgroundColor: Theme.of(
+                context,
+              ).extension<SemanticColors>()!.destructive,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
             child: Text(t.common.delete),
@@ -209,13 +225,34 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-// ── Shared section header ─────────────────────────────────────────────────────
+class _SyncTrailing extends StatelessWidget {
+  const _SyncTrailing({required this.isSyncing, required this.isGuest});
+
+  final bool isSyncing;
+  final bool isGuest;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isSyncing) {
+      return const SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      );
+    }
+    if (isGuest) {
+      return Icon(
+        Icons.lock_outline_rounded,
+        size: 18,
+        color: Theme.of(context).extension<SemanticColors>()!.pendingText,
+      );
+    }
+    return const SizedBox.shrink();
+  }
+}
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({
-    required this.title,
-    this.isDestructive = false,
-  });
+  const _SectionHeader({required this.title, this.isDestructive = false});
 
   final String title;
   final bool isDestructive;
@@ -228,11 +265,9 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title.toUpperCase(),
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: isDestructive
-                  ? colors.destructive
-                  : colors.pendingText,
-              letterSpacing: 1.2,
-            ),
+          color: isDestructive ? colors.destructive : colors.pendingText,
+          letterSpacing: 1.2,
+        ),
       ),
     );
   }
@@ -241,10 +276,7 @@ class _SectionHeader extends StatelessWidget {
 // ── Account tiles ─────────────────────────────────────────────────────────────
 
 class _AccountTile extends StatelessWidget {
-  const _AccountTile({
-    required this.email,
-    required this.onLogout,
-  });
+  const _AccountTile({required this.email, required this.onLogout});
 
   final String email;
   final VoidCallback onLogout;
@@ -278,9 +310,7 @@ class _GuestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const CircleAvatar(
-        child: Icon(Icons.person_outline_rounded),
-      ),
+      leading: const CircleAvatar(child: Icon(Icons.person_outline_rounded)),
       title: Text(label),
       subtitle: Text(cta),
       trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),

@@ -54,7 +54,7 @@ final class _AuthDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$_authDioHash() => r'5ab7f9909df70ba0b3669452996c522b556fb2dd';
+String _$_authDioHash() => r'12453946eeec8cbebdfe453e309626456dc5a5c3';
 
 @ProviderFor(authService)
 final authServiceProvider = AuthServiceProvider._();

@@ -8,64 +8,86 @@ part of 'settings_controller.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// In-memory toggle for the "Wi-Fi only" sync preference.
-///
-/// Phase 5 will persist this flag in SharedPreferences or flutter_secure_storage.
 
-@ProviderFor(WifiOnly)
-final wifiOnlyProvider = WifiOnlyProvider._();
+@ProviderFor(settingsRepository)
+final settingsRepositoryProvider = SettingsRepositoryProvider._();
 
-/// In-memory toggle for the "Wi-Fi only" sync preference.
-///
-/// Phase 5 will persist this flag in SharedPreferences or flutter_secure_storage.
-final class WifiOnlyProvider extends $NotifierProvider<WifiOnly, bool> {
-  /// In-memory toggle for the "Wi-Fi only" sync preference.
-  ///
-  /// Phase 5 will persist this flag in SharedPreferences or flutter_secure_storage.
-  WifiOnlyProvider._()
+final class SettingsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<SettingsRepository>,
+          SettingsRepository,
+          FutureOr<SettingsRepository>
+        >
+    with
+        $FutureModifier<SettingsRepository>,
+        $FutureProvider<SettingsRepository> {
+  SettingsRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'wifiOnlyProvider',
-        isAutoDispose: true,
+        name: r'settingsRepositoryProvider',
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$wifiOnlyHash();
+  String debugGetCreateSourceHash() => _$settingsRepositoryHash();
 
   @$internal
   @override
-  WifiOnly create() => WifiOnly();
+  $FutureProviderElement<SettingsRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
-    );
+  @override
+  FutureOr<SettingsRepository> create(Ref ref) {
+    return settingsRepository(ref);
   }
 }
 
-String _$wifiOnlyHash() => r'd1bfd3b57bc0a2763d98029653b0cb097abd84c7';
+String _$settingsRepositoryHash() =>
+    r'9b87adf667d44c51ab91f1d3d35e851b915d42ed';
 
-/// In-memory toggle for the "Wi-Fi only" sync preference.
-///
-/// Phase 5 will persist this flag in SharedPreferences or flutter_secure_storage.
+@ProviderFor(Settings)
+final settingsProvider = SettingsProvider._();
 
-abstract class _$WifiOnly extends $Notifier<bool> {
-  bool build();
+final class SettingsProvider
+    extends $AsyncNotifierProvider<Settings, AppSettings> {
+  SettingsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'settingsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$settingsHash();
+
+  @$internal
+  @override
+  Settings create() => Settings();
+}
+
+String _$settingsHash() => r'0b669448d1a826ff61c350170e40316c76f1b6b5';
+
+abstract class _$Settings extends $AsyncNotifier<AppSettings> {
+  FutureOr<AppSettings> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<bool, bool>;
+    final ref = this.ref as $Ref<AsyncValue<AppSettings>, AppSettings>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<bool, bool>,
-              bool,
+              AnyNotifier<AsyncValue<AppSettings>, AppSettings>,
+              AsyncValue<AppSettings>,
               Object?,
               Object?
             >;

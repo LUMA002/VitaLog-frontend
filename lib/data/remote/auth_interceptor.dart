@@ -38,6 +38,13 @@ final class AuthInterceptor extends Interceptor {
   /// on this completer instead of issuing a duplicate refresh request.
   Completer<bool>? _refreshCompleter;
 
+  void _completeRefresh(bool success) {
+    final completer = _refreshCompleter;
+    if (completer != null && !completer.isCompleted) {
+      completer.complete(success);
+    }
+  }
+
   // ── onRequest ─────────────────────────────────────────────────────────────
 
   @override
@@ -63,24 +70,23 @@ final class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    // Avoid retrying an already-retried request or the refresh call itself.
     final options = err.requestOptions;
     if (options.extra['_retried'] == true) {
       return handler.next(err);
     }
 
-    // ── Queuing mutex ──────────────────────────────────────────────────────
-
     if (_refreshCompleter != null) {
-      // Another request is already refreshing — wait for the outcome.
       final refreshed = await _refreshCompleter!.future;
       if (refreshed) {
-        return handler.resolve(await _retry(options, err.requestOptions.extra));
-      } else {
-        return handler.next(
-          _authError('Session expired.', err.requestOptions),
-        );
+        try {
+          return handler.resolve(
+            await _retry(options, {'_retried': true}),
+          );
+        } on Object catch (e) {
+          return handler.next(_authError(e.toString(), options));
+        }
       }
+      return handler.next(_authError('Session expired.', options));
     }
 
     _refreshCompleter = Completer<bool>();
@@ -88,7 +94,7 @@ final class AuthInterceptor extends Interceptor {
     try {
       final refreshToken = await _storage.getRefreshToken();
       if (refreshToken == null || refreshToken.isEmpty) {
-        _refreshCompleter!.complete(false);
+        _completeRefresh(false);
         _onSessionExpired();
         return handler.next(_authError('No refresh token.', options));
       }
@@ -98,7 +104,7 @@ final class AuthInterceptor extends Interceptor {
       if (newTokens == null ||
           newTokens.accessToken.isEmpty ||
           newTokens.refreshToken.isEmpty) {
-        _refreshCompleter!.complete(false);
+        _completeRefresh(false);
         await _storage.clearSession();
         _onSessionExpired();
         return handler.next(_authError('Token refresh failed.', options));
@@ -108,11 +114,17 @@ final class AuthInterceptor extends Interceptor {
         accessToken: newTokens.accessToken,
         refreshToken: newTokens.refreshToken,
       );
-      _refreshCompleter!.complete(true);
 
-      return handler.resolve(await _retry(options, {'_retried': true}));
-    } catch (e) {
-      _refreshCompleter?.complete(false);
+      try {
+        final response = await _retry(options, {'_retried': true});
+        _completeRefresh(true);
+        return handler.resolve(response);
+      } on Object catch (e) {
+        _completeRefresh(false);
+        return handler.next(_authError(e.toString(), options));
+      }
+    } on Object catch (e) {
+      _completeRefresh(false);
       await _storage.clearSession();
       _onSessionExpired();
       return handler.next(_authError(e.toString(), options));

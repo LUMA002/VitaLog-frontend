@@ -42,6 +42,9 @@ dependencies:
   internet_connection_checker_plus: ^3.0.0 # Real internet reachability
 
 
+  # --- Preferences ---
+  shared_preferences: ^2.5.3 # App settings (Wi-Fi only sync, etc.)
+
   # --- Security and Logging ---
   flutter_secure_storage: ^10.2.0 # Encrypted JWT storage
   talker_flutter: ^5.1.17 # In-app log viewer (Settings -> Dev)

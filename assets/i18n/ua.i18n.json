@@ -57,6 +57,11 @@
       "wifiOnly": "Тільки Wi-Fi",
       "never": "Ніколи"
     },
+    "language": {
+      "title": "Мова",
+      "en": "Англійська",
+      "ua": "Українська"
+    },
     "notifications": {
       "title": "Сповіщення",
       "rebuild": "Оновити розклад"

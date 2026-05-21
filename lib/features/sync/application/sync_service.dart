@@ -7,6 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../app/providers/repository_providers.dart';
 import '../../../core/failure/app_failure.dart';
 import '../../../core/logger/talker.dart';
+import '../../../core/network/sync_connectivity.dart';
+import '../../settings/application/settings_controller.dart';
 import '../../../data/local/daos/courses_dao.dart';
 import '../../../data/local/daos/global_ingredients_dao.dart';
 import '../../../data/local/daos/products_dao.dart';
@@ -55,11 +57,18 @@ class SyncService extends _$SyncService {
     final authState = ref.read(authControllerProvider).asData?.value;
     if (authState is! Authenticated) return;
 
+    final settings = await ref.read(settingsProvider.future);
+    final canSync = await ref.read(syncConnectivityProvider).canSync(
+          wifiOnlySync: settings.wifiOnlySync,
+        );
+    if (!canSync) return;
+
     _syncing = true;
     state = const AsyncLoading();
 
     try {
-      state = AsyncData(await _doSync(authState));
+      await _doSync(authState);
+      state = const AsyncData(null);
     } on Object catch (e, st) {
       state = AsyncError(_toAppFailure(e), st);
       talker.handle(e, st, '[SyncService]');

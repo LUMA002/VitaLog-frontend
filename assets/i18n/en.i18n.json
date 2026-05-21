@@ -57,6 +57,11 @@
       "wifiOnly": "Wi-Fi only",
       "never": "Never"
     },
+    "language": {
+      "title": "Language",
+      "en": "English",
+      "ua": "Ukrainian"
+    },
     "notifications": {
       "title": "Notifications",
       "rebuild": "Rebuild schedule"
