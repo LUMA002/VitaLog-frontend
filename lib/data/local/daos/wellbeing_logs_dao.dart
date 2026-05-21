@@ -36,4 +36,9 @@ class WellbeingLogsDao extends DatabaseAccessor<AppDatabase>
   /// Deletes an entry by UUID. Returns the number of rows deleted (0 or 1).
   Future<int> deleteById(String id) =>
       (delete(wellbeingLogs)..where((t) => t.id.equals(id))).go();
+
+  /// Hard-deletes all wellbeing journal rows (logout erase).
+  ///
+  /// V2 schema has no [userId] on this table; entries are device-local only.
+  Future<int> deleteAll() => delete(wellbeingLogs).go();
 }

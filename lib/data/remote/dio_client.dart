@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
-import '../../core/env/env.dart';
 import '../../core/logger/talker.dart';
+import '../../core/network/dio_base_options.dart';
 import '../../features/auth/application/auth_controller.dart';
 import 'auth_interceptor.dart';
 import 'auth_service.dart';
@@ -27,18 +27,7 @@ Dio dio(Ref ref) {
   final storage = ref.watch(secureStorageServiceProvider);
   final auth = ref.watch(authServiceProvider);
 
-  final instance = Dio(
-    BaseOptions(
-      baseUrl: Env.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Client-Platform': 'mobile',
-      },
-    ),
-  );
+  final instance = Dio(createAppDioBaseOptions());
 
   instance.interceptors.addAll([
     AuthInterceptor(

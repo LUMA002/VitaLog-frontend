@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../app/providers/repository_providers.dart';
 import '../../../core/failure/app_failure.dart';
 import '../../../core/result/result.dart';
 import '../../../data/remote/auth_service.dart';
@@ -62,9 +63,46 @@ class AuthController extends _$AuthController {
 
   /// Authenticates the user and persists the session.
   ///
-  /// Returns [Success] with the [Authenticated] state on success, or
-  /// [Failure] with an [AppFailure] if the credentials are invalid.
+  /// Sets [state] to [AsyncLoading] while the request is in-flight, then to
+  /// [AsyncData] on success or [AsyncError] with an [AppFailure] on failure.
   Future<Result<Authenticated, AppFailure>> login({
+    required String email,
+    required String password,
+  }) async {
+    state = const AsyncLoading();
+    final result = await _loginCore(email: email, password: password);
+    _applyAuthResult(result);
+    return result;
+  }
+
+  // ── Register ───────────────────────────────────────────────────────────────
+
+  /// Registers a new account, then immediately logs in to establish a session.
+  Future<Result<Authenticated, AppFailure>> register({
+    required String email,
+    required String password,
+  }) async {
+    state = const AsyncLoading();
+
+    final authSvc = ref.read(authServiceProvider);
+    final registerResult =
+        await authSvc.register(email: email, password: password);
+
+    if (registerResult.isFailure) {
+      _applyAuthResult(
+        Failure<Authenticated, AppFailure>(registerResult.error),
+      );
+      return Failure(registerResult.error);
+    }
+
+    final loginResult = await _loginCore(email: email, password: password);
+    _applyAuthResult(loginResult);
+    return loginResult;
+  }
+
+  // ── Session persistence ────────────────────────────────────────────────────
+
+  Future<Result<Authenticated, AppFailure>> _loginCore({
     required String email,
     required String password,
   }) async {
@@ -85,45 +123,88 @@ class AuthController extends _$AuthController {
       );
     }
 
+    final normalizedEmail = email.trim().toLowerCase();
     await storage.saveSession(
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       userId: userId,
-      email: email.trim().toLowerCase(),
+      email: normalizedEmail,
     );
-    final authState = Authenticated(userId: userId, email: email);
-    state = AsyncData(authState);
-    return Success<Authenticated, AppFailure>(authState);
-  }
 
-  // ── Register ───────────────────────────────────────────────────────────────
-
-  /// Registers a new account, then immediately logs in to establish a session.
-  Future<Result<Authenticated, AppFailure>> register({
-    required String email,
-    required String password,
-  }) async {
-    final authSvc = ref.read(authServiceProvider);
-    final registerResult =
-        await authSvc.register(email: email, password: password);
-
-    if (registerResult.isFailure) {
-      return Failure(registerResult.error);
+    final claimFailure = await _claimGuestData(userId);
+    if (claimFailure != null) {
+      return Failure<Authenticated, AppFailure>(claimFailure);
     }
 
-    // Registration succeeded; proceed to login.
-    return login(email: email, password: password);
+    return Success<Authenticated, AppFailure>(
+      Authenticated(userId: userId, email: normalizedEmail),
+    );
+  }
+
+  void _applyAuthResult(Result<Authenticated, AppFailure> result) {
+    if (result.isFailure) {
+      state = AsyncError(result.error, StackTrace.current);
+      return;
+    }
+    state = AsyncData(result.value);
   }
 
   // ── Logout ─────────────────────────────────────────────────────────────────
 
   /// Clears local tokens and reverts to [Guest].
   ///
-  /// [keepLocalData]: when `false`, the caller is expected to erase all rows
-  /// owned by this user before calling logout (not implemented in Phase 5).
-  Future<void> logout({bool keepLocalData = true}) async {
+  /// When [eraseData] is true, hard-deletes rows owned by the current user from
+  /// the local Drift database before clearing the session.
+  Future<void> logout({required bool eraseData}) async {
+    if (eraseData) {
+      final current = state.value;
+      if (current is Authenticated) {
+        await _eraseUserData(current.userId);
+      }
+    }
+
     await ref.read(secureStorageServiceProvider).clearSession();
     state = const AsyncData(Guest());
+    _invalidateDataProviders();
+  }
+
+  // ── Local data ownership ───────────────────────────────────────────────────
+
+  Future<AppFailure?> _claimGuestData(String userId) async {
+    try {
+      final coursesDao = ref.read(coursesDaoProvider);
+      final productsDao = ref.read(productsDaoProvider);
+
+      await coursesDao.claimGuestCourses(userId);
+      await coursesDao.claimGuestIntakeLogs(userId);
+      await productsDao.claimGuestDraftProducts(userId);
+
+      _invalidateDataProviders();
+      return null;
+    } catch (e) {
+      return DbFailure(message: 'Failed to claim local data.', cause: e);
+    }
+  }
+
+  Future<void> _eraseUserData(String userId) async {
+    final coursesDao = ref.read(coursesDaoProvider);
+    final productsDao = ref.read(productsDaoProvider);
+    final wellbeingDao = ref.read(wellbeingLogsDaoProvider);
+
+    await coursesDao.deleteCoursesForUser(userId);
+    await coursesDao.deleteIntakeLogsForUser(userId);
+    await productsDao.deleteLocalDraftsForUser(userId);
+    // WellbeingLogs has no userId in V2 — erase all device-local journal rows.
+    await wellbeingDao.deleteAll();
+  }
+
+  void _invalidateDataProviders() {
+    ref
+      ..invalidate(activeCourseStreamProvider)
+      ..invalidate(userIntakeLogStreamProvider)
+      ..invalidate(intakeHistoryStreamProvider)
+      ..invalidate(allProductStreamProvider)
+      ..invalidate(allWellbeingLogStreamProvider);
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────

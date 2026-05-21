@@ -82,8 +82,22 @@
       "title": "Створити акаунт",
       "email": "Електронна пошта",
       "password": "Пароль",
+      "confirmPassword": "Підтвердіть пароль",
       "submit": "Створити акаунт",
       "hasAccount": "Вже є акаунт? Увійти"
+    },
+    "validation": {
+      "emailRequired": "Вкажіть електронну пошту",
+      "emailInvalid": "Вкажіть коректну адресу електронної пошти",
+      "emailMaxLength": "Адреса електронної пошти має містити не більше 255 символів",
+      "passwordRequired": "Вкажіть пароль",
+      "passwordMinLength": "Пароль має містити щонайменше 8 символів.",
+      "passwordMaxLength": "Пароль має містити не більше 128 символів.",
+      "passwordUppercase": "Пароль має містити принаймні одну велику літеру.",
+      "passwordLowercase": "Пароль має містити принаймні одну малу літеру.",
+      "passwordDigit": "Пароль має містити принаймні одну цифру.",
+      "confirmPasswordRequired": "Підтвердіть пароль",
+      "confirmPasswordMismatch": "Паролі не збігаються"
     }
   },
   "errors": {

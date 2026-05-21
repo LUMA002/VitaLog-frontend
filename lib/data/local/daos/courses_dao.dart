@@ -81,6 +81,36 @@ class CoursesDao extends DatabaseAccessor<AppDatabase>
   Future<void> upsertIntakeLogBatch(List<IntakeLogsCompanion> rows) =>
       batch((b) => b.insertAllOnConflictUpdate(intakeLogs, rows));
 
+  /// Stamps guest-owned courses with [userId] and marks them for sync.
+  Future<int> claimGuestCourses(String userId) => (update(courses)
+        ..where((t) => t.userId.isNull()))
+      .write(
+        CoursesCompanion(
+          userId: Value(userId),
+          pendingSync: const Value(1),
+        ),
+      );
+
+  /// Stamps guest-owned intake logs with [userId] and marks them for sync.
+  Future<int> claimGuestIntakeLogs(String userId) => (update(intakeLogs)
+        ..where((t) => t.userId.isNull()))
+      .write(
+        IntakeLogsCompanion(
+          userId: Value(userId),
+          pendingSync: const Value(1),
+        ),
+      );
+
+  /// Hard-deletes all courses owned by [userId] (logout erase).
+  Future<int> deleteCoursesForUser(String userId) => (delete(courses)
+        ..where((t) => t.userId.equals(userId)))
+      .go();
+
+  /// Hard-deletes all intake logs owned by [userId] (logout erase).
+  Future<int> deleteIntakeLogsForUser(String userId) => (delete(intakeLogs)
+        ..where((t) => t.userId.equals(userId)))
+      .go();
+
   /// Intake history with product names via LEFT JOIN (includes soft-deleted
   /// courses and products so historical labels stay intact).
   Stream<List<IntakeHistoryRow>> watchIntakeHistoryForUser(String? userId) {

@@ -165,9 +165,9 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
     if (choice != null) {
-      await ref
-          .read(authControllerProvider.notifier)
-          .logout(keepLocalData: choice);
+      await ref.read(authControllerProvider.notifier).logout(
+            eraseData: !choice,
+          );
     }
   }
 

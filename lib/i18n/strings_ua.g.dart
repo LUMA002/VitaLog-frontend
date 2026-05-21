@@ -139,6 +139,7 @@ class TranslationsAuthUa implements TranslationsAuthEn {
 	// Translations
 	@override late final TranslationsAuthLoginUa login = TranslationsAuthLoginUa._(_root);
 	@override late final TranslationsAuthRegisterUa register = TranslationsAuthRegisterUa._(_root);
+	@override late final TranslationsAuthValidationUa validation = TranslationsAuthValidationUa._(_root);
 }
 
 // Path: errors
@@ -281,8 +282,29 @@ class TranslationsAuthRegisterUa implements TranslationsAuthRegisterEn {
 	@override String get title => 'Створити акаунт';
 	@override String get email => 'Електронна пошта';
 	@override String get password => 'Пароль';
+	@override String get confirmPassword => 'Підтвердіть пароль';
 	@override String get submit => 'Створити акаунт';
 	@override String get hasAccount => 'Вже є акаунт? Увійти';
+}
+
+// Path: auth.validation
+class TranslationsAuthValidationUa implements TranslationsAuthValidationEn {
+	TranslationsAuthValidationUa._(this._root);
+
+	final TranslationsUa _root; // ignore: unused_field
+
+	// Translations
+	@override String get emailRequired => 'Вкажіть електронну пошту';
+	@override String get emailInvalid => 'Вкажіть коректну адресу електронної пошти';
+	@override String get emailMaxLength => 'Адреса електронної пошти має містити не більше 255 символів';
+	@override String get passwordRequired => 'Вкажіть пароль';
+	@override String get passwordMinLength => 'Пароль має містити щонайменше 8 символів.';
+	@override String get passwordMaxLength => 'Пароль має містити не більше 128 символів.';
+	@override String get passwordUppercase => 'Пароль має містити принаймні одну велику літеру.';
+	@override String get passwordLowercase => 'Пароль має містити принаймні одну малу літеру.';
+	@override String get passwordDigit => 'Пароль має містити принаймні одну цифру.';
+	@override String get confirmPasswordRequired => 'Підтвердіть пароль';
+	@override String get confirmPasswordMismatch => 'Паролі не збігаються';
 }
 
 // Path: errors.auth
@@ -357,8 +379,20 @@ extension on TranslationsUa {
 			'auth.register.title' => 'Створити акаунт',
 			'auth.register.email' => 'Електронна пошта',
 			'auth.register.password' => 'Пароль',
+			'auth.register.confirmPassword' => 'Підтвердіть пароль',
 			'auth.register.submit' => 'Створити акаунт',
 			'auth.register.hasAccount' => 'Вже є акаунт? Увійти',
+			'auth.validation.emailRequired' => 'Вкажіть електронну пошту',
+			'auth.validation.emailInvalid' => 'Вкажіть коректну адресу електронної пошти',
+			'auth.validation.emailMaxLength' => 'Адреса електронної пошти має містити не більше 255 символів',
+			'auth.validation.passwordRequired' => 'Вкажіть пароль',
+			'auth.validation.passwordMinLength' => 'Пароль має містити щонайменше 8 символів.',
+			'auth.validation.passwordMaxLength' => 'Пароль має містити не більше 128 символів.',
+			'auth.validation.passwordUppercase' => 'Пароль має містити принаймні одну велику літеру.',
+			'auth.validation.passwordLowercase' => 'Пароль має містити принаймні одну малу літеру.',
+			'auth.validation.passwordDigit' => 'Пароль має містити принаймні одну цифру.',
+			'auth.validation.confirmPasswordRequired' => 'Підтвердіть пароль',
+			'auth.validation.confirmPasswordMismatch' => 'Паролі не збігаються',
 			'errors.network' => 'Помилка мережі. Перевірте підключення.',
 			'errors.auth.expired' => 'Сесія закінчилась. Будь ласка, увійдіть знову.',
 			'errors.auth.unauthorized' => 'Доступ заборонено.',

@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import '../../core/failure/app_failure.dart';
+import '../../core/logger/talker.dart';
+import '../../core/network/dio_base_options.dart';
 import '../../core/result/result.dart';
 import 'dtos/auth_dtos.dart';
 import 'secure_storage_service.dart';
@@ -14,25 +17,19 @@ part 'auth_service.g.dart';
 /// avoid circular dependency: AuthInterceptor → AuthService → Dio).
 @Riverpod(keepAlive: true)
 Dio _authDio(Ref ref) {
-  return Dio(
-    BaseOptions(
-      baseUrl: _authBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Client-Platform': 'mobile',
-      },
+  final dio = Dio(createDioBaseOptions());
+  dio.interceptors.add(
+    TalkerDioLogger(
+      talker: talker,
+      settings: const TalkerDioLoggerSettings(
+        printRequestHeaders: false,
+        printResponseHeaders: false,
+        printResponseData: false,
+      ),
     ),
   );
+  return dio;
 }
-
-/// Fall back to env if available; keep it simple for this internal provider.
-const _authBaseUrl = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: 'http://10.0.2.2:5000',
-);
 
 @Riverpod(keepAlive: true)
 AuthService authService(Ref ref) => AuthService(
@@ -152,8 +149,8 @@ final class AuthService {
     if (status == 400 || status == 409) {
       final detail = e.response?.data is Map
           ? (e.response!.data as Map)['title'] as String? ??
-              e.message ??
-              'Bad request'
+                e.message ??
+                'Bad request'
           : e.message ?? 'Bad request';
       return ValidationFailure(message: detail);
     }

@@ -9,23 +9,20 @@ import '../i18n/strings.g.dart';
 import 'app.dart';
 
 Future<void> bootstrap() async {
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-      FlutterError.onError = (details) {
-        talker.handle(details.exception, details.stack, 'Flutter Error');
-      };
+    FlutterError.onError = (details) {
+      talker.handle(details.exception, details.stack, 'Flutter Error');
+    };
 
-      await LocaleSettings.useDeviceLocale();
+    await LocaleSettings.useDeviceLocale();
 
-      runApp(
-        ProviderScope(
-          observers: [TalkerRiverpodObserver(talker: talker)],
-          child: const App(),
-        ),
-      );
-    },
-    (error, stack) => talker.handle(error, stack, 'Zone Error'),
-  );
+    runApp(
+      ProviderScope(
+        observers: [TalkerRiverpodObserver(talker: talker)],
+        child: const App(),
+      ),
+    );
+  }, (error, stack) => talker.handle(error, stack, 'Zone Error'));
 }

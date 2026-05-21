@@ -188,6 +188,7 @@ class TranslationsAuthEn {
 	// Translations
 	late final TranslationsAuthLoginEn login = TranslationsAuthLoginEn._(_root);
 	late final TranslationsAuthRegisterEn register = TranslationsAuthRegisterEn._(_root);
+	late final TranslationsAuthValidationEn validation = TranslationsAuthValidationEn._(_root);
 }
 
 // Path: errors
@@ -416,11 +417,56 @@ class TranslationsAuthRegisterEn {
 	/// en: 'Password'
 	String get password => 'Password';
 
+	/// en: 'Confirm password'
+	String get confirmPassword => 'Confirm password';
+
 	/// en: 'Create Account'
 	String get submit => 'Create Account';
 
 	/// en: 'Already have an account? Sign In'
 	String get hasAccount => 'Already have an account? Sign In';
+}
+
+// Path: auth.validation
+class TranslationsAuthValidationEn {
+	TranslationsAuthValidationEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Email is required'
+	String get emailRequired => 'Email is required';
+
+	/// en: 'Enter a valid email address'
+	String get emailInvalid => 'Enter a valid email address';
+
+	/// en: 'Email must be at most 255 characters'
+	String get emailMaxLength => 'Email must be at most 255 characters';
+
+	/// en: 'Password is required'
+	String get passwordRequired => 'Password is required';
+
+	/// en: 'Password must be at least 8 characters long.'
+	String get passwordMinLength => 'Password must be at least 8 characters long.';
+
+	/// en: 'Password must be at most 128 characters long.'
+	String get passwordMaxLength => 'Password must be at most 128 characters long.';
+
+	/// en: 'Password must contain at least one uppercase letter.'
+	String get passwordUppercase => 'Password must contain at least one uppercase letter.';
+
+	/// en: 'Password must contain at least one lowercase letter.'
+	String get passwordLowercase => 'Password must contain at least one lowercase letter.';
+
+	/// en: 'Password must contain at least one number.'
+	String get passwordDigit => 'Password must contain at least one number.';
+
+	/// en: 'Please confirm your password'
+	String get confirmPasswordRequired => 'Please confirm your password';
+
+	/// en: 'Passwords do not match'
+	String get confirmPasswordMismatch => 'Passwords do not match';
 }
 
 // Path: errors.auth
@@ -499,8 +545,20 @@ extension on Translations {
 			'auth.register.title' => 'Create Account',
 			'auth.register.email' => 'Email',
 			'auth.register.password' => 'Password',
+			'auth.register.confirmPassword' => 'Confirm password',
 			'auth.register.submit' => 'Create Account',
 			'auth.register.hasAccount' => 'Already have an account? Sign In',
+			'auth.validation.emailRequired' => 'Email is required',
+			'auth.validation.emailInvalid' => 'Enter a valid email address',
+			'auth.validation.emailMaxLength' => 'Email must be at most 255 characters',
+			'auth.validation.passwordRequired' => 'Password is required',
+			'auth.validation.passwordMinLength' => 'Password must be at least 8 characters long.',
+			'auth.validation.passwordMaxLength' => 'Password must be at most 128 characters long.',
+			'auth.validation.passwordUppercase' => 'Password must contain at least one uppercase letter.',
+			'auth.validation.passwordLowercase' => 'Password must contain at least one lowercase letter.',
+			'auth.validation.passwordDigit' => 'Password must contain at least one number.',
+			'auth.validation.confirmPasswordRequired' => 'Please confirm your password',
+			'auth.validation.confirmPasswordMismatch' => 'Passwords do not match',
 			'errors.network' => 'Network error. Please check your connection.',
 			'errors.auth.expired' => 'Session expired. Please sign in again.',
 			'errors.auth.unauthorized' => 'Unauthorized.',

@@ -35,6 +35,26 @@ class ProductsDao extends DatabaseAccessor<AppDatabase>
   Future<void> upsertBatch(List<ProductsCompanion> rows) =>
       batch((b) => b.insertAllOnConflictUpdate(products, rows));
 
+  /// Stamps guest draft products with [userId] and marks them for sync.
+  Future<int> claimGuestDraftProducts(String userId) => (update(products)
+        ..where(
+          (t) => t.creatorUserId.isNull() & t.isLocalDraft.equals(1),
+        ))
+      .write(
+        ProductsCompanion(
+          creatorUserId: Value(userId),
+          pendingSync: const Value(1),
+        ),
+      );
+
+  /// Hard-deletes local draft products created by [userId] (logout erase).
+  Future<int> deleteLocalDraftsForUser(String userId) => (delete(products)
+        ..where(
+          (t) =>
+              t.creatorUserId.equals(userId) & t.isLocalDraft.equals(1),
+        ))
+      .go();
+
   // ─── ProductIngredients ───────────────────────────────────────────────────
 
   /// All ingredient rows for a given product.
