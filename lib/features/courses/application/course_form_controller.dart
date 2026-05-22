@@ -6,6 +6,7 @@ import '../../../core/result/result.dart';
 import '../../../core/utils/uuid.dart';
 import '../../../domain/models/course.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../notifications/application/notification_service.dart';
 import 'course_form_state.dart';
 
 part 'course_form_controller.g.dart';
@@ -137,7 +138,10 @@ class CourseFormController extends _$CourseFormController {
           await ref.read(courseRepositoryProvider).upsert(course);
 
       return result.when(
-        success: (_) => true,
+        success: (_) {
+          ref.read(notificationServiceProvider).scheduleNextIntakes();
+          return true;
+        },
         failure: (e) {
           state = AsyncData(
             current.copyWith(

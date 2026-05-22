@@ -47,6 +47,7 @@ class TranslationsUa with BaseTranslations<AppLocale, Translations> implements T
 	@override late final TranslationsAuthUa auth = TranslationsAuthUa._(_root);
 	@override late final TranslationsValidationUa validation = TranslationsValidationUa._(_root);
 	@override late final TranslationsErrorsUa errors = TranslationsErrorsUa._(_root);
+	@override late final TranslationsNotificationsUa notifications = TranslationsNotificationsUa._(_root);
 	@override late final TranslationsCommonUa common = TranslationsCommonUa._(_root);
 }
 
@@ -60,7 +61,7 @@ class TranslationsNavUa implements TranslationsNavEn {
 	@override String get today => 'Сьогодні';
 	@override String get history => 'Історія';
 	@override String get courses => 'Курси';
-	@override String get settings => 'Налаштування';
+	@override String get settings => 'Опції';
 }
 
 // Path: dashboard
@@ -180,6 +181,17 @@ class TranslationsErrorsUa implements TranslationsErrorsEn {
 	@override String get sync => 'Синхронізація не вдалась. Ми спробуємо ще раз.';
 	@override String get unknown => 'Щось пішло не так.';
 	@override String get deviceTime => 'Перевірте час на пристрої та спробуйте знову.';
+}
+
+// Path: notifications
+class TranslationsNotificationsUa implements TranslationsNotificationsEn {
+	TranslationsNotificationsUa._(this._root);
+
+	final TranslationsUa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'VitaLog';
+	@override String takeReminder({required Object name}) => 'Час прийому: ${name}';
 }
 
 // Path: common
@@ -370,7 +382,7 @@ extension on TranslationsUa {
 			'nav.today' => 'Сьогодні',
 			'nav.history' => 'Історія',
 			'nav.courses' => 'Курси',
-			'nav.settings' => 'Налаштування',
+			'nav.settings' => 'Опції',
 			'dashboard.title' => 'План на сьогодні',
 			'dashboard.empty' => 'На сьогодні курсів не заплановано.',
 			'dashboard.quickLog' => 'Відмітити прийом',
@@ -459,6 +471,8 @@ extension on TranslationsUa {
 			'errors.sync' => 'Синхронізація не вдалась. Ми спробуємо ще раз.',
 			'errors.unknown' => 'Щось пішло не так.',
 			'errors.deviceTime' => 'Перевірте час на пристрої та спробуйте знову.',
+			'notifications.title' => 'VitaLog',
+			'notifications.takeReminder' => ({required Object name}) => 'Час прийому: ${name}',
 			'common.cancel' => 'Скасувати',
 			'common.save' => 'Зберегти',
 			'common.delete' => 'Видалити',

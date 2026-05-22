@@ -4,6 +4,7 @@ import '../../../app/providers/repository_providers.dart';
 import '../../../domain/models/course.dart';
 import '../../../domain/models/product.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../notifications/application/notification_service.dart';
 
 part 'courses_controller.g.dart';
 
@@ -63,5 +64,6 @@ class CoursesController extends _$CoursesController {
     await ref
         .read(courseRepositoryProvider)
         .softDelete(courseId, clock.nowUtc());
+    ref.read(notificationServiceProvider).scheduleNextIntakes();
   }
 }

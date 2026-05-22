@@ -134,6 +134,10 @@
     "unknown": "Something went wrong.",
     "deviceTime": "Please check your device time and try again."
   },
+  "notifications": {
+    "title": "VitaLog",
+    "takeReminder(name)": "Time to take: {name}"
+  },
   "common": {
     "cancel": "Cancel",
     "save": "Save",

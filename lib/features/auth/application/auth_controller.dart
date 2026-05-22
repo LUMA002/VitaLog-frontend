@@ -7,6 +7,7 @@ import '../../../core/failure/app_failure.dart';
 import '../../../core/result/result.dart';
 import '../../../data/remote/auth_service.dart';
 import '../../../data/remote/secure_storage_service.dart';
+import '../../notifications/application/notification_service.dart';
 
 part 'auth_controller.g.dart';
 
@@ -135,6 +136,9 @@ class AuthController extends _$AuthController {
     if (claimFailure != null) {
       return Failure<Authenticated, AppFailure>(claimFailure);
     }
+
+    // Rebuild notification schedule now that the user's courses are stamped.
+    ref.read(notificationServiceProvider).scheduleNextIntakes();
 
     return Success<Authenticated, AppFailure>(
       Authenticated(userId: userId, email: normalizedEmail),

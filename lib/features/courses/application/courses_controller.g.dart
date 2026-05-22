@@ -39,7 +39,7 @@ final class CoursesControllerProvider
   CoursesController create() => CoursesController();
 }
 
-String _$coursesControllerHash() => r'28119f364931917ca49225ac6d4317831738ab59';
+String _$coursesControllerHash() => r'ed5be9d238406297ba91dc3c33bc42ae36f998a6';
 
 /// Provides the list of active courses for the current user, enriched with
 /// product metadata for display.

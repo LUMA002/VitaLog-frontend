@@ -134,6 +134,10 @@
     "unknown": "Щось пішло не так.",
     "deviceTime": "Перевірте час на пристрої та спробуйте знову."
   },
+  "notifications": {
+    "title": "VitaLog",
+    "takeReminder(name)": "Час прийому: {name}"
+  },
   "common": {
     "cancel": "Скасувати",
     "save": "Зберегти",

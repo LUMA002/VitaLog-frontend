@@ -10,6 +10,7 @@ import '../../../app/router/routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../i18n/strings.g.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../notifications/application/notification_service.dart';
 import '../../sync/application/sync_service.dart';
 import '../application/settings_controller.dart';
 
@@ -127,7 +128,7 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.notifications_outlined),
             title: Text(t.settings.notifications.rebuild),
             onTap: () =>
-                _stubAction(context, 'Rebuild notifications — Phase 5'),
+                ref.read(notificationServiceProvider).scheduleNextIntakes(),
           ),
           const Divider(height: 1),
 
@@ -162,12 +163,6 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  void _stubAction(BuildContext context, String label) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('$label: coming soon.')));
   }
 
   Future<void> _showLogoutDialog(BuildContext context, WidgetRef ref) async {

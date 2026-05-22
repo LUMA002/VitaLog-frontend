@@ -69,7 +69,7 @@ final class CourseFormControllerProvider
 }
 
 String _$courseFormControllerHash() =>
-    r'06f19105259c35fde6582e4345861dfe0851676a';
+    r'f74b074595a14a4796169047779be148486db3cc';
 
 /// Manages the state for the course create / edit form.
 ///

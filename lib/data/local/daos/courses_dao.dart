@@ -7,6 +7,16 @@ import '../tables/products_table.dart';
 
 part 'courses_dao.g.dart';
 
+/// Lightweight projection used exclusively by [NotificationService].
+///
+/// Only [course] and [productName] are fetched — no ingredient rows are loaded.
+class ActiveCourseRow {
+  const ActiveCourseRow({required this.course, this.productName});
+
+  final CoursesData course;
+  final String? productName;
+}
+
 /// Row returned by [CoursesDao.watchIntakeHistoryForUser] (Drift join).
 class IntakeHistoryRow {
   const IntakeHistoryRow({required this.log, this.productName});
@@ -80,6 +90,36 @@ class CoursesDao extends DatabaseAccessor<AppDatabase>
   /// Insert or replace a batch of intake logs.
   Future<void> upsertIntakeLogBatch(List<IntakeLogsCompanion> rows) =>
       batch((b) => b.insertAllOnConflictUpdate(intakeLogs, rows));
+
+  /// Returns all non-deleted courses for [userId] with their product name.
+  ///
+  /// Uses a single LEFT JOIN against [Products] — no ingredient rows are
+  /// fetched. Intended for [NotificationService] to build the sliding-window
+  /// schedule efficiently.
+  Future<List<ActiveCourseRow>> getActiveCoursesWithProductName(
+    String? userId,
+  ) {
+    final q = select(courses).join([
+      leftOuterJoin(products, products.id.equalsExp(courses.productId)),
+    ])..where(courses.deletedAt.isNull());
+
+    if (userId == null) {
+      q.where(courses.userId.isNull());
+    } else {
+      q.where(courses.userId.equals(userId));
+    }
+
+    return q.get().then(
+      (rows) => rows
+          .map(
+            (row) => ActiveCourseRow(
+              course: row.readTable(courses),
+              productName: row.readTableOrNull(products)?.name,
+            ),
+          )
+          .toList(),
+    );
+  }
 
   /// Stamps guest-owned courses with [userId] and marks them for sync.
   Future<int> claimGuestCourses(String userId) => (update(courses)

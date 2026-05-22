@@ -53,6 +53,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsAuthEn auth = TranslationsAuthEn._(_root);
 	late final TranslationsValidationEn validation = TranslationsValidationEn._(_root);
 	late final TranslationsErrorsEn errors = TranslationsErrorsEn._(_root);
+	late final TranslationsNotificationsEn notifications = TranslationsNotificationsEn._(_root);
 	late final TranslationsCommonEn common = TranslationsCommonEn._(_root);
 }
 
@@ -268,6 +269,21 @@ class TranslationsErrorsEn {
 
 	/// en: 'Please check your device time and try again.'
 	String get deviceTime => 'Please check your device time and try again.';
+}
+
+// Path: notifications
+class TranslationsNotificationsEn {
+	TranslationsNotificationsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'VitaLog'
+	String get title => 'VitaLog';
+
+	/// en: 'Time to take: {name}'
+	String takeReminder({required Object name}) => 'Time to take: ${name}';
 }
 
 // Path: common
@@ -665,6 +681,8 @@ extension on Translations {
 			'errors.sync' => 'Sync failed. Will retry automatically.',
 			'errors.unknown' => 'Something went wrong.',
 			'errors.deviceTime' => 'Please check your device time and try again.',
+			'notifications.title' => 'VitaLog',
+			'notifications.takeReminder' => ({required Object name}) => 'Time to take: ${name}',
 			'common.cancel' => 'Cancel',
 			'common.save' => 'Save',
 			'common.delete' => 'Delete',

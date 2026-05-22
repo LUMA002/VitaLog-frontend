@@ -1,5 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<!--  android:usesCleartextTraffic with true - allow HTTP traffic for development purposes -->
+
+    <!-- ── Notification permissions ────────────────────────────────────────── -->
+    <!-- Required on Android 13+ (API 33+) to display notifications at runtime. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Required for exact-alarm scheduling (AlarmManager.setExactAndAllowWhileIdle).
+         SCHEDULE_EXACT_ALARM: user must grant permission via system dialog (API 31+).
+         Alternatively replace with USE_EXACT_ALARM for calendar/alarm-clock apps that
+         qualify for the auto-grant policy; see https://developer.android.com/about/versions/14/changes/schedule-exact-alarms -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <!-- Required to reschedule alarms after device reboot. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--  android:usesCleartextTraffic with true - allow HTTP traffic for development purposes -->
     <application
         android:label="vita_log"
         android:name="${applicationName}"
@@ -27,8 +41,27 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <!-- Don't delete the meta-data below.
-             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        This is used by the Flutter tool to generate GeneratedPluginRegistrant.java. -->
+        <!-- ── flutter_local_notifications receivers ─────────────────────── -->
+        <!-- Fires pending alarms when the OS delivers an exact-alarm intent. -->
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+
+        <!-- Reschedules all alarms after device reboot or app update. -->
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
