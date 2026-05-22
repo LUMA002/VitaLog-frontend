@@ -27,7 +27,13 @@ class SettingsScreen extends ConsumerWidget {
     final currentLocale = LocaleSettings.currentLocale;
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.settings.title)),
+      appBar: AppBar(
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(t.settings.title),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 40),
         children: [
@@ -164,7 +170,7 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(t.settings.account.logout),
-        content: const Text('How would you like to sign out?'),
+        content: Text(t.settings.account.logoutDialogContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(null),
@@ -194,10 +200,7 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(t.settings.danger.eraseDb),
-        content: const Text(
-          'This will permanently delete all local data. '
-          'Synced data can be recovered by signing in again.',
-        ),
+        content: Text(t.settings.danger.eraseDbConfirmContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),

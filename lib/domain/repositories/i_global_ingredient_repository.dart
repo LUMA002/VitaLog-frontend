@@ -10,4 +10,8 @@ abstract interface class IGlobalIngredientRepository {
 
   /// Returns a single ingredient by [id], or null if not found.
   Future<GlobalIngredient?> getById(String id);
+
+  /// Case-insensitive substring search over ingredient names. Excludes
+  /// soft-deleted rows. Returns an empty list when [query] is blank.
+  Future<List<GlobalIngredient>> search(String query);
 }

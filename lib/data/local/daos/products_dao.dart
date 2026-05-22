@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/utils/uuid.dart';
+import '../../../features/products/application/create_product_state.dart';
 import '../app_database.dart';
 import '../tables/product_ingredients_table.dart';
 import '../tables/products_table.dart';
@@ -80,4 +82,61 @@ class ProductsDao extends DatabaseAccessor<AppDatabase>
     List<ProductIngredientsCompanion> rows,
   ) =>
       batch((b) => b.insertAllOnConflictUpdate(productIngredients, rows));
+
+  // ─── Transactional create ─────────────────────────────────────────────────
+
+  /// Creates a new product and its ingredient line-items atomically.
+  ///
+  /// The product is stamped as a local draft (`isLocalDraft = 1`,
+  /// `pendingSync = 1`) so the sync engine will upload it on the next run.
+  /// [userId] is `null` for guest mode — the claim flow will stamp it later.
+  ///
+  /// Returns the newly inserted [ProductsData] row.
+  Future<ProductsData> createProductWithIngredients({
+    required String name,
+    required String? description,
+    required String? userId,
+    required List<IngredientFormEntry> ingredients,
+    required DateTime nowUtc,
+  }) {
+    return db.transaction(() async {
+      final productId = newUuid();
+
+      await into(products).insert(
+        ProductsCompanion(
+          id: Value(productId),
+          name: Value(name),
+          description: Value(description),
+          creatorUserId: Value(userId),
+          isLocalDraft: const Value(1),
+          updatedAt: Value(nowUtc),
+          deletedAt: const Value(null),
+          pendingSync: const Value(1),
+        ),
+      );
+
+      for (final entry in ingredients) {
+        assert(
+          (entry.globalIngredient != null) != (entry.customName != null),
+          'XOR: exactly one of globalIngredient or customName must be set.',
+        );
+        await into(productIngredients).insert(
+          ProductIngredientsCompanion(
+            id: Value(newUuid()),
+            productId: Value(productId),
+            ingredientId: Value(entry.globalIngredient?.id),
+            customIngredientName: Value(entry.customName),
+            amount: Value(entry.amount),
+            unit: Value(entry.unit),
+            updatedAt: Value(nowUtc),
+            deletedAt: const Value(null),
+            pendingSync: const Value(1),
+          ),
+        );
+      }
+
+      return (select(products)..where((t) => t.id.equals(productId)))
+          .getSingle();
+    });
+  }
 }

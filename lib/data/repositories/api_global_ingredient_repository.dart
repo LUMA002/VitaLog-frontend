@@ -19,4 +19,10 @@ final class ApiGlobalIngredientRepository
       throw UnimplementedError(
         'ApiGlobalIngredientRepository is not yet implemented.',
       );
+
+  @override
+  Future<List<GlobalIngredient>> search(String query) =>
+      throw UnimplementedError(
+        'ApiGlobalIngredientRepository is not yet implemented.',
+      );
 }

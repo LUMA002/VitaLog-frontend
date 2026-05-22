@@ -4,11 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/repository_providers.dart';
 import '../../../app/theme/app_theme.dart';
-import '../../../core/result/result.dart';
-import '../../../core/utils/uuid.dart';
 import '../../../domain/models/product.dart';
 import '../../../i18n/strings.g.dart';
-import '../../auth/application/auth_controller.dart';
+import '../../products/presentation/create_product_screen.dart';
 import '../application/course_form_controller.dart';
 import '../application/course_form_state.dart';
 
@@ -253,49 +251,21 @@ class _ProductListSheet extends ConsumerWidget {
   final ScrollController scrollController;
   final void Function(String id, String name) onSelect;
 
-  Future<void> _showCreateProductDialog(
+  Future<void> _openCreateProductScreen(
     BuildContext context,
-    WidgetRef ref,
   ) async {
-    final name = await showDialog<String>(
-      context: context,
-      builder: (_) => const _CreateProductDialog(),
+    final product = await Navigator.of(context).push<Product>(
+      MaterialPageRoute<Product>(
+        fullscreenDialog: true,
+        builder: (_) => const CreateProductScreen(),
+      ),
     );
 
-    if (!context.mounted) return;
-    if (name == null || name.isEmpty) return;
+    if (!context.mounted || product == null) return;
 
-    final clock = ref.read(clockProvider);
-    final nowUtc = clock.nowUtc();
-    final authState = ref.read(authControllerProvider).value;
-    final creatorUserId = switch (authState) {
-      Authenticated(:final userId) => userId,
-      _ => null,
-    };
-
-    final product = Product(
-      id: newUuid(),
-      name: name,
-      description: null,
-      creatorUserId: creatorUserId,
-      isLocalDraft: true,
-      updatedAtUtc: nowUtc,
-      deletedAtUtc: null,
-    );
-
-    final result =
-        await ref.read(productRepositoryProvider).upsert(product);
-
-    if (!context.mounted) return;
-
-    result.when(
-      success: (_) {},
-      failure: (failure) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
-        );
-      },
-    );
+    // Delegate to the parent's onSelect callback so the course form picks up
+    // the newly created product without coupling to courseId from here.
+    onSelect(product.id, product.name);
   }
 
   @override
@@ -321,7 +291,7 @@ class _ProductListSheet extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.add_rounded),
                 tooltip: t.products.create,
-                onPressed: () => _showCreateProductDialog(context, ref),
+                onPressed: () => _openCreateProductScreen(context),
               ),
             ],
           ),
@@ -356,65 +326,6 @@ class _ProductListSheet extends ConsumerWidget {
               },
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Create product dialog ─────────────────────────────────────────────────────
-
-class _CreateProductDialog extends StatefulWidget {
-  const _CreateProductDialog();
-
-  @override
-  State<_CreateProductDialog> createState() => _CreateProductDialogState();
-}
-
-class _CreateProductDialogState extends State<_CreateProductDialog> {
-  late final TextEditingController _nameController;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final name = _nameController.text.trim();
-    if (name.isEmpty) return;
-    Navigator.of(context).pop(name);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return AlertDialog(
-      title: Text(t.products.createTitle),
-      content: TextField(
-        controller: _nameController,
-        autofocus: true,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: InputDecoration(
-          labelText: t.products.nameLabel,
-        ),
-        onSubmitted: (_) => _submit(),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(t.common.cancel),
-        ),
-        FilledButton(
-          onPressed: _submit,
-          child: Text(t.common.save),
         ),
       ],
     );

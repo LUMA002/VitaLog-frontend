@@ -131,6 +131,15 @@ class TranslationsCoursesEn {
 	/// en: 'No active courses.'
 	String get empty => 'No active courses.';
 
+	/// en: 'serving'
+	String get serving => 'serving';
+
+	/// en: 'servings'
+	String get servings => 'servings';
+
+	/// en: 'Delete this course? This cannot be undone.'
+	String get deleteConfirmContent => 'Delete this course? This cannot be undone.';
+
 	late final TranslationsCoursesFieldsEn fields = TranslationsCoursesFieldsEn._(_root);
 }
 
@@ -153,6 +162,30 @@ class TranslationsProductsEn {
 
 	/// en: 'Product Name'
 	String get nameLabel => 'Product Name';
+
+	/// en: 'Description (optional)'
+	String get descriptionLabel => 'Description (optional)';
+
+	/// en: 'Add Ingredient'
+	String get addIngredient => 'Add Ingredient';
+
+	/// en: 'Search ingredients...'
+	String get ingredientSearchHint => 'Search ingredients...';
+
+	/// en: 'Add {query} as custom ingredient'
+	String addCustomIngredient({required Object query}) => 'Add ${query} as custom ingredient';
+
+	/// en: 'Amount'
+	String get amountLabel => 'Amount';
+
+	/// en: 'Unit (e.g. mg, IU)'
+	String get unitLabel => 'Unit (e.g. mg, IU)';
+
+	/// en: 'Save Product'
+	String get saveProduct => 'Save Product';
+
+	/// en: 'No ingredients added yet.'
+	String get noIngredients => 'No ingredients added yet.';
 
 	/// en: 'Global'
 	String get global => 'Global';
@@ -301,6 +334,9 @@ class TranslationsSettingsAccountEn {
 	/// en: 'Sign out'
 	String get logout => 'Sign out';
 
+	/// en: 'How would you like to sign out?'
+	String get logoutDialogContent => 'How would you like to sign out?';
+
 	/// en: 'Keep local data'
 	String get keepData => 'Keep local data';
 
@@ -393,6 +429,9 @@ class TranslationsSettingsDangerEn {
 
 	/// en: 'Erase local database'
 	String get eraseDb => 'Erase local database';
+
+	/// en: 'This will permanently delete all local data. Synced data can be recovered by signing in again.'
+	String get eraseDbConfirmContent => 'This will permanently delete all local data. Synced data can be recovered by signing in again.';
 }
 
 // Path: auth.login
@@ -527,6 +566,9 @@ extension on Translations {
 			'courses.create' => 'New Course',
 			'courses.edit' => 'Edit Course',
 			'courses.empty' => 'No active courses.',
+			'courses.serving' => 'serving',
+			'courses.servings' => 'servings',
+			'courses.deleteConfirmContent' => 'Delete this course? This cannot be undone.',
 			'courses.fields.product' => 'Product',
 			'courses.fields.servingSize' => 'Serving size',
 			'courses.fields.timeOfDay' => 'Time of day',
@@ -536,6 +578,14 @@ extension on Translations {
 			'products.createTitle' => 'New Product',
 			'products.create' => 'Create',
 			'products.nameLabel' => 'Product Name',
+			'products.descriptionLabel' => 'Description (optional)',
+			'products.addIngredient' => 'Add Ingredient',
+			'products.ingredientSearchHint' => 'Search ingredients...',
+			'products.addCustomIngredient' => ({required Object query}) => 'Add ${query} as custom ingredient',
+			'products.amountLabel' => 'Amount',
+			'products.unitLabel' => 'Unit (e.g. mg, IU)',
+			'products.saveProduct' => 'Save Product',
+			'products.noIngredients' => 'No ingredients added yet.',
 			'products.global' => 'Global',
 			'products.custom' => 'Custom',
 			'settings.title' => 'Settings',
@@ -543,6 +593,7 @@ extension on Translations {
 			'settings.account.guest' => 'Guest',
 			'settings.account.signInCta' => 'Sign in to enable cloud sync',
 			'settings.account.logout' => 'Sign out',
+			'settings.account.logoutDialogContent' => 'How would you like to sign out?',
 			'settings.account.keepData' => 'Keep local data',
 			'settings.account.eraseData' => 'Erase synced data',
 			'settings.sync.title' => 'Synchronization',
@@ -559,6 +610,7 @@ extension on Translations {
 			'settings.developer.viewLogs' => 'View logs',
 			'settings.danger.title' => 'Danger Zone',
 			'settings.danger.eraseDb' => 'Erase local database',
+			'settings.danger.eraseDbConfirmContent' => 'This will permanently delete all local data. Synced data can be recovered by signing in again.',
 			'auth.login.title' => 'Sign In',
 			'auth.login.email' => 'Email',
 			'auth.login.password' => 'Password',

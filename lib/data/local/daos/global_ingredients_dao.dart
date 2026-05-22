@@ -34,4 +34,13 @@ class GlobalIngredientsDao extends DatabaseAccessor<AppDatabase>
   /// Profile target: ≤ 250 ms for hundreds of rows on mid-tier Android.
   Future<void> upsertBatch(List<GlobalIngredientsCompanion> rows) =>
       batch((b) => b.insertAllOnConflictUpdate(globalIngredients, rows));
+
+  /// Case-insensitive LIKE search over [name]. Excludes soft-deleted rows.
+  Future<List<GlobalIngredientsData>> search(String query) =>
+      (select(globalIngredients)
+            ..where(
+              (t) => t.name.like('%$query%') & t.deletedAt.isNull(),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.name)]))
+          .get();
 }

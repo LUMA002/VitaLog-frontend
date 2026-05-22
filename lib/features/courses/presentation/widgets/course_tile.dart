@@ -81,7 +81,7 @@ class CourseTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        '${_servingLabel(item.course.servingSize)}  ·  $dateRange',
+                        '${_servingLabel(item.course.servingSize, t)}  ·  $dateRange',
                         style: TextStyle(
                           color: colors.pendingText,
                           fontSize: 13,
@@ -108,7 +108,7 @@ class CourseTile extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(t.common.confirm),
-        content: const Text('Delete this course? This cannot be undone.'),
+        content: Text(t.courses.deleteConfirmContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -124,11 +124,11 @@ class CourseTile extends StatelessWidget {
     return result ?? false;
   }
 
-  String _servingLabel(double size) {
+  String _servingLabel(double size, Translations t) {
     final s = size == size.truncateToDouble()
         ? size.toInt().toString()
         : size.toStringAsFixed(1);
-    return '$s serving${size == 1 ? '' : 's'}';
+    return '$s ${size == 1 ? t.courses.serving : t.courses.servings}';
   }
 
   String _formatTimeOfDay(BuildContext context, Duration d) {

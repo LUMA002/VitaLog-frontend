@@ -97,6 +97,9 @@ class TranslationsCoursesUa implements TranslationsCoursesEn {
 	@override String get create => 'Новий курс';
 	@override String get edit => 'Редагувати курс';
 	@override String get empty => 'Активних курсів немає.';
+	@override String get serving => 'порція';
+	@override String get servings => 'порцій';
+	@override String get deleteConfirmContent => 'Видалити цей курс? Дію неможливо скасувати.';
 	@override late final TranslationsCoursesFieldsUa fields = TranslationsCoursesFieldsUa._(_root);
 }
 
@@ -111,6 +114,14 @@ class TranslationsProductsUa implements TranslationsProductsEn {
 	@override String get createTitle => 'Новий продукт';
 	@override String get create => 'Створити';
 	@override String get nameLabel => 'Назва продукту';
+	@override String get descriptionLabel => 'Опис (необов\'язково)';
+	@override String get addIngredient => 'Додати інгредієнт';
+	@override String get ingredientSearchHint => 'Пошук інгредієнтів...';
+	@override String addCustomIngredient({required Object query}) => 'Додати ${query} як власний інгредієнт';
+	@override String get amountLabel => 'Кількість';
+	@override String get unitLabel => 'Одиниця (напр. мг, МО)';
+	@override String get saveProduct => 'Зберегти продукт';
+	@override String get noIngredients => 'Інгредієнти ще не додані.';
 	@override String get global => 'Загальний';
 	@override String get custom => 'Власний';
 }
@@ -208,6 +219,7 @@ class TranslationsSettingsAccountUa implements TranslationsSettingsAccountEn {
 	@override String get guest => 'Гість';
 	@override String get signInCta => 'Увійдіть, щоб увімкнути хмарну синхронізацію';
 	@override String get logout => 'Вийти';
+	@override String get logoutDialogContent => 'Як ви хочете вийти?';
 	@override String get keepData => 'Зберегти локальні дані';
 	@override String get eraseData => 'Видалити синхронізовані дані';
 }
@@ -269,6 +281,7 @@ class TranslationsSettingsDangerUa implements TranslationsSettingsDangerEn {
 	// Translations
 	@override String get title => 'Небезпечна зона';
 	@override String get eraseDb => 'Очистити локальну базу даних';
+	@override String get eraseDbConfirmContent => 'Це назавжди видалить усі локальні дані. Синхронізовані дані можна відновити, увійшовши знову.';
 }
 
 // Path: auth.login
@@ -355,6 +368,9 @@ extension on TranslationsUa {
 			'courses.create' => 'Новий курс',
 			'courses.edit' => 'Редагувати курс',
 			'courses.empty' => 'Активних курсів немає.',
+			'courses.serving' => 'порція',
+			'courses.servings' => 'порцій',
+			'courses.deleteConfirmContent' => 'Видалити цей курс? Дію неможливо скасувати.',
 			'courses.fields.product' => 'Продукт',
 			'courses.fields.servingSize' => 'Розмір порції',
 			'courses.fields.timeOfDay' => 'Час прийому',
@@ -364,6 +380,14 @@ extension on TranslationsUa {
 			'products.createTitle' => 'Новий продукт',
 			'products.create' => 'Створити',
 			'products.nameLabel' => 'Назва продукту',
+			'products.descriptionLabel' => 'Опис (необов\'язково)',
+			'products.addIngredient' => 'Додати інгредієнт',
+			'products.ingredientSearchHint' => 'Пошук інгредієнтів...',
+			'products.addCustomIngredient' => ({required Object query}) => 'Додати ${query} як власний інгредієнт',
+			'products.amountLabel' => 'Кількість',
+			'products.unitLabel' => 'Одиниця (напр. мг, МО)',
+			'products.saveProduct' => 'Зберегти продукт',
+			'products.noIngredients' => 'Інгредієнти ще не додані.',
 			'products.global' => 'Загальний',
 			'products.custom' => 'Власний',
 			'settings.title' => 'Налаштування',
@@ -371,6 +395,7 @@ extension on TranslationsUa {
 			'settings.account.guest' => 'Гість',
 			'settings.account.signInCta' => 'Увійдіть, щоб увімкнути хмарну синхронізацію',
 			'settings.account.logout' => 'Вийти',
+			'settings.account.logoutDialogContent' => 'Як ви хочете вийти?',
 			'settings.account.keepData' => 'Зберегти локальні дані',
 			'settings.account.eraseData' => 'Видалити синхронізовані дані',
 			'settings.sync.title' => 'Синхронізація',
@@ -387,6 +412,7 @@ extension on TranslationsUa {
 			'settings.developer.viewLogs' => 'Переглянути логи',
 			'settings.danger.title' => 'Небезпечна зона',
 			'settings.danger.eraseDb' => 'Очистити локальну базу даних',
+			'settings.danger.eraseDbConfirmContent' => 'Це назавжди видалить усі локальні дані. Синхронізовані дані можна відновити, увійшовши знову.',
 			'auth.login.title' => 'Увійти',
 			'auth.login.email' => 'Електронна пошта',
 			'auth.login.password' => 'Пароль',

@@ -24,6 +24,9 @@
     "create": "New Course",
     "edit": "Edit Course",
     "empty": "No active courses.",
+    "serving": "serving",
+    "servings": "servings",
+    "deleteConfirmContent": "Delete this course? This cannot be undone.",
     "fields": {
       "product": "Product",
       "servingSize": "Serving size",
@@ -37,6 +40,14 @@
     "createTitle": "New Product",
     "create": "Create",
     "nameLabel": "Product Name",
+    "descriptionLabel": "Description (optional)",
+    "addIngredient": "Add Ingredient",
+    "ingredientSearchHint": "Search ingredients...",
+    "addCustomIngredient(query)": "Add {query} as custom ingredient",
+    "amountLabel": "Amount",
+    "unitLabel": "Unit (e.g. mg, IU)",
+    "saveProduct": "Save Product",
+    "noIngredients": "No ingredients added yet.",
     "global": "Global",
     "custom": "Custom"
   },
@@ -47,6 +58,7 @@
       "guest": "Guest",
       "signInCta": "Sign in to enable cloud sync",
       "logout": "Sign out",
+      "logoutDialogContent": "How would you like to sign out?",
       "keepData": "Keep local data",
       "eraseData": "Erase synced data"
     },
@@ -72,7 +84,8 @@
     },
     "danger": {
       "title": "Danger Zone",
-      "eraseDb": "Erase local database"
+      "eraseDb": "Erase local database",
+      "eraseDbConfirmContent": "This will permanently delete all local data. Synced data can be recovered by signing in again."
     }
   },
   "auth": {

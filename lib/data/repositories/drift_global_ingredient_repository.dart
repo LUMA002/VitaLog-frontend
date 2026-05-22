@@ -29,4 +29,11 @@ final class DriftGlobalIngredientRepository
     final row = await _dao.getById(id);
     return row?.toDomain();
   }
+
+  @override
+  Future<List<GlobalIngredient>> search(String query) async {
+    if (query.trim().isEmpty) return const [];
+    final rows = await _dao.search(query.trim());
+    return rows.map((r) => r.toDomain()).toList();
+  }
 }
