@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router/routes.dart';
 import '../../../core/failure/app_failure.dart';
+import '../../../core/l10n/app_failure_l10n.dart';
 import '../../../i18n/strings.g.dart';
 import '../application/auth_controller.dart';
 
@@ -14,8 +15,9 @@ void listenAuthController(WidgetRef ref, BuildContext context) {
 
     next.whenOrNull(
       error: (error, _) {
-        final message =
-            error is AppFailure ? error.message : error.toString();
+        final message = error is AppFailure
+            ? error.localizedMessage
+            : error.toString();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),

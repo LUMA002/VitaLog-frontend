@@ -1,6 +1,7 @@
 ﻿import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../app/providers/repository_providers.dart';
+import '../../../core/l10n/app_failure_l10n.dart';
 import '../../../core/result/result.dart';
 import '../../../core/utils/uuid.dart';
 import '../../../domain/models/course.dart';
@@ -141,7 +142,7 @@ class CourseFormController extends _$CourseFormController {
           state = AsyncData(
             current.copyWith(
               isSubmitting: false,
-              fieldErrors: {'_global': e.message},
+              fieldErrors: {'_global': e.localizedMessage},
             ),
           );
           return false;

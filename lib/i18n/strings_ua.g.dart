@@ -45,6 +45,7 @@ class TranslationsUa with BaseTranslations<AppLocale, Translations> implements T
 	@override late final TranslationsProductsUa products = TranslationsProductsUa._(_root);
 	@override late final TranslationsSettingsUa settings = TranslationsSettingsUa._(_root);
 	@override late final TranslationsAuthUa auth = TranslationsAuthUa._(_root);
+	@override late final TranslationsValidationUa validation = TranslationsValidationUa._(_root);
 	@override late final TranslationsErrorsUa errors = TranslationsErrorsUa._(_root);
 	@override late final TranslationsCommonUa common = TranslationsCommonUa._(_root);
 }
@@ -152,6 +153,19 @@ class TranslationsAuthUa implements TranslationsAuthEn {
 	@override late final TranslationsAuthLoginUa login = TranslationsAuthLoginUa._(_root);
 	@override late final TranslationsAuthRegisterUa register = TranslationsAuthRegisterUa._(_root);
 	@override late final TranslationsAuthValidationUa validation = TranslationsAuthValidationUa._(_root);
+}
+
+// Path: validation
+class TranslationsValidationUa implements TranslationsValidationEn {
+	TranslationsValidationUa._(this._root);
+
+	final TranslationsUa _root; // ignore: unused_field
+
+	// Translations
+	@override String get productRequired => 'Оберіть продукт.';
+	@override String get servingSizePositive => 'Значення має бути більше 0.';
+	@override String get endDateOnOrAfterStart => 'Дата закінчення не може бути раніше дати початку.';
+	@override String get nameRequired => 'Вкажіть назву.';
 }
 
 // Path: errors
@@ -435,6 +449,10 @@ extension on TranslationsUa {
 			'auth.validation.passwordDigit' => 'Пароль має містити принаймні одну цифру.',
 			'auth.validation.confirmPasswordRequired' => 'Підтвердіть пароль',
 			'auth.validation.confirmPasswordMismatch' => 'Паролі не збігаються',
+			'validation.productRequired' => 'Оберіть продукт.',
+			'validation.servingSizePositive' => 'Значення має бути більше 0.',
+			'validation.endDateOnOrAfterStart' => 'Дата закінчення не може бути раніше дати початку.',
+			'validation.nameRequired' => 'Вкажіть назву.',
 			'errors.network' => 'Помилка мережі. Перевірте підключення.',
 			'errors.auth.expired' => 'Сесія закінчилась. Будь ласка, увійдіть знову.',
 			'errors.auth.unauthorized' => 'Доступ заборонено.',

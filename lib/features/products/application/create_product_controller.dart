@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../app/providers/repository_providers.dart';
 import '../../../domain/models/product.dart';
+import '../../../i18n/strings.g.dart';
 import '../../auth/application/auth_controller.dart';
 import 'create_product_state.dart';
 
@@ -34,7 +35,7 @@ class CreateProductController extends _$CreateProductController {
   /// returns the newly created [Product] on success, or `null` on failure.
   Future<Product?> submit() async {
     if (state.name.trim().isEmpty) {
-      state = state.copyWith(nameError: 'Name is required.');
+      state = state.copyWith(nameError: t.validation.nameRequired);
       return null;
     }
 

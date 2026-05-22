@@ -51,6 +51,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsProductsEn products = TranslationsProductsEn._(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 	late final TranslationsAuthEn auth = TranslationsAuthEn._(_root);
+	late final TranslationsValidationEn validation = TranslationsValidationEn._(_root);
 	late final TranslationsErrorsEn errors = TranslationsErrorsEn._(_root);
 	late final TranslationsCommonEn common = TranslationsCommonEn._(_root);
 }
@@ -223,6 +224,27 @@ class TranslationsAuthEn {
 	late final TranslationsAuthLoginEn login = TranslationsAuthLoginEn._(_root);
 	late final TranslationsAuthRegisterEn register = TranslationsAuthRegisterEn._(_root);
 	late final TranslationsAuthValidationEn validation = TranslationsAuthValidationEn._(_root);
+}
+
+// Path: validation
+class TranslationsValidationEn {
+	TranslationsValidationEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Please select a product.'
+	String get productRequired => 'Please select a product.';
+
+	/// en: 'Must be greater than 0.'
+	String get servingSizePositive => 'Must be greater than 0.';
+
+	/// en: 'End date must be on or after the start date.'
+	String get endDateOnOrAfterStart => 'End date must be on or after the start date.';
+
+	/// en: 'Name is required.'
+	String get nameRequired => 'Name is required.';
 }
 
 // Path: errors
@@ -633,6 +655,10 @@ extension on Translations {
 			'auth.validation.passwordDigit' => 'Password must contain at least one number.',
 			'auth.validation.confirmPasswordRequired' => 'Please confirm your password',
 			'auth.validation.confirmPasswordMismatch' => 'Passwords do not match',
+			'validation.productRequired' => 'Please select a product.',
+			'validation.servingSizePositive' => 'Must be greater than 0.',
+			'validation.endDateOnOrAfterStart' => 'End date must be on or after the start date.',
+			'validation.nameRequired' => 'Name is required.',
 			'errors.network' => 'Network error. Please check your connection.',
 			'errors.auth.expired' => 'Session expired. Please sign in again.',
 			'errors.auth.unauthorized' => 'Unauthorized.',

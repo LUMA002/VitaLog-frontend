@@ -4,7 +4,7 @@
     "today": "Сьогодні",
     "history": "Історія",
     "courses": "Курси",
-    "settings": "Налаштування"
+    "settings": "Опції"
   },
   "dashboard": {
     "title": "План на сьогодні",
@@ -117,6 +117,12 @@
       "confirmPasswordRequired": "Підтвердіть пароль",
       "confirmPasswordMismatch": "Паролі не збігаються"
     }
+  },
+  "validation": {
+    "productRequired": "Оберіть продукт.",
+    "servingSizePositive": "Значення має бути більше 0.",
+    "endDateOnOrAfterStart": "Дата закінчення не може бути раніше дати початку.",
+    "nameRequired": "Вкажіть назву."
   },
   "errors": {
     "network": "Помилка мережі. Перевірте підключення.",

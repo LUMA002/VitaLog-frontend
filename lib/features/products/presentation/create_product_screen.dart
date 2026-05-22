@@ -46,7 +46,7 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
     final product =
         await ref.read(createProductControllerProvider.notifier).submit();
     if (product != null && mounted) {
-      Navigator.of(context).pop<Product>(product);
+      Navigator.of(context).pop(product);
     }
   }
 

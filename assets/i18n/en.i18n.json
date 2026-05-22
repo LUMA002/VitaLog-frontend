@@ -118,6 +118,12 @@
       "confirmPasswordMismatch": "Passwords do not match"
     }
   },
+  "validation": {
+    "productRequired": "Please select a product.",
+    "servingSizePositive": "Must be greater than 0.",
+    "endDateOnOrAfterStart": "End date must be on or after the start date.",
+    "nameRequired": "Name is required."
+  },
   "errors": {
     "network": "Network error. Please check your connection.",
     "auth": {

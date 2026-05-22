@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../i18n/strings.g.dart';
+
 part 'course_form_state.freezed.dart';
 
 /// Immutable state for the course create/edit form.
@@ -38,17 +40,17 @@ Map<String, String> validateCourseForm(CourseFormState state) {
   final errors = <String, String>{};
 
   if (state.productId == null || state.productId!.isEmpty) {
-    errors['product'] = 'Please select a product.';
+    errors['product'] = t.validation.productRequired;
   }
 
   final servingSize = double.tryParse(state.servingSizeInput);
   if (servingSize == null || servingSize <= 0) {
-    errors['servingSize'] = 'Must be greater than 0.';
+    errors['servingSize'] = t.validation.servingSizePositive;
   }
 
   if (state.endDateUtc != null &&
       state.endDateUtc!.isBefore(state.startDateUtc)) {
-    errors['endDate'] = 'End date must be on or after the start date.';
+    errors['endDate'] = t.validation.endDateOnOrAfterStart;
   }
 
   return errors;

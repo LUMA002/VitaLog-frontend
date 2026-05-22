@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/l10n/material_locale.dart';
 import '../../../../app/theme/app_radii.dart';
 import '../../../../app/theme/app_theme.dart';
 import '../../../../i18n/strings.g.dart';
@@ -139,10 +140,10 @@ class CourseTile extends StatelessWidget {
   }
 
   String _formatDateRange(DateTime start, DateTime? end) {
-    final fmt = DateFormat.MMMd();
-    final startStr = fmt.format(start);
+    final fmt = DateFormat.MMMd(resolveMaterialLocale().toString());
+    final startStr = fmt.format(start.toLocal());
     if (end == null) return '$startStr →';
-    return '$startStr – ${fmt.format(end)}';
+    return '$startStr – ${fmt.format(end.toLocal())}';
   }
 }
 

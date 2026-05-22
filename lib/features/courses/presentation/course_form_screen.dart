@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../app/providers/repository_providers.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../core/l10n/material_locale.dart';
 import '../../../domain/models/product.dart';
 import '../../../i18n/strings.g.dart';
 import '../../products/presentation/create_product_screen.dart';
@@ -93,7 +96,7 @@ class _CourseFormScreenState extends ConsumerState<CourseFormScreen> {
         .read(courseFormControllerProvider(widget.courseId).notifier)
         .submit();
     if (saved && context.mounted) {
-      Navigator.of(context).pop();
+      context.pop();
     }
   }
 }
@@ -356,9 +359,15 @@ class _TimePickerTile extends ConsumerWidget {
         title: Text(tod.format(context)),
         trailing: const Icon(Icons.edit_outlined, size: 18),
         onTap: () async {
+          final locale = resolveMaterialLocale();
           final picked = await showTimePicker(
             context: context,
             initialTime: tod,
+            builder: (ctx, child) => Localizations.override(
+              context: ctx,
+              locale: locale,
+              child: child!,
+            ),
           );
           if (picked != null && context.mounted) {
             ref
@@ -394,8 +403,9 @@ class _DatePickerTile extends ConsumerWidget {
     final startDate =
         form?.startDateUtc ?? DateTime.utc(2020);
 
+    final locale = resolveMaterialLocale();
     final label = date != null
-        ? '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}'
+        ? DateFormat.yMd(locale.toString()).format(date.toLocal())
         : (isEndDate ? t.courses.fields.endDate : '—');
 
     return Card(
@@ -421,6 +431,7 @@ class _DatePickerTile extends ConsumerWidget {
           final initial = date ?? now;
           final picked = await showDatePicker(
             context: context,
+            locale: resolveMaterialLocale(),
             initialDate: initial,
             firstDate:
                 isEndDate ? startDate : DateTime(2000),

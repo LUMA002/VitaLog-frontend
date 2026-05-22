@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/providers/repository_providers.dart';
+import '../../../core/l10n/material_locale.dart';
 import '../../../app/router/routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../i18n/strings.g.dart';
@@ -28,10 +29,10 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
-          child: Text(t.settings.title),
+        title: Text(
+          t.settings.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
       body: ListView(
@@ -60,7 +61,9 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: Text(
               lastSyncAsync.when(
                 data: (at) => at != null
-                    ? DateFormat.yMd().add_jm().format(at.toLocal())
+                    ? DateFormat.yMd(resolveMaterialLocale().toString())
+                        .add_jm()
+                        .format(at.toLocal())
                     : t.settings.sync.never,
                 loading: () => '…',
                 error: (_, _) => t.settings.sync.never,
@@ -109,7 +112,10 @@ class SettingsScreen extends ConsumerWidget {
               ],
               selected: {currentLocale},
               onSelectionChanged: (selected) {
-                LocaleSettings.setLocale(selected.first);
+                final locale = selected.first;
+                LocaleSettings.setLocale(locale);
+                Intl.defaultLocale =
+                    locale == AppLocale.ua ? 'uk' : locale.languageCode;
               },
             ),
           ),

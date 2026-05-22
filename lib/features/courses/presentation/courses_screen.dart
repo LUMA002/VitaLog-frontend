@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../app/router/routes.dart';
 import '../../../i18n/strings.g.dart';
 import '../../dashboard/presentation/widgets/time_slot_card.dart';
 import '../application/courses_controller.dart';
-import 'course_form_screen.dart';
 import 'widgets/course_tile.dart';
 
 class CoursesScreen extends ConsumerWidget {
@@ -57,11 +58,10 @@ class CoursesScreen extends ConsumerWidget {
   }
 
   void _openForm(BuildContext context, String? courseId) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: true,
-        builder: (_) => CourseFormScreen(courseId: courseId),
-      ),
-    );
+    if (courseId == null) {
+      context.push(AppRoutes.coursesNew);
+    } else {
+      context.push(AppRoutes.courseEdit(courseId));
+    }
   }
 }

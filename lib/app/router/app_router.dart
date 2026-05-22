@@ -8,6 +8,7 @@ import '../../features/auth/application/auth_controller.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/courses/presentation/course_form_screen.dart';
+import '../../features/products/presentation/create_product_screen.dart';
 import '../../features/courses/presentation/courses_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/logs/presentation/logs_screen.dart';
@@ -77,9 +78,8 @@ GoRouter appRouter(Ref ref) {
         ],
       ),
       GoRoute(
-        path: '/products/new',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'New Product'),
+        path: AppRoutes.productNew,
+        builder: (context, state) => const CreateProductScreen(),
       ),
       GoRoute(
         path: '/products/:id',
