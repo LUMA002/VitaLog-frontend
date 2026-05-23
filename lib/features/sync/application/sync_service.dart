@@ -58,9 +58,9 @@ class SyncService extends _$SyncService {
     if (authState is! Authenticated) return;
 
     final settings = await ref.read(settingsProvider.future);
-    final canSync = await ref.read(syncConnectivityProvider).canSync(
-          wifiOnlySync: settings.wifiOnlySync,
-        );
+    final canSync = await ref
+        .read(syncConnectivityProvider)
+        .canSync(wifiOnlySync: settings.wifiOnlySync);
     if (!canSync) return;
 
     _syncing = true;
@@ -92,14 +92,18 @@ class SyncService extends _$SyncService {
 
     // ── 1. Collect dirty records ──────────────────────────────────────────
 
-    final dirtyProducts =
-        (await productsDao.getPendingSync()).take(_kMaxItemsPerEntity).toList();
-    final dirtyIngredients =
-        (await productsDao.getPendingIngredientSync()).take(_kMaxItemsPerEntity).toList();
-    final dirtyCourses =
-        (await coursesDao.getPendingSync()).take(_kMaxItemsPerEntity).toList();
-    final dirtyIntakeLogs =
-        (await coursesDao.getPendingIntakeSync()).take(_kMaxItemsPerEntity).toList();
+    final dirtyProducts = (await productsDao.getPendingSync())
+        .take(_kMaxItemsPerEntity)
+        .toList();
+    final dirtyIngredients = (await productsDao.getPendingIngredientSync())
+        .take(_kMaxItemsPerEntity)
+        .toList();
+    final dirtyCourses = (await coursesDao.getPendingSync())
+        .take(_kMaxItemsPerEntity)
+        .toList();
+    final dirtyIntakeLogs = (await coursesDao.getPendingIntakeSync())
+        .take(_kMaxItemsPerEntity)
+        .toList();
 
     // ── 2. Build pushed-ID sets (for ACK resolution later) ────────────────
 
@@ -132,33 +136,49 @@ class SyncService extends _$SyncService {
     final response = SyncResponseDto.fromJson(httpResponse.data!);
 
     // ── 5. Apply server changes in a single Drift transaction ─────────────
+    //
+    // FK dependency chain (parent → child):
+    //   GlobalIngredients → ProductIngredients.ingredientId
+    //   Products → ProductIngredients.productId → Courses.productId → IntakeLogs.courseId
+    //
+    // Apply order MUST follow this chain top-down so child INSERTs never run
+    // before their parent row exists locally.
+
+    var resetSyncCursor = false;
 
     await db.transaction(() async {
       await _applyGlobalIngredients(globalIngredientsDao, response);
-      await _applyProducts(productsDao, response, pushedProductIds);
+      await _applyProducts(
+        productsDao,
+        response,
+        pushedProductIds,
+        auth.userId,
+      );
       await _applyProductIngredients(
         productsDao,
         response,
         pushedIngredientIds,
       );
-      await _applyCourses(
-        coursesDao,
-        response,
-        pushedCourseIds,
-        auth.userId,
-      );
-      await _applyIntakeLogs(
+      await _applyCourses(coursesDao, response, pushedCourseIds, auth.userId);
+      resetSyncCursor = await _applyIntakeLogs(
         coursesDao,
         response,
         pushedLogIds,
         auth.userId,
       );
       await syncMetaDao.updateSyncMeta(
-        lastSyncAt: response.serverTime,
+        lastSyncAt: resetSyncCursor ? null : response.serverTime,
         lastSyncDurationMs: stopwatch.elapsedMilliseconds,
-        lastSyncStatus: 'success',
+        lastSyncStatus: resetSyncCursor ? 'pending_full_pull' : 'success',
       );
     });
+
+    if (resetSyncCursor) {
+      talker.info(
+        '[SyncService] Sync cursor reset — parent courses missing locally; '
+        'next sync will full-pull.',
+      );
+    }
   }
 
   // ── Entity appliers ────────────────────────────────────────────────────────
@@ -181,11 +201,13 @@ class SyncService extends _$SyncService {
     ProductsDao dao,
     SyncResponseDto response,
     Set<String> pushedIds,
+    String userId,
   ) async {
     if (response.products.isEmpty) return;
 
-    final pullOnly =
-        response.products.where((dto) => !pushedIds.contains(dto.id)).toList();
+    final pullOnly = response.products
+        .where((dto) => !pushedIds.contains(dto.id))
+        .toList();
 
     // Build a map of id → updatedAt for locally dirty rows so we can apply
     // True-LWW: keep local if local.updatedAt > server.updatedAt.
@@ -194,9 +216,11 @@ class SyncService extends _$SyncService {
     };
 
     final companions = [
-      // ACK'd — unconditionally replace with server version.
-      for (final dto in response.products.where((d) => pushedIds.contains(d.id)))
-        dto.toDriftCompanion(),
+      // ACK'd — unconditionally replace with the server version.
+      for (final dto in response.products.where(
+        (d) => pushedIds.contains(d.id),
+      ))
+        dto.toDriftCompanion(acknowledgedOwnerId: userId),
       // Pull-only — only upsert when server version is not older than local dirty.
       for (final dto in pullOnly)
         if (_shouldApplyPull(dto.id, dto.updatedAt, localDirtyTimestamps))
@@ -221,8 +245,9 @@ class SyncService extends _$SyncService {
     };
 
     final companions = [
-      for (final dto
-          in response.productIngredients.where((d) => pushedIds.contains(d.id)))
+      for (final dto in response.productIngredients.where(
+        (d) => pushedIds.contains(d.id),
+      ))
         dto.toDriftCompanion(),
       for (final dto in pullOnly)
         if (_shouldApplyPull(dto.id, dto.updatedAt, localDirtyTimestamps))
@@ -240,15 +265,15 @@ class SyncService extends _$SyncService {
   ) async {
     if (response.courses.isEmpty) return;
 
-    final pullOnly =
-        response.courses.where((dto) => !pushedIds.contains(dto.id)).toList();
+    final pullOnly = response.courses
+        .where((dto) => !pushedIds.contains(dto.id))
+        .toList();
     final localDirtyTimestamps = {
       for (final r in await dao.getPendingSync()) r.id: r.updatedAt,
     };
 
     final companions = [
-      for (final dto
-          in response.courses.where((d) => pushedIds.contains(d.id)))
+      for (final dto in response.courses.where((d) => pushedIds.contains(d.id)))
         dto.toDriftCompanion(userId: userId),
       for (final dto in pullOnly)
         if (_shouldApplyPull(dto.id, dto.updatedAt, localDirtyTimestamps))
@@ -258,13 +283,15 @@ class SyncService extends _$SyncService {
     if (companions.isNotEmpty) await dao.upsertCourseBatch(companions);
   }
 
-  Future<void> _applyIntakeLogs(
+  /// Returns `true` when one or more intake logs were skipped because their
+  /// parent course is not in the local DB (delta cursor ahead of local state).
+  Future<bool> _applyIntakeLogs(
     CoursesDao dao,
     SyncResponseDto response,
     Set<String> pushedIds,
     String userId,
   ) async {
-    if (response.intakeLogs.isEmpty) return;
+    if (response.intakeLogs.isEmpty) return false;
 
     final pullOnly = response.intakeLogs
         .where((dto) => !pushedIds.contains(dto.id))
@@ -274,15 +301,40 @@ class SyncService extends _$SyncService {
     };
 
     final companions = [
-      for (final dto
-          in response.intakeLogs.where((d) => pushedIds.contains(d.id)))
+      for (final dto in response.intakeLogs.where(
+        (d) => pushedIds.contains(d.id),
+      ))
         dto.toDriftCompanion(userId: userId),
       for (final dto in pullOnly)
         if (_shouldApplyPull(dto.id, dto.updatedAt, localDirtyTimestamps))
           dto.toDriftCompanion(userId: userId),
     ];
 
-    if (companions.isNotEmpty) await dao.upsertIntakeLogBatch(companions);
+    if (companions.isEmpty) return false;
+
+    final referencedCourseIds = companions
+        .map((row) => row.courseId.value)
+        .toSet();
+    final existingCourseIds = await dao.getExistingCourseIds(
+      referencedCourseIds,
+    );
+
+    final applicable = companions
+        .where((row) => existingCourseIds.contains(row.courseId.value))
+        .toList();
+
+    if (applicable.length < companions.length) {
+      final skipped = companions.length - applicable.length;
+      talker.warning(
+        '[SyncService] Skipped $skipped intake log(s): parent course missing locally.',
+      );
+    }
+
+    if (applicable.isNotEmpty) {
+      await dao.upsertIntakeLogBatch(applicable);
+    }
+
+    return applicable.length < companions.length;
   }
 
   // ── LWW helpers ────────────────────────────────────────────────────────────
@@ -309,7 +361,9 @@ class SyncService extends _$SyncService {
       final status = e.response?.statusCode;
       if (status == 400) {
         final body = e.response?.data;
-        final detail = body is Map ? body['title'] ?? body.toString() : e.message;
+        final detail = body is Map
+            ? body['title'] ?? body.toString()
+            : e.message;
         return SyncFailure(message: 'Validation error: $detail');
       }
       if (status == 401) return AuthFailure.expired;
@@ -330,4 +384,3 @@ class SyncService extends _$SyncService {
     return UnknownFailure(message: e.toString(), cause: e);
   }
 }
-

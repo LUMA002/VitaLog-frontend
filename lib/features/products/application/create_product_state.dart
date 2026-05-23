@@ -20,11 +20,12 @@ sealed class IngredientFormEntry with _$IngredientFormEntry {
 }
 
 /// Immutable UI state for the "Create Product" full-screen form.
+///
+/// Name and description live in [TextEditingController]s on the screen so
+/// keystrokes do not rebuild the widget tree (avoids Windows keyboard glitches).
 @freezed
 sealed class CreateProductState with _$CreateProductState {
   const factory CreateProductState({
-    @Default('') String name,
-    String? description,
     @Default([]) List<IngredientFormEntry> ingredients,
     @Default(false) bool isSubmitting,
     String? nameError,

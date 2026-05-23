@@ -57,7 +57,7 @@ final class AuthControllerProvider
   AuthController create() => AuthController();
 }
 
-String _$authControllerHash() => r'3c7dc683ab1046df48c4ad4c4575d610779b79db';
+String _$authControllerHash() => r'dce7615d93c65106088b888246a6aa6bb66bad7a';
 
 /// Manages the global authentication session.
 ///

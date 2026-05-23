@@ -247,7 +247,9 @@ class TranslationsSettingsAccountUa implements TranslationsSettingsAccountEn {
 	@override String get logout => 'Вийти';
 	@override String get logoutDialogContent => 'Як ви хочете вийти?';
 	@override String get keepData => 'Зберегти локальні дані';
-	@override String get eraseData => 'Видалити синхронізовані дані';
+	@override String get eraseData => 'Вийти та видалити дані';
+	@override String get eraseDataConfirmTitle => 'Ви впевнені?';
+	@override String get eraseDataConfirmContent => 'Це видалить усі локальні дані з цього пристрою.';
 }
 
 // Path: settings.sync
@@ -306,8 +308,8 @@ class TranslationsSettingsDangerUa implements TranslationsSettingsDangerEn {
 
 	// Translations
 	@override String get title => 'Небезпечна зона';
-	@override String get eraseDb => 'Очистити локальну базу даних';
-	@override String get eraseDbConfirmContent => 'Це назавжди видалить усі локальні дані. Синхронізовані дані можна відновити, увійшовши знову.';
+	@override String get clearLocalData => 'Очистити локальні дані';
+	@override String get clearLocalDataConfirmContent => 'Це назавжди видалить усі локальні дані. Синхронізовані дані можна відновити, увійшовши знову.';
 }
 
 // Path: auth.login
@@ -423,7 +425,9 @@ extension on TranslationsUa {
 			'settings.account.logout' => 'Вийти',
 			'settings.account.logoutDialogContent' => 'Як ви хочете вийти?',
 			'settings.account.keepData' => 'Зберегти локальні дані',
-			'settings.account.eraseData' => 'Видалити синхронізовані дані',
+			'settings.account.eraseData' => 'Вийти та видалити дані',
+			'settings.account.eraseDataConfirmTitle' => 'Ви впевнені?',
+			'settings.account.eraseDataConfirmContent' => 'Це видалить усі локальні дані з цього пристрою.',
 			'settings.sync.title' => 'Синхронізація',
 			'settings.sync.lastSync' => 'Остання синхронізація',
 			'settings.sync.syncNow' => 'Синхронізувати зараз',
@@ -437,8 +441,8 @@ extension on TranslationsUa {
 			'settings.developer.title' => 'Розробник',
 			'settings.developer.viewLogs' => 'Переглянути логи',
 			'settings.danger.title' => 'Небезпечна зона',
-			'settings.danger.eraseDb' => 'Очистити локальну базу даних',
-			'settings.danger.eraseDbConfirmContent' => 'Це назавжди видалить усі локальні дані. Синхронізовані дані можна відновити, увійшовши знову.',
+			'settings.danger.clearLocalData' => 'Очистити локальні дані',
+			'settings.danger.clearLocalDataConfirmContent' => 'Це назавжди видалить усі локальні дані. Синхронізовані дані можна відновити, увійшовши знову.',
 			'auth.login.title' => 'Увійти',
 			'auth.login.email' => 'Електронна пошта',
 			'auth.login.password' => 'Пароль',

@@ -298,7 +298,7 @@ $GlobalIngredientCopyWith<$Res>? get globalIngredient {
 /// @nodoc
 mixin _$CreateProductState {
 
- String get name; String? get description; List<IngredientFormEntry> get ingredients; bool get isSubmitting; String? get nameError;
+ List<IngredientFormEntry> get ingredients; bool get isSubmitting; String? get nameError;
 /// Create a copy of CreateProductState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -309,16 +309,16 @@ $CreateProductStateCopyWith<CreateProductState> get copyWith => _$CreateProductS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateProductState&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.nameError, nameError) || other.nameError == nameError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateProductState&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.nameError, nameError) || other.nameError == nameError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(ingredients),isSubmitting,nameError);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(ingredients),isSubmitting,nameError);
 
 @override
 String toString() {
-  return 'CreateProductState(name: $name, description: $description, ingredients: $ingredients, isSubmitting: $isSubmitting, nameError: $nameError)';
+  return 'CreateProductState(ingredients: $ingredients, isSubmitting: $isSubmitting, nameError: $nameError)';
 }
 
 
@@ -329,7 +329,7 @@ abstract mixin class $CreateProductStateCopyWith<$Res>  {
   factory $CreateProductStateCopyWith(CreateProductState value, $Res Function(CreateProductState) _then) = _$CreateProductStateCopyWithImpl;
 @useResult
 $Res call({
- String name, String? description, List<IngredientFormEntry> ingredients, bool isSubmitting, String? nameError
+ List<IngredientFormEntry> ingredients, bool isSubmitting, String? nameError
 });
 
 
@@ -346,11 +346,9 @@ class _$CreateProductStateCopyWithImpl<$Res>
 
 /// Create a copy of CreateProductState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = freezed,Object? ingredients = null,Object? isSubmitting = null,Object? nameError = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? ingredients = null,Object? isSubmitting = null,Object? nameError = freezed,}) {
   return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,ingredients: null == ingredients ? _self.ingredients : ingredients // ignore: cast_nullable_to_non_nullable
+ingredients: null == ingredients ? _self.ingredients : ingredients // ignore: cast_nullable_to_non_nullable
 as List<IngredientFormEntry>,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,nameError: freezed == nameError ? _self.nameError : nameError // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -435,10 +433,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String? description,  List<IngredientFormEntry> ingredients,  bool isSubmitting,  String? nameError)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<IngredientFormEntry> ingredients,  bool isSubmitting,  String? nameError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateProductState() when $default != null:
-return $default(_that.name,_that.description,_that.ingredients,_that.isSubmitting,_that.nameError);case _:
+return $default(_that.ingredients,_that.isSubmitting,_that.nameError);case _:
   return orElse();
 
 }
@@ -456,10 +454,10 @@ return $default(_that.name,_that.description,_that.ingredients,_that.isSubmittin
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String? description,  List<IngredientFormEntry> ingredients,  bool isSubmitting,  String? nameError)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<IngredientFormEntry> ingredients,  bool isSubmitting,  String? nameError)  $default,) {final _that = this;
 switch (_that) {
 case _CreateProductState():
-return $default(_that.name,_that.description,_that.ingredients,_that.isSubmitting,_that.nameError);}
+return $default(_that.ingredients,_that.isSubmitting,_that.nameError);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -473,10 +471,10 @@ return $default(_that.name,_that.description,_that.ingredients,_that.isSubmittin
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String? description,  List<IngredientFormEntry> ingredients,  bool isSubmitting,  String? nameError)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<IngredientFormEntry> ingredients,  bool isSubmitting,  String? nameError)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateProductState() when $default != null:
-return $default(_that.name,_that.description,_that.ingredients,_that.isSubmitting,_that.nameError);case _:
+return $default(_that.ingredients,_that.isSubmitting,_that.nameError);case _:
   return null;
 
 }
@@ -488,11 +486,9 @@ return $default(_that.name,_that.description,_that.ingredients,_that.isSubmittin
 
 
 class _CreateProductState implements CreateProductState {
-  const _CreateProductState({this.name = '', this.description, final  List<IngredientFormEntry> ingredients = const [], this.isSubmitting = false, this.nameError}): _ingredients = ingredients;
+  const _CreateProductState({final  List<IngredientFormEntry> ingredients = const [], this.isSubmitting = false, this.nameError}): _ingredients = ingredients;
   
 
-@override@JsonKey() final  String name;
-@override final  String? description;
  final  List<IngredientFormEntry> _ingredients;
 @override@JsonKey() List<IngredientFormEntry> get ingredients {
   if (_ingredients is EqualUnmodifiableListView) return _ingredients;
@@ -513,16 +509,16 @@ _$CreateProductStateCopyWith<_CreateProductState> get copyWith => __$CreateProdu
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateProductState&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.nameError, nameError) || other.nameError == nameError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateProductState&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.nameError, nameError) || other.nameError == nameError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(_ingredients),isSubmitting,nameError);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_ingredients),isSubmitting,nameError);
 
 @override
 String toString() {
-  return 'CreateProductState(name: $name, description: $description, ingredients: $ingredients, isSubmitting: $isSubmitting, nameError: $nameError)';
+  return 'CreateProductState(ingredients: $ingredients, isSubmitting: $isSubmitting, nameError: $nameError)';
 }
 
 
@@ -533,7 +529,7 @@ abstract mixin class _$CreateProductStateCopyWith<$Res> implements $CreateProduc
   factory _$CreateProductStateCopyWith(_CreateProductState value, $Res Function(_CreateProductState) _then) = __$CreateProductStateCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String? description, List<IngredientFormEntry> ingredients, bool isSubmitting, String? nameError
+ List<IngredientFormEntry> ingredients, bool isSubmitting, String? nameError
 });
 
 
@@ -550,11 +546,9 @@ class __$CreateProductStateCopyWithImpl<$Res>
 
 /// Create a copy of CreateProductState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = freezed,Object? ingredients = null,Object? isSubmitting = null,Object? nameError = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? ingredients = null,Object? isSubmitting = null,Object? nameError = freezed,}) {
   return _then(_CreateProductState(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,ingredients: null == ingredients ? _self._ingredients : ingredients // ignore: cast_nullable_to_non_nullable
+ingredients: null == ingredients ? _self._ingredients : ingredients // ignore: cast_nullable_to_non_nullable
 as List<IngredientFormEntry>,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,nameError: freezed == nameError ? _self.nameError : nameError // ignore: cast_nullable_to_non_nullable
 as String?,

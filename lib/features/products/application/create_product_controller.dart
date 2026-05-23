@@ -13,14 +13,6 @@ class CreateProductController extends _$CreateProductController {
   @override
   CreateProductState build() => const CreateProductState();
 
-  // ── Field setters ──────────────────────────────────────────────────────────
-
-  void setName(String name) =>
-      state = state.copyWith(name: name, nameError: null);
-
-  void setDescription(String? description) =>
-      state = state.copyWith(description: description?.isEmpty == true ? null : description);
-
   void addIngredient(IngredientFormEntry entry) =>
       state = state.copyWith(ingredients: [...state.ingredients, entry]);
 
@@ -33,8 +25,14 @@ class CreateProductController extends _$CreateProductController {
 
   /// Validates the form, writes to the local DB inside a transaction, and
   /// returns the newly created [Product] on success, or `null` on failure.
-  Future<Product?> submit() async {
-    if (state.name.trim().isEmpty) {
+  Future<Product?> submit({
+    required String name,
+    String? description,
+  }) async {
+    final trimmedName = name.trim();
+    final trimmedDescription = description?.trim();
+
+    if (trimmedName.isEmpty) {
       state = state.copyWith(nameError: t.validation.nameRequired);
       return null;
     }
@@ -52,8 +50,9 @@ class CreateProductController extends _$CreateProductController {
 
       final dao = ref.read(productsDaoProvider);
       final entity = await dao.createProductWithIngredients(
-        name: state.name.trim(),
-        description: state.description?.trim(),
+        name: trimmedName,
+        description:
+            trimmedDescription?.isEmpty == true ? null : trimmedDescription,
         userId: userId,
         ingredients: state.ingredients,
         nowUtc: nowUtc,

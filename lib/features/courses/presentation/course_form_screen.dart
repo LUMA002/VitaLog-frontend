@@ -8,6 +8,7 @@ import '../../../app/providers/repository_providers.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/l10n/material_locale.dart';
 import '../../../domain/models/product.dart';
+import '../../../domain/models/product_scope.dart';
 import '../../../i18n/strings.g.dart';
 import '../../products/presentation/create_product_screen.dart';
 import '../application/course_form_controller.dart';
@@ -311,8 +312,7 @@ class _ProductListSheet extends ConsumerWidget {
               itemCount: products.length,
               itemBuilder: (_, i) {
                 final p = products[i];
-                final isCustom =
-                    p.isLocalDraft || p.creatorUserId != null;
+                final isCustom = p.isCustomProduct;
                 return ListTile(
                   leading: Icon(
                     isCustom

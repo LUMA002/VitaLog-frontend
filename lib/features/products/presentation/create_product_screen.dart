@@ -43,8 +43,12 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
   }
 
   Future<void> _save() async {
-    final product =
-        await ref.read(createProductControllerProvider.notifier).submit();
+    final product = await ref
+        .read(createProductControllerProvider.notifier)
+        .submit(
+          name: _nameController.text,
+          description: _descriptionController.text,
+        );
     if (product != null && mounted) {
       Navigator.of(context).pop(product);
     }
@@ -53,14 +57,22 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final state = ref.watch(createProductControllerProvider);
+    final isSubmitting = ref.watch(
+      createProductControllerProvider.select((s) => s.isSubmitting),
+    );
+    final nameError = ref.watch(
+      createProductControllerProvider.select((s) => s.nameError),
+    );
+    final ingredients = ref.watch(
+      createProductControllerProvider.select((s) => s.ingredients),
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(t.products.createTitle),
         actions: [
           TextButton(
-            onPressed: state.isSubmitting ? null : _save,
+            onPressed: isSubmitting ? null : _save,
             child: Text(t.common.save),
           ),
         ],
@@ -75,10 +87,8 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
               labelText: t.products.nameLabel,
-              errorText: state.nameError,
+              errorText: nameError,
             ),
-            onChanged: (v) =>
-                ref.read(createProductControllerProvider.notifier).setName(v),
           ),
           const SizedBox(height: 12),
 
@@ -91,9 +101,6 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
               labelText: t.products.descriptionLabel,
               alignLabelWithHint: true,
             ),
-            onChanged: (v) => ref
-                .read(createProductControllerProvider.notifier)
-                .setDescription(v),
           ),
           const SizedBox(height: 24),
 
@@ -119,7 +126,7 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
           ),
           const SizedBox(height: 8),
 
-          if (state.ingredients.isEmpty)
+          if (ingredients.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Center(
@@ -130,7 +137,7 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
               ),
             )
           else
-            ...state.ingredients.asMap().entries.map(
+            ...ingredients.asMap().entries.map(
               (e) => _IngredientTile(
                 entry: e.value,
                 onRemove: () => ref
@@ -141,8 +148,8 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: state.isSubmitting ? null : _save,
-        icon: state.isSubmitting
+        onPressed: isSubmitting ? null : _save,
+        icon: isSubmitting
             ? const SizedBox(
                 width: 20,
                 height: 20,

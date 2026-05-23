@@ -378,8 +378,14 @@ class TranslationsSettingsAccountEn {
 	/// en: 'Keep local data'
 	String get keepData => 'Keep local data';
 
-	/// en: 'Erase synced data'
-	String get eraseData => 'Erase synced data';
+	/// en: 'Sign out and erase data'
+	String get eraseData => 'Sign out and erase data';
+
+	/// en: 'Are you sure?'
+	String get eraseDataConfirmTitle => 'Are you sure?';
+
+	/// en: 'This will remove all local data from this device.'
+	String get eraseDataConfirmContent => 'This will remove all local data from this device.';
 }
 
 // Path: settings.sync
@@ -465,11 +471,11 @@ class TranslationsSettingsDangerEn {
 	/// en: 'Danger Zone'
 	String get title => 'Danger Zone';
 
-	/// en: 'Erase local database'
-	String get eraseDb => 'Erase local database';
+	/// en: 'Clear local data'
+	String get clearLocalData => 'Clear local data';
 
 	/// en: 'This will permanently delete all local data. Synced data can be recovered by signing in again.'
-	String get eraseDbConfirmContent => 'This will permanently delete all local data. Synced data can be recovered by signing in again.';
+	String get clearLocalDataConfirmContent => 'This will permanently delete all local data. Synced data can be recovered by signing in again.';
 }
 
 // Path: auth.login
@@ -633,7 +639,9 @@ extension on Translations {
 			'settings.account.logout' => 'Sign out',
 			'settings.account.logoutDialogContent' => 'How would you like to sign out?',
 			'settings.account.keepData' => 'Keep local data',
-			'settings.account.eraseData' => 'Erase synced data',
+			'settings.account.eraseData' => 'Sign out and erase data',
+			'settings.account.eraseDataConfirmTitle' => 'Are you sure?',
+			'settings.account.eraseDataConfirmContent' => 'This will remove all local data from this device.',
 			'settings.sync.title' => 'Synchronization',
 			'settings.sync.lastSync' => 'Last sync',
 			'settings.sync.syncNow' => 'Sync now',
@@ -647,8 +655,8 @@ extension on Translations {
 			'settings.developer.title' => 'Developer',
 			'settings.developer.viewLogs' => 'View logs',
 			'settings.danger.title' => 'Danger Zone',
-			'settings.danger.eraseDb' => 'Erase local database',
-			'settings.danger.eraseDbConfirmContent' => 'This will permanently delete all local data. Synced data can be recovered by signing in again.',
+			'settings.danger.clearLocalData' => 'Clear local data',
+			'settings.danger.clearLocalDataConfirmContent' => 'This will permanently delete all local data. Synced data can be recovered by signing in again.',
 			'auth.login.title' => 'Sign In',
 			'auth.login.email' => 'Email',
 			'auth.login.password' => 'Password',

@@ -141,15 +141,33 @@ class CoursesDao extends DatabaseAccessor<AppDatabase>
         ),
       );
 
+  /// Hard-deletes all intake logs owned by [userId] (logout erase).
+  Future<int> deleteIntakeLogsForUser(String userId) => (delete(intakeLogs)
+        ..where((t) => t.userId.equals(userId)))
+      .go();
+
+  /// Hard-deletes guest intake logs (`user_id IS NULL`).
+  Future<int> deleteGuestIntakeLogs() => (delete(intakeLogs)
+        ..where((t) => t.userId.isNull()))
+      .go();
+
   /// Hard-deletes all courses owned by [userId] (logout erase).
   Future<int> deleteCoursesForUser(String userId) => (delete(courses)
         ..where((t) => t.userId.equals(userId)))
       .go();
 
-  /// Hard-deletes all intake logs owned by [userId] (logout erase).
-  Future<int> deleteIntakeLogsForUser(String userId) => (delete(intakeLogs)
-        ..where((t) => t.userId.equals(userId)))
+  /// Hard-deletes guest courses (`user_id IS NULL`).
+  Future<int> deleteGuestCourses() => (delete(courses)
+        ..where((t) => t.userId.isNull()))
       .go();
+
+  /// Returns the subset of [ids] that currently exist in [courses].
+  Future<Set<String>> getExistingCourseIds(Set<String> ids) async {
+    if (ids.isEmpty) return {};
+    final rows =
+        await (select(courses)..where((t) => t.id.isIn(ids.toList()))).get();
+    return rows.map((row) => row.id).toSet();
+  }
 
   /// Intake history with product names via LEFT JOIN (includes soft-deleted
   /// courses and products so historical labels stay intact).

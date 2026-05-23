@@ -42,7 +42,7 @@ final class CreateProductControllerProvider
 }
 
 String _$createProductControllerHash() =>
-    r'f4a0989a9608754d43778b8cd30aa2030361b7cd';
+    r'c0d3e713fb00ba52fc88b6efc103c5ee91ebd537';
 
 abstract class _$CreateProductController extends $Notifier<CreateProductState> {
   CreateProductState build();

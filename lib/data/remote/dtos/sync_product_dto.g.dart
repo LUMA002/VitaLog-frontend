@@ -18,6 +18,7 @@ _SyncProductDto _$SyncProductDtoFromJson(Map<String, dynamic> json) =>
         json['deletedAt'],
         const MicrosecondDateTimeJsonConverter().fromJson,
       ),
+      creatorUserId: json['creatorUserId'] as String?,
     );
 
 Map<String, dynamic> _$SyncProductDtoToJson(_SyncProductDto instance) =>
@@ -32,6 +33,7 @@ Map<String, dynamic> _$SyncProductDtoToJson(_SyncProductDto instance) =>
         instance.deletedAt,
         const MicrosecondDateTimeJsonConverter().toJson,
       ),
+      'creatorUserId': instance.creatorUserId,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

@@ -50,12 +50,31 @@ class ProductsDao extends DatabaseAccessor<AppDatabase>
       );
 
   /// Hard-deletes local draft products created by [userId] (logout erase).
-  Future<int> deleteLocalDraftsForUser(String userId) => (delete(products)
-        ..where(
-          (t) =>
-              t.creatorUserId.equals(userId) & t.isLocalDraft.equals(1),
-        ))
-      .go();
+  Future<int> deleteLocalDraftsForUser(String userId) =>
+      _deleteDraftProducts(
+        (t) => t.creatorUserId.equals(userId) & t.isLocalDraft.equals(1),
+      );
+
+  /// Hard-deletes guest draft products (`creator_user_id IS NULL`,
+  /// `is_local_draft = 1`).
+  Future<int> deleteGuestDraftProducts() => _deleteDraftProducts(
+        (t) => t.creatorUserId.isNull() & t.isLocalDraft.equals(1),
+      );
+
+  Future<int> _deleteDraftProducts(
+    Expression<bool> Function($ProductsTable t) whereClause,
+  ) async {
+    final draftIds = await (select(products)..where(whereClause))
+        .map((row) => row.id)
+        .get();
+    if (draftIds.isEmpty) return 0;
+
+    await (delete(productIngredients)
+          ..where((t) => t.productId.isIn(draftIds)))
+        .go();
+
+    return (delete(products)..where((t) => t.id.isIn(draftIds))).go();
+  }
 
   // ─── ProductIngredients ───────────────────────────────────────────────────
 

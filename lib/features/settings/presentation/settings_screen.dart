@@ -151,14 +151,14 @@ class SettingsScreen extends ConsumerWidget {
               color: Theme.of(context).extension<SemanticColors>()!.destructive,
             ),
             title: Text(
-              t.settings.danger.eraseDb,
+              t.settings.danger.clearLocalData,
               style: TextStyle(
                 color: Theme.of(
                   context,
                 ).extension<SemanticColors>()!.destructive,
               ),
             ),
-            onTap: () => _showEraseDbDialog(context, ref),
+            onTap: () => _showClearLocalDataDialog(context, ref),
           ),
         ],
       ),
@@ -188,20 +188,49 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
-    if (choice != null) {
-      await ref
-          .read(authControllerProvider.notifier)
-          .logout(eraseData: !choice);
+    if (choice == null || !context.mounted) return;
+
+    if (choice == false) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(t.settings.account.eraseDataConfirmTitle),
+          content: Text(t.settings.account.eraseDataConfirmContent),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(t.common.cancel),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(
+                  context,
+                ).extension<SemanticColors>()!.destructive,
+              ),
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(t.common.confirm),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !context.mounted) return;
     }
+
+    await ref
+        .read(authControllerProvider.notifier)
+        .logout(eraseData: !choice);
   }
 
-  Future<void> _showEraseDbDialog(BuildContext context, WidgetRef ref) async {
+  Future<void> _showClearLocalDataDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     final t = Translations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(t.settings.danger.eraseDb),
-        content: Text(t.settings.danger.eraseDbConfirmContent),
+        title: Text(t.settings.danger.clearLocalData),
+        content: Text(t.settings.danger.clearLocalDataConfirmContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -220,11 +249,7 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
     if (confirmed == true && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Database erase — Phase 5 implementation.'),
-        ),
-      );
+      await ref.read(authControllerProvider.notifier).eraseLocalData();
     }
   }
 }

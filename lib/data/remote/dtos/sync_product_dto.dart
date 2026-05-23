@@ -18,8 +18,9 @@ part 'sync_product_dto.g.dart';
 /// }
 /// ```
 ///
-/// Note: `creatorUserId` is intentionally absent — the server injects ownership
-/// on upsert and never transmits it to the client.
+/// Note: `creatorUserId` is omitted on push - the server injects ownership on upsert.
+/// It is included in sync *responses* so clients can distinguish global vs custom
+/// products after a cross-device pull.
 @freezed
 sealed class SyncProductDto with _$SyncProductDto {
   const factory SyncProductDto({
@@ -28,6 +29,7 @@ sealed class SyncProductDto with _$SyncProductDto {
     required String? description,
     @MicrosecondDateTimeJsonConverter() required DateTime updatedAt,
     @MicrosecondDateTimeJsonConverter() required DateTime? deletedAt,
+    String? creatorUserId,
   }) = _SyncProductDto;
 
   factory SyncProductDto.fromJson(Map<String, dynamic> json) =>

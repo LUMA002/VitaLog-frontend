@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../app/providers/repository_providers.dart';
 import '../../../domain/models/course.dart';
 import '../../../domain/models/product.dart';
+import '../../../domain/models/product_scope.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../notifications/application/notification_service.dart';
 
@@ -48,12 +49,10 @@ class CoursesController extends _$CoursesController {
 
     return courses.map((c) {
       final product = productsById[c.productId];
-      final isCustom = product != null &&
-          (product.isLocalDraft || product.creatorUserId != null);
       return CourseItem(
         course: c,
         productName: product?.name ?? '—',
-        isGlobalProduct: !isCustom,
+        isGlobalProduct: product?.isGlobalProduct ?? false,
       );
     }).toList()
       ..sort((a, b) => a.course.timeOfDay.compareTo(b.course.timeOfDay));

@@ -165,11 +165,31 @@ class AuthController extends _$AuthController {
       if (current is Authenticated) {
         await _eraseUserData(current.userId);
       }
+      await ref.read(syncMetaDaoProvider).updateSyncMeta(
+            lastSyncAt: null,
+            lastSyncStatus: 'local_data_cleared',
+          );
     }
 
     await ref.read(secureStorageServiceProvider).clearSession();
     state = const AsyncData(Guest());
     _invalidateDataProviders();
+  }
+
+  /// Hard-deletes all locally owned rows for the current session owner.
+  ///
+  /// Authenticated users lose synced personal data; guests lose offline drafts
+  /// and schedules. Global catalog rows are preserved.
+  Future<void> eraseLocalData() async {
+    final current = state.value;
+    final userId = current is Authenticated ? current.userId : null;
+    await _eraseUserData(userId);
+    await ref.read(syncMetaDaoProvider).updateSyncMeta(
+          lastSyncAt: null,
+          lastSyncStatus: 'local_data_cleared',
+        );
+    _invalidateDataProviders();
+    ref.read(notificationServiceProvider).scheduleNextIntakes();
   }
 
   // ── Local data ownership ───────────────────────────────────────────────────
@@ -190,16 +210,30 @@ class AuthController extends _$AuthController {
     }
   }
 
-  Future<void> _eraseUserData(String userId) async {
+  Future<void> _eraseUserData(String? userId) async {
+    final db = ref.read(appDatabaseProvider);
     final coursesDao = ref.read(coursesDaoProvider);
     final productsDao = ref.read(productsDaoProvider);
     final wellbeingDao = ref.read(wellbeingLogsDaoProvider);
 
-    await coursesDao.deleteCoursesForUser(userId);
-    await coursesDao.deleteIntakeLogsForUser(userId);
-    await productsDao.deleteLocalDraftsForUser(userId);
-    // WellbeingLogs has no userId in V2 — erase all device-local journal rows.
-    await wellbeingDao.deleteAll();
+    await db.transaction(() async {
+      if (userId != null) {
+        await coursesDao.deleteIntakeLogsForUser(userId);
+      } else {
+        await coursesDao.deleteGuestIntakeLogs();
+      }
+
+      // WellbeingLogs has no userId in V2 — erase all device-local journal rows.
+      await wellbeingDao.deleteAll();
+
+      if (userId != null) {
+        await coursesDao.deleteCoursesForUser(userId);
+        await productsDao.deleteLocalDraftsForUser(userId);
+      } else {
+        await coursesDao.deleteGuestCourses();
+        await productsDao.deleteGuestDraftProducts();
+      }
+    });
   }
 
   void _invalidateDataProviders() {

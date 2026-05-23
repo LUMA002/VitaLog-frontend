@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SyncProductDto {
 
- String get id; String get name; String? get description;@MicrosecondDateTimeJsonConverter() DateTime get updatedAt;@MicrosecondDateTimeJsonConverter() DateTime? get deletedAt;
+ String get id; String get name; String? get description;@MicrosecondDateTimeJsonConverter() DateTime get updatedAt;@MicrosecondDateTimeJsonConverter() DateTime? get deletedAt; String? get creatorUserId;
 /// Create a copy of SyncProductDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SyncProductDtoCopyWith<SyncProductDto> get copyWith => _$SyncProductDtoCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SyncProductDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SyncProductDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.creatorUserId, creatorUserId) || other.creatorUserId == creatorUserId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,updatedAt,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,name,description,updatedAt,deletedAt,creatorUserId);
 
 @override
 String toString() {
-  return 'SyncProductDto(id: $id, name: $name, description: $description, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+  return 'SyncProductDto(id: $id, name: $name, description: $description, updatedAt: $updatedAt, deletedAt: $deletedAt, creatorUserId: $creatorUserId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SyncProductDtoCopyWith<$Res>  {
   factory $SyncProductDtoCopyWith(SyncProductDto value, $Res Function(SyncProductDto) _then) = _$SyncProductDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String? description,@MicrosecondDateTimeJsonConverter() DateTime updatedAt,@MicrosecondDateTimeJsonConverter() DateTime? deletedAt
+ String id, String name, String? description,@MicrosecondDateTimeJsonConverter() DateTime updatedAt,@MicrosecondDateTimeJsonConverter() DateTime? deletedAt, String? creatorUserId
 });
 
 
@@ -65,14 +65,15 @@ class _$SyncProductDtoCopyWithImpl<$Res>
 
 /// Create a copy of SyncProductDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? updatedAt = null,Object? deletedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? updatedAt = null,Object? deletedAt = freezed,Object? creatorUserId = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,creatorUserId: freezed == creatorUserId ? _self.creatorUserId : creatorUserId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? description, @MicrosecondDateTimeJsonConverter()  DateTime updatedAt, @MicrosecondDateTimeJsonConverter()  DateTime? deletedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? description, @MicrosecondDateTimeJsonConverter()  DateTime updatedAt, @MicrosecondDateTimeJsonConverter()  DateTime? deletedAt,  String? creatorUserId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SyncProductDto() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.deletedAt);case _:
+return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.deletedAt,_that.creatorUserId);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.dele
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? description, @MicrosecondDateTimeJsonConverter()  DateTime updatedAt, @MicrosecondDateTimeJsonConverter()  DateTime? deletedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? description, @MicrosecondDateTimeJsonConverter()  DateTime updatedAt, @MicrosecondDateTimeJsonConverter()  DateTime? deletedAt,  String? creatorUserId)  $default,) {final _that = this;
 switch (_that) {
 case _SyncProductDto():
-return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.deletedAt);}
+return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.deletedAt,_that.creatorUserId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +193,10 @@ return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.dele
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? description, @MicrosecondDateTimeJsonConverter()  DateTime updatedAt, @MicrosecondDateTimeJsonConverter()  DateTime? deletedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? description, @MicrosecondDateTimeJsonConverter()  DateTime updatedAt, @MicrosecondDateTimeJsonConverter()  DateTime? deletedAt,  String? creatorUserId)?  $default,) {final _that = this;
 switch (_that) {
 case _SyncProductDto() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.deletedAt);case _:
+return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.deletedAt,_that.creatorUserId);case _:
   return null;
 
 }
@@ -207,7 +208,7 @@ return $default(_that.id,_that.name,_that.description,_that.updatedAt,_that.dele
 @JsonSerializable()
 
 class _SyncProductDto implements SyncProductDto {
-  const _SyncProductDto({required this.id, required this.name, required this.description, @MicrosecondDateTimeJsonConverter() required this.updatedAt, @MicrosecondDateTimeJsonConverter() required this.deletedAt});
+  const _SyncProductDto({required this.id, required this.name, required this.description, @MicrosecondDateTimeJsonConverter() required this.updatedAt, @MicrosecondDateTimeJsonConverter() required this.deletedAt, this.creatorUserId});
   factory _SyncProductDto.fromJson(Map<String, dynamic> json) => _$SyncProductDtoFromJson(json);
 
 @override final  String id;
@@ -215,6 +216,7 @@ class _SyncProductDto implements SyncProductDto {
 @override final  String? description;
 @override@MicrosecondDateTimeJsonConverter() final  DateTime updatedAt;
 @override@MicrosecondDateTimeJsonConverter() final  DateTime? deletedAt;
+@override final  String? creatorUserId;
 
 /// Create a copy of SyncProductDto
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +231,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SyncProductDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SyncProductDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.creatorUserId, creatorUserId) || other.creatorUserId == creatorUserId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,updatedAt,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,name,description,updatedAt,deletedAt,creatorUserId);
 
 @override
 String toString() {
-  return 'SyncProductDto(id: $id, name: $name, description: $description, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+  return 'SyncProductDto(id: $id, name: $name, description: $description, updatedAt: $updatedAt, deletedAt: $deletedAt, creatorUserId: $creatorUserId)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$SyncProductDtoCopyWith<$Res> implements $SyncProductDtoCo
   factory _$SyncProductDtoCopyWith(_SyncProductDto value, $Res Function(_SyncProductDto) _then) = __$SyncProductDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String? description,@MicrosecondDateTimeJsonConverter() DateTime updatedAt,@MicrosecondDateTimeJsonConverter() DateTime? deletedAt
+ String id, String name, String? description,@MicrosecondDateTimeJsonConverter() DateTime updatedAt,@MicrosecondDateTimeJsonConverter() DateTime? deletedAt, String? creatorUserId
 });
 
 
@@ -266,14 +268,15 @@ class __$SyncProductDtoCopyWithImpl<$Res>
 
 /// Create a copy of SyncProductDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? updatedAt = null,Object? deletedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? updatedAt = null,Object? deletedAt = freezed,Object? creatorUserId = freezed,}) {
   return _then(_SyncProductDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,creatorUserId: freezed == creatorUserId ? _self.creatorUserId : creatorUserId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

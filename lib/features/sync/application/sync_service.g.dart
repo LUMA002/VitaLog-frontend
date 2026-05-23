@@ -68,7 +68,7 @@ final class SyncServiceProvider
   }
 }
 
-String _$syncServiceHash() => r'd5a89d0edc6c99ae95bbf633a7534c482b54a5ed';
+String _$syncServiceHash() => r'f3969da2d8b9feac56ce64e18ffb106e97b27520';
 
 /// Singleton sync orchestrator.
 ///

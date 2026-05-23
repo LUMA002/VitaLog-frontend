@@ -22,23 +22,23 @@ extension ProductDataSyncX on ProductsData {
 
 /// Converts a server-echoed [SyncProductDto] into a Drift [ProductsCompanion].
 ///
-/// [creatorUserId] is absent (preserves existing on UPDATE, NULL on INSERT)
-/// because the server never returns it in the DTO.
-/// [isLocalDraft] is forced to `0` — once the server has echoed this row
-/// back, it is no longer a local-only draft.
+/// [acknowledgedOwnerId] is the authenticated user id for rows this client just
+/// pushed (ACK path). Used when the server omits [SyncProductDto.creatorUserId]
+/// on older API builds.
+/// [isLocalDraft] is forced to `0` — once the server has echoed this row back,
+/// it is no longer a local-only draft.
 extension SyncProductDtoDriftX on SyncProductDto {
-  ProductsCompanion toDriftCompanion() => ProductsCompanion(
-    id: Value(id),
-    name: Value(name),
-    description: Value(description),
-    // Intentionally absent: preserve existing `creatorUserId` on UPDATE;
-    // new rows (INSERT) get NULL (treated as "global / unknown owner").
-    creatorUserId: const Value.absent(),
-    isLocalDraft: const Value(0),
-    updatedAt: Value(updatedAt),
-    deletedAt: Value(deletedAt),
-    pendingSync: const Value(0),
-  );
+  ProductsCompanion toDriftCompanion({String? acknowledgedOwnerId}) =>
+      ProductsCompanion(
+        id: Value(id),
+        name: Value(name),
+        description: Value(description),
+        creatorUserId: Value(creatorUserId ?? acknowledgedOwnerId),
+        isLocalDraft: const Value(0),
+        updatedAt: Value(updatedAt),
+        deletedAt: Value(deletedAt),
+        pendingSync: const Value(0),
+      );
 }
 
 // ── ProductIngredient ─────────────────────────────────────────────────────────

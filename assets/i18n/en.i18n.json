@@ -60,7 +60,9 @@
       "logout": "Sign out",
       "logoutDialogContent": "How would you like to sign out?",
       "keepData": "Keep local data",
-      "eraseData": "Erase synced data"
+      "eraseData": "Sign out and erase data",
+      "eraseDataConfirmTitle": "Are you sure?",
+      "eraseDataConfirmContent": "This will remove all local data from this device."
     },
     "sync": {
       "title": "Synchronization",
@@ -84,8 +86,8 @@
     },
     "danger": {
       "title": "Danger Zone",
-      "eraseDb": "Erase local database",
-      "eraseDbConfirmContent": "This will permanently delete all local data. Synced data can be recovered by signing in again."
+      "clearLocalData": "Clear local data",
+      "clearLocalDataConfirmContent": "This will permanently delete all local data. Synced data can be recovered by signing in again."
     }
   },
   "auth": {
