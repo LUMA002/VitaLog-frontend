@@ -48,6 +48,8 @@
     "unitLabel": "Unit (e.g. mg, IU)",
     "saveProduct": "Save Product",
     "noIngredients": "No ingredients added yet.",
+    "ingredientsTitle": "Ingredients",
+    "noSpecificIngredients": "No specific ingredients listed.",
     "global": "Global",
     "custom": "Custom"
   },

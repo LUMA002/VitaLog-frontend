@@ -7,6 +7,9 @@ abstract interface class IProductIngredientRepository {
   /// Reactive stream of all active ingredients for [productId].
   Stream<List<ProductIngredient>> watchForProduct(String productId);
 
+  /// Read-only snapshot of all active ingredients for [productId].
+  Future<List<ProductIngredient>> getForProduct(String productId);
+
   /// Persists [ingredient] locally and marks it as pending sync.
   Future<Result<Unit, AppFailure>> upsert(ProductIngredient ingredient);
 

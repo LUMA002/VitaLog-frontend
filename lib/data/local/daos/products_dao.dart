@@ -84,6 +84,17 @@ class ProductsDao extends DatabaseAccessor<AppDatabase>
             ..where((t) => t.productId.equals(productId)))
           .watch();
 
+  /// Active ingredient rows for a given product (read-only snapshot).
+  Future<List<ProductIngredientsData>> getIngredientsForProduct(
+    String productId,
+  ) =>
+      (select(productIngredients)
+            ..where(
+              (t) =>
+                  t.productId.equals(productId) & t.deletedAt.isNull(),
+            ))
+          .get();
+
   /// Single product ingredient by UUID. Returns null if not found.
   Future<ProductIngredientsData?> getIngredientById(String id) =>
       (select(productIngredients)..where((t) => t.id.equals(id)))

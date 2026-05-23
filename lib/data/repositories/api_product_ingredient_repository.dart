@@ -17,6 +17,12 @@ final class ApiProductIngredientRepository
       );
 
   @override
+  Future<List<ProductIngredient>> getForProduct(String productId) =>
+      throw UnimplementedError(
+        'ApiProductIngredientRepository is not yet implemented.',
+      );
+
+  @override
   Future<Result<Unit, AppFailure>> upsert(ProductIngredient ingredient) =>
       throw UnimplementedError(
         'ApiProductIngredientRepository is not yet implemented.',

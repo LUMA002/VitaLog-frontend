@@ -7,6 +7,7 @@ import '../../../../app/theme/app_radii.dart';
 import '../../../../app/theme/app_theme.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../courses/application/courses_controller.dart';
+import '../../../products/presentation/widgets/product_ingredients_bottom_sheet.dart';
 
 /// A swipe-to-delete tile displaying a [CourseItem] in the Courses list.
 ///
@@ -69,6 +70,21 @@ class CourseTile extends StatelessWidget {
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.info_outline, size: 20),
+                            tooltip: t.products.ingredientsTitle,
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                              minWidth: 32,
+                              minHeight: 32,
+                            ),
+                            onPressed: () => ProductIngredientsBottomSheet.show(
+                              context,
+                              productId: item.course.productId,
+                              productName: item.productName,
                             ),
                           ),
                           const SizedBox(width: 6),

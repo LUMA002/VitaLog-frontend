@@ -48,6 +48,8 @@
     "unitLabel": "Одиниця (напр. мг, МО)",
     "saveProduct": "Зберегти продукт",
     "noIngredients": "Інгредієнти ще не додані.",
+    "ingredientsTitle": "Інгредієнти",
+    "noSpecificIngredients": "Конкретні інгредієнти не вказані.",
     "global": "Загальний",
     "custom": "Власний"
   },

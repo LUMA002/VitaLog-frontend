@@ -189,6 +189,12 @@ class TranslationsProductsEn {
 	/// en: 'No ingredients added yet.'
 	String get noIngredients => 'No ingredients added yet.';
 
+	/// en: 'Ingredients'
+	String get ingredientsTitle => 'Ingredients';
+
+	/// en: 'No specific ingredients listed.'
+	String get noSpecificIngredients => 'No specific ingredients listed.';
+
 	/// en: 'Global'
 	String get global => 'Global';
 
@@ -630,6 +636,8 @@ extension on Translations {
 			'products.unitLabel' => 'Unit (e.g. mg, IU)',
 			'products.saveProduct' => 'Save Product',
 			'products.noIngredients' => 'No ingredients added yet.',
+			'products.ingredientsTitle' => 'Ingredients',
+			'products.noSpecificIngredients' => 'No specific ingredients listed.',
 			'products.global' => 'Global',
 			'products.custom' => 'Custom',
 			'settings.title' => 'Settings',

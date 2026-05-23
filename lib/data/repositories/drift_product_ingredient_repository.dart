@@ -24,6 +24,12 @@ final class DriftProductIngredientRepository
   }
 
   @override
+  Future<List<ProductIngredient>> getForProduct(String productId) async {
+    final rows = await _dao.getIngredientsForProduct(productId);
+    return rows.map((r) => r.toDomain()).toList();
+  }
+
+  @override
   Future<Result<Unit, AppFailure>> upsert(ProductIngredient ingredient) async {
     try {
       await _dao.upsertIngredientBatch([ingredient.toDrift(pendingSync: 1)]);

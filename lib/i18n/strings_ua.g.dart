@@ -124,6 +124,8 @@ class TranslationsProductsUa implements TranslationsProductsEn {
 	@override String get unitLabel => 'Одиниця (напр. мг, МО)';
 	@override String get saveProduct => 'Зберегти продукт';
 	@override String get noIngredients => 'Інгредієнти ще не додані.';
+	@override String get ingredientsTitle => 'Інгредієнти';
+	@override String get noSpecificIngredients => 'Конкретні інгредієнти не вказані.';
 	@override String get global => 'Загальний';
 	@override String get custom => 'Власний';
 }
@@ -416,6 +418,8 @@ extension on TranslationsUa {
 			'products.unitLabel' => 'Одиниця (напр. мг, МО)',
 			'products.saveProduct' => 'Зберегти продукт',
 			'products.noIngredients' => 'Інгредієнти ще не додані.',
+			'products.ingredientsTitle' => 'Інгредієнти',
+			'products.noSpecificIngredients' => 'Конкретні інгредієнти не вказані.',
 			'products.global' => 'Загальний',
 			'products.custom' => 'Власний',
 			'settings.title' => 'Налаштування',

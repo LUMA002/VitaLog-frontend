@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_radii.dart';
 import '../../../../app/theme/app_theme.dart';
+import '../../../../i18n/strings.g.dart';
+import '../../../products/presentation/widgets/product_ingredients_bottom_sheet.dart';
 import '../../application/scheduled_intake.dart';
 
 /// Displays a single scheduled supplement intake slot on the Dashboard.
@@ -27,6 +29,7 @@ class TimeSlotCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final colors = Theme.of(context).extension<SemanticColors>()!;
     final colorScheme = Theme.of(context).colorScheme;
     final timeLabel = _formatTimeOfDay(context, intake.timeOfDay);
@@ -56,15 +59,40 @@ class TimeSlotCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        intake.productName,
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              intake.productName,
+                              style: TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.info_outline,
+                              size: 20,
+                              color: subColor,
+                            ),
+                            tooltip: t.products.ingredientsTitle,
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                              minWidth: 32,
+                              minHeight: 32,
+                            ),
+                            onPressed: () => ProductIngredientsBottomSheet.show(
+                              context,
+                              productId: intake.productId,
+                              productName: intake.productName,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 2),
                       Text(
