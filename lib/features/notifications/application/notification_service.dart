@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -31,15 +29,21 @@ class NotificationService {
   NotificationService(this._ref);
 
   final Ref _ref;
-  final _fln = FlutterLocalNotificationsPlugin();
+  // Not instantiated on web — flutter_local_notifications uses dart:io
+  // internally, which is unavailable on the web compiler target.
+  final FlutterLocalNotificationsPlugin? _fln =
+      kIsWeb ? null : FlutterLocalNotificationsPlugin();
   bool _initialized = false;
 
   // ── Internal ──────────────────────────────────────────────────────────────
 
-  bool get _isMobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  bool get _isMobile =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
 
   Future<bool> _ensureInitialized() async {
-    if (!_isMobile) return false;
+    if (!_isMobile || _fln == null) return false;
     if (_initialized) return true;
 
     tz.initializeTimeZones();
@@ -75,13 +79,13 @@ class NotificationService {
   Future<void> requestPermissions() async {
     if (!await _ensureInitialized()) return;
 
-    final android = _fln.resolvePlatformSpecificImplementation<
+    final android = _fln?.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     await android?.requestNotificationsPermission();
     await android?.requestExactAlarmsPermission();
 
     await _fln
-        .resolvePlatformSpecificImplementation<
+        ?.resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
@@ -94,7 +98,7 @@ class NotificationService {
   Future<void> scheduleNextIntakes() async {
     if (!await _ensureInitialized()) return;
 
-    await _fln.cancelAll();
+    await _fln?.cancelAll();
 
     final authState = _ref.read(authControllerProvider).value;
     final userId = switch (authState) {
@@ -160,7 +164,7 @@ class NotificationService {
         final notifId =
             Object.hash(course.id, day.year, day.month, day.day) & 0x7FFFFFFF;
 
-        await _fln.zonedSchedule(
+        await _fln?.zonedSchedule(
           id: notifId,
           title: tr.notifications.title,
           body: tr.notifications.takeReminder(name: row.productName ?? ''),

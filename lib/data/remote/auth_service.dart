@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
@@ -64,14 +65,15 @@ final class AuthService {
 
       final dto = LoginResponseDto.fromJson(response.data!);
 
-      // Decode userId from JWT payload (we need it for the claim flow, but
-      // the login endpoint doesn't return it directly — we rely on a
-      // subsequent /me call or decode locally).
-      // For now, store what we have and let AuthController handle the rest.
-      await _storage.saveTokens(
-        accessToken: dto.accessToken,
-        refreshToken: dto.refreshToken,
-      );
+      // On web the backend returns HttpOnly cookies; the JSON body carries
+      // empty strings. Storing empty tokens in secure storage is pointless
+      // and would break session hydration on mobile.
+      if (!kIsWeb) {
+        await _storage.saveTokens(
+          accessToken: dto.accessToken,
+          refreshToken: dto.refreshToken,
+        );
+      }
 
       return Success((userId: '', email: email));
     } on DioException catch (e) {

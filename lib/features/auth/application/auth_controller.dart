@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../app/providers/repository_providers.dart';
@@ -117,6 +118,17 @@ class AuthController extends _$AuthController {
     }
 
     final tokens = result.value;
+    final normalizedEmail = email.trim().toLowerCase();
+
+    // On web, the backend delivers the session via HttpOnly cookies — the
+    // JSON response carries empty token strings. Skip JWT decoding, secure
+    // storage, and local-DB operations entirely; those are Mobile/Desktop only.
+    if (kIsWeb) {
+      return Success<Authenticated, AppFailure>(
+        Authenticated(userId: normalizedEmail, email: normalizedEmail),
+      );
+    }
+
     final userId = _extractSubFromJwt(tokens.accessToken) ?? '';
     if (userId.isEmpty) {
       return const Failure<Authenticated, AppFailure>(
@@ -124,7 +136,6 @@ class AuthController extends _$AuthController {
       );
     }
 
-    final normalizedEmail = email.trim().toLowerCase();
     await storage.saveSession(
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
@@ -160,7 +171,7 @@ class AuthController extends _$AuthController {
   /// When [eraseData] is true, hard-deletes rows owned by the current user from
   /// the local Drift database before clearing the session.
   Future<void> logout({required bool eraseData}) async {
-    if (eraseData) {
+    if (!kIsWeb && eraseData) {
       final current = state.value;
       if (current is Authenticated) {
         await _eraseUserData(current.userId);
@@ -173,7 +184,7 @@ class AuthController extends _$AuthController {
 
     await ref.read(secureStorageServiceProvider).clearSession();
     state = const AsyncData(Guest());
-    _invalidateDataProviders();
+    if (!kIsWeb) _invalidateDataProviders();
   }
 
   /// Hard-deletes all locally owned rows for the current session owner.
@@ -181,6 +192,8 @@ class AuthController extends _$AuthController {
   /// Authenticated users lose synced personal data; guests lose offline drafts
   /// and schedules. Global catalog rows are preserved.
   Future<void> eraseLocalData() async {
+    if (kIsWeb) return;
+
     final current = state.value;
     final userId = current is Authenticated ? current.userId : null;
     await _eraseUserData(userId);

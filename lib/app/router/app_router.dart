@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -11,6 +12,7 @@ import '../../features/courses/presentation/course_form_screen.dart';
 import '../../features/products/presentation/create_product_screen.dart';
 import '../../features/courses/presentation/courses_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/dashboard/presentation/web_dashboard_screen.dart';
 import '../../features/logs/presentation/logs_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../i18n/strings.g.dart';
@@ -87,6 +89,10 @@ GoRouter appRouter(Ref ref) {
             const _PlaceholderScreen(title: 'Product Detail'),
       ),
       GoRoute(
+        path: AppRoutes.webDashboard,
+        builder: (context, state) => const WebDashboardScreen(),
+      ),
+      GoRoute(
         path: AppRoutes.authLogin,
         builder: (context, state) => const LoginScreen(),
       ),
@@ -100,14 +106,24 @@ GoRouter appRouter(Ref ref) {
       ),
     ],
     redirect: (context, state) {
-      // Guest mode is always allowed — only protect the sync sub-route.
-      if (state.matchedLocation == AppRoutes.settingsSync) {
-        final authState =
-            ref.read(authControllerProvider).value;
-        if (authState is! Authenticated) {
-          return AppRoutes.authLogin;
+      final authState = ref.read(authControllerProvider).value;
+      final location = state.matchedLocation;
+
+      // On web, authenticated users must stay on the web dashboard.
+      // Routes that depend on Drift (/, /logs, /courses) are mobile-only.
+      if (kIsWeb) {
+        if (authState is Authenticated && location != AppRoutes.webDashboard) {
+          return AppRoutes.webDashboard;
         }
+        return null;
       }
+
+      // Guest mode is always allowed on mobile/desktop -
+      // only the sync sub-route requires authentication.
+      if (location == AppRoutes.settingsSync && authState is! Authenticated) {
+        return AppRoutes.authLogin;
+      }
+
       return null;
     },
   );

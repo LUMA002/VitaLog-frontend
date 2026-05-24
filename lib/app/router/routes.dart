@@ -1,5 +1,6 @@
 abstract final class AppRoutes {
   static const dashboard = '/';
+  static const webDashboard = '/web';
   static const logs = '/logs';
   static const courses = '/courses';
   static const coursesNew = '/courses/new';
