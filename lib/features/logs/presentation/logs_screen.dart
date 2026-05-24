@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/repository_providers.dart';
 import '../../../domain/models/intake_log.dart';
 import '../../../i18n/strings.g.dart';
 import '../../dashboard/presentation/widgets/time_slot_card.dart';
 import '../application/logs_providers.dart';
 import 'widgets/intake_log_tile.dart';
+import 'widgets/wellbeing_bottom_sheet.dart';
 import 'widgets/wellbeing_log_tile.dart';
 
 class LogsScreen extends ConsumerStatefulWidget {
@@ -23,6 +25,9 @@ class _LogsScreenState extends ConsumerState<LogsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) setState(() {});
+    });
   }
 
   @override
@@ -52,6 +57,16 @@ class _LogsScreenState extends ConsumerState<LogsScreen>
           _WellbeingLogsTab(),
         ],
       ),
+      floatingActionButton: _tabController.index == 1
+          ? FloatingActionButton(
+              onPressed: () {
+                final today =
+                    ref.read(clockProvider).nowUtc().toLocal();
+                WellbeingBottomSheet.show(context, recordDate: today);
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

@@ -47,6 +47,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsNavEn nav = TranslationsNavEn._(_root);
 	late final TranslationsDashboardEn dashboard = TranslationsDashboardEn._(_root);
 	late final TranslationsLogsEn logs = TranslationsLogsEn._(_root);
+	late final TranslationsWellbeingEn wellbeing = TranslationsWellbeingEn._(_root);
 	late final TranslationsCoursesEn courses = TranslationsCoursesEn._(_root);
 	late final TranslationsProductsEn products = TranslationsProductsEn._(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
@@ -111,6 +112,42 @@ class TranslationsLogsEn {
 
 	/// en: 'No logs yet.'
 	String get empty => 'No logs yet.';
+}
+
+// Path: wellbeing
+class TranslationsWellbeingEn {
+	TranslationsWellbeingEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Add Entry'
+	String get title => 'Add Entry';
+
+	/// en: 'Mood'
+	String get mood => 'Mood';
+
+	/// en: 'Energy'
+	String get energy => 'Energy';
+
+	/// en: 'Sleep (hrs)'
+	String get sleep => 'Sleep (hrs)';
+
+	/// en: 'Notes'
+	String get notes => 'Notes';
+
+	/// en: 'Save'
+	String get save => 'Save';
+
+	/// en: 'Wellbeing logged today ✓'
+	String get success => 'Wellbeing logged today ✓';
+
+	/// en: 'How are you feeling today? 📝'
+	String get prompt => 'How are you feeling today? 📝';
+
+	/// en: '{value} h'
+	String sleepValue({required Object value}) => '${value} h';
 }
 
 // Path: courses
@@ -612,6 +649,15 @@ extension on Translations {
 			'logs.tabs.intake' => 'Intake',
 			'logs.tabs.wellbeing' => 'Wellbeing',
 			'logs.empty' => 'No logs yet.',
+			'wellbeing.title' => 'Add Entry',
+			'wellbeing.mood' => 'Mood',
+			'wellbeing.energy' => 'Energy',
+			'wellbeing.sleep' => 'Sleep (hrs)',
+			'wellbeing.notes' => 'Notes',
+			'wellbeing.save' => 'Save',
+			'wellbeing.success' => 'Wellbeing logged today ✓',
+			'wellbeing.prompt' => 'How are you feeling today? 📝',
+			'wellbeing.sleepValue' => ({required Object value}) => '${value} h',
 			'courses.title' => 'Courses',
 			'courses.create' => 'New Course',
 			'courses.edit' => 'Edit Course',

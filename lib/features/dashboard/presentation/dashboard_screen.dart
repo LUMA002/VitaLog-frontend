@@ -7,6 +7,7 @@ import '../../../app/theme/app_theme.dart';
 import '../../../i18n/strings.g.dart';
 import '../application/dashboard_controller.dart';
 import 'widgets/time_slot_card.dart';
+import 'widgets/wellbeing_prompt_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -53,31 +54,41 @@ class DashboardScreen extends ConsumerWidget {
             ),
             data: (schedule) {
               if (schedule.isEmpty) {
-                return SliverFillRemaining(
-                  child: EmptyStateView(
-                    message: t.dashboard.empty,
-                    icon: Icons.event_available_outlined,
-                  ),
+                return SliverMainAxisGroup(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: EmptyStateView(
+                        message: t.dashboard.empty,
+                        icon: Icons.event_available_outlined,
+                      ),
+                    ),
+                    const SliverToBoxAdapter(child: WellbeingPromptCard()),
+                    const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                  ],
                 );
               }
-              return SliverPadding(
-                padding: const EdgeInsets.only(bottom: 24),
-                sliver: SliverList.builder(
-                  itemCount: schedule.length,
-                  itemBuilder: (_, i) {
-                    final intake = schedule[i];
-                    return TimeSlotCard(
-                      key: Key(intake.courseId),
-                      intake: intake,
-                      onLog: () => ref
-                          .read(dashboardScheduleProvider.notifier)
-                          .logIntake(intake.courseId),
-                      onUnlog: () => ref
-                          .read(dashboardScheduleProvider.notifier)
-                          .unlogIntake(intake.courseId),
-                    );
-                  },
-                ),
+              return SliverMainAxisGroup(
+                slivers: [
+                  SliverList.builder(
+                    itemCount: schedule.length,
+                    itemBuilder: (_, i) {
+                      final intake = schedule[i];
+                      return TimeSlotCard(
+                        key: Key(intake.courseId),
+                        intake: intake,
+                        onLog: () => ref
+                            .read(dashboardScheduleProvider.notifier)
+                            .logIntake(intake.courseId),
+                        onUnlog: () => ref
+                            .read(dashboardScheduleProvider.notifier)
+                            .unlogIntake(intake.courseId),
+                      );
+                    },
+                  ),
+                  const SliverToBoxAdapter(child: WellbeingPromptCard()),
+                  const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                ],
               );
             },
           ),

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_theme.dart';
 import '../../../../domain/models/wellbeing_log.dart';
+import '../../../../i18n/strings.g.dart';
 
 /// A swipe-to-delete tile for a single [WellbeingLog] entry.
 ///
@@ -20,13 +21,11 @@ class WellbeingLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final colors = Theme.of(context).extension<SemanticColors>()!;
-    final local = log.recordedAtUtc.toLocal();
-    final dateLabel = DateFormat.yMMMd().format(local);
-    final timeLabel = TimeOfDay(
-      hour: local.hour,
-      minute: local.minute,
-    ).format(context);
+    final recordedLocal = log.recordedAtUtc.toLocal();
+    final dateLabel = DateFormat.yMMMd().format(recordedLocal);
+    final timeLabel = DateFormat.jm().format(recordedLocal);
 
     return Dismissible(
       key: Key('wellbeing-${log.id}'),
@@ -45,12 +44,14 @@ class WellbeingLogTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Mood ${_dots(log.mood)}  Energy ${_dots(log.energy)}',
+              '${t.wellbeing.mood} ${_dots(log.mood)}  '
+              '${t.wellbeing.energy} ${_dots(log.energy)}',
               style: TextStyle(color: colors.pendingText, fontSize: 13),
             ),
             if (log.sleepHours != null)
               Text(
-                'Sleep ${log.sleepHours!.toStringAsFixed(1)} h',
+                '${t.wellbeing.sleep}: '
+                '${t.wellbeing.sleepValue(value: log.sleepHours!.toStringAsFixed(1))}',
                 style: TextStyle(color: colors.pendingText, fontSize: 12),
               ),
             if (log.notes != null && log.notes!.isNotEmpty)
@@ -97,12 +98,12 @@ class _MoodEnergy extends StatelessWidget {
   }
 
   String _moodEmoji(int mood) => switch (mood) {
-    1 => '😞',
-    2 => '😕',
-    3 => '😐',
-    4 => '🙂',
-    _ => '😄',
-  };
+        1 => '😞',
+        2 => '😕',
+        3 => '😐',
+        4 => '🙂',
+        _ => '😄',
+      };
 }
 
 class _DeleteBackground extends StatelessWidget {

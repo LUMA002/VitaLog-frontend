@@ -19,6 +19,17 @@
     },
     "empty": "No logs yet."
   },
+  "wellbeing": {
+    "title": "Add Entry",
+    "mood": "Mood",
+    "energy": "Energy",
+    "sleep": "Sleep (hrs)",
+    "notes": "Notes",
+    "save": "Save",
+    "success": "Wellbeing logged today ✓",
+    "prompt": "How are you feeling today? 📝",
+    "sleepValue(value)": "{value} h"
+  },
   "courses": {
     "title": "Courses",
     "create": "New Course",

@@ -41,6 +41,7 @@ class TranslationsUa with BaseTranslations<AppLocale, Translations> implements T
 	@override late final TranslationsNavUa nav = TranslationsNavUa._(_root);
 	@override late final TranslationsDashboardUa dashboard = TranslationsDashboardUa._(_root);
 	@override late final TranslationsLogsUa logs = TranslationsLogsUa._(_root);
+	@override late final TranslationsWellbeingUa wellbeing = TranslationsWellbeingUa._(_root);
 	@override late final TranslationsCoursesUa courses = TranslationsCoursesUa._(_root);
 	@override late final TranslationsProductsUa products = TranslationsProductsUa._(_root);
 	@override late final TranslationsSettingsUa settings = TranslationsSettingsUa._(_root);
@@ -86,6 +87,24 @@ class TranslationsLogsUa implements TranslationsLogsEn {
 	@override String get title => 'Історія';
 	@override late final TranslationsLogsTabsUa tabs = TranslationsLogsTabsUa._(_root);
 	@override String get empty => 'Записів ще немає.';
+}
+
+// Path: wellbeing
+class TranslationsWellbeingUa implements TranslationsWellbeingEn {
+	TranslationsWellbeingUa._(this._root);
+
+	final TranslationsUa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Додати запис';
+	@override String get mood => 'Настрій';
+	@override String get energy => 'Енергія';
+	@override String get sleep => 'Сон (год)';
+	@override String get notes => 'Нотатки';
+	@override String get save => 'Зберегти';
+	@override String get success => 'Ви вже зафіксували самопочуття сьогодні. Дякуємо!';
+	@override String get prompt => 'Як ви почуваєтесь сьогодні? 📝';
+	@override String sleepValue({required Object value}) => '${value} год';
 }
 
 // Path: courses
@@ -394,6 +413,15 @@ extension on TranslationsUa {
 			'logs.tabs.intake' => 'Прийоми',
 			'logs.tabs.wellbeing' => 'Самопочуття',
 			'logs.empty' => 'Записів ще немає.',
+			'wellbeing.title' => 'Додати запис',
+			'wellbeing.mood' => 'Настрій',
+			'wellbeing.energy' => 'Енергія',
+			'wellbeing.sleep' => 'Сон (год)',
+			'wellbeing.notes' => 'Нотатки',
+			'wellbeing.save' => 'Зберегти',
+			'wellbeing.success' => 'Ви вже зафіксували самопочуття сьогодні. Дякуємо!',
+			'wellbeing.prompt' => 'Як ви почуваєтесь сьогодні? 📝',
+			'wellbeing.sleepValue' => ({required Object value}) => '${value} год',
 			'courses.title' => 'Курси',
 			'courses.create' => 'Новий курс',
 			'courses.edit' => 'Редагувати курс',

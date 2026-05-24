@@ -70,3 +70,22 @@ class WellbeingLogsController extends _$WellbeingLogsController {
     await ref.read(wellbeingLogRepositoryProvider).deleteById(id);
   }
 }
+
+/// Whether a wellbeing entry exists for the device's current local calendar day.
+@riverpod
+bool hasTodayWellbeingLog(Ref ref) {
+  final clock = ref.watch(clockProvider);
+  final logsAsync = ref.watch(allWellbeingLogStreamProvider);
+  return logsAsync.maybeWhen(
+    data: (List<WellbeingLog> logs) {
+      final today = clock.nowUtc().toLocal();
+      return logs.any((log) {
+        final recorded = log.recordedAtUtc.toLocal();
+        return recorded.year == today.year &&
+            recorded.month == today.month &&
+            recorded.day == today.day;
+      });
+    },
+    orElse: () => false,
+  );
+}

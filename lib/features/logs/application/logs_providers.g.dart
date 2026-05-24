@@ -134,3 +134,50 @@ abstract class _$WellbeingLogsController
     element.handleCreate(ref, build);
   }
 }
+
+/// Whether a wellbeing entry exists for the device's current local calendar day.
+
+@ProviderFor(hasTodayWellbeingLog)
+final hasTodayWellbeingLogProvider = HasTodayWellbeingLogProvider._();
+
+/// Whether a wellbeing entry exists for the device's current local calendar day.
+
+final class HasTodayWellbeingLogProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether a wellbeing entry exists for the device's current local calendar day.
+  HasTodayWellbeingLogProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hasTodayWellbeingLogProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$hasTodayWellbeingLogHash();
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    return hasTodayWellbeingLog(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$hasTodayWellbeingLogHash() =>
+    r'4c661ed09f23ca082e46684b956a6d9aac4a5996';
