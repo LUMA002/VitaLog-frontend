@@ -23,13 +23,16 @@ import 'secure_storage_service.dart';
 /// fully wired.
 final class AuthInterceptor extends Interceptor {
   AuthInterceptor({
+    required Dio dio,
     required SecureStorageService storage,
     required AuthService authService,
     required void Function() onSessionExpired,
-  })  : _storage = storage,
+  })  : _dio = dio,
+        _storage = storage,
         _authService = authService,
         _onSessionExpired = onSessionExpired;
 
+  final Dio _dio;
   final SecureStorageService _storage;
   final AuthService _authService;
   final void Function() _onSessionExpired;
@@ -79,9 +82,9 @@ final class AuthInterceptor extends Interceptor {
       final refreshed = await _refreshCompleter!.future;
       if (refreshed) {
         try {
-          return handler.resolve(
-            await _retry(options, {'_retried': true}),
-          );
+          return handler.resolve(await _retry(options));
+        } on DioException catch (e) {
+          return handler.next(e);
         } on Object catch (e) {
           return handler.next(_authError(e.toString(), options));
         }
@@ -115,12 +118,13 @@ final class AuthInterceptor extends Interceptor {
         refreshToken: newTokens.refreshToken,
       );
 
+      _completeRefresh(true);
+
       try {
-        final response = await _retry(options, {'_retried': true});
-        _completeRefresh(true);
-        return handler.resolve(response);
+        return handler.resolve(await _retry(options));
+      } on DioException catch (e) {
+        return handler.next(e);
       } on Object catch (e) {
-        _completeRefresh(false);
         return handler.next(_authError(e.toString(), options));
       }
     } on Object catch (e) {
@@ -135,29 +139,13 @@ final class AuthInterceptor extends Interceptor {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  Future<Response<dynamic>> _retry(
-    RequestOptions options,
-    Map<String, dynamic> extraOverrides,
-  ) async {
+  Future<Response<dynamic>> _retry(RequestOptions options) async {
     final newToken = await _storage.getAccessToken();
-    final dio = Dio();
-    return dio.request<dynamic>(
-      options.path,
-      data: options.data,
-      queryParameters: options.queryParameters,
-      options: Options(
-        method: options.method,
-        headers: {
-          ...options.headers,
-          if (newToken != null) 'Authorization': 'Bearer $newToken',
-        },
-        extra: {...options.extra, ...extraOverrides},
-        responseType: options.responseType,
-        contentType: options.contentType,
-        sendTimeout: options.sendTimeout,
-        receiveTimeout: options.receiveTimeout,
-      ),
-    );
+    if (newToken != null && newToken.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $newToken';
+    }
+    options.extra['_retried'] = true;
+    return _dio.fetch(options);
   }
 
   DioException _authError(String message, RequestOptions options) =>

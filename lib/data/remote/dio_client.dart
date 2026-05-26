@@ -31,6 +31,7 @@ Dio dio(Ref ref) {
 
   instance.interceptors.addAll([
     AuthInterceptor(
+      dio: instance,
       storage: storage,
       authService: auth,
       // Invalidate the auth provider so the app transitions to Guest state.
