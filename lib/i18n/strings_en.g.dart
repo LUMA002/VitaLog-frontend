@@ -95,6 +95,9 @@ class TranslationsDashboardEn {
 
 	/// en: 'Log intake'
 	String get quickLog => 'Log intake';
+
+	/// en: 'Taken at {time}'
+	String takenAt({required Object time}) => 'Taken at ${time}';
 }
 
 // Path: logs
@@ -645,6 +648,7 @@ extension on Translations {
 			'dashboard.title' => 'Today\'s Plan',
 			'dashboard.empty' => 'No courses scheduled for today.',
 			'dashboard.quickLog' => 'Log intake',
+			'dashboard.takenAt' => ({required Object time}) => 'Taken at ${time}',
 			'logs.title' => 'History',
 			'logs.tabs.intake' => 'Intake',
 			'logs.tabs.wellbeing' => 'Wellbeing',

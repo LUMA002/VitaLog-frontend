@@ -9,7 +9,8 @@
   "dashboard": {
     "title": "Today's Plan",
     "empty": "No courses scheduled for today.",
-    "quickLog": "Log intake"
+    "quickLog": "Log intake",
+    "takenAt": "Taken at {time}"
   },
   "logs": {
     "title": "History",

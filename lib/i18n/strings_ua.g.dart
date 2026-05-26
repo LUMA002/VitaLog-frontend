@@ -75,6 +75,7 @@ class TranslationsDashboardUa implements TranslationsDashboardEn {
 	@override String get title => 'План на сьогодні';
 	@override String get empty => 'На сьогодні курсів не заплановано.';
 	@override String get quickLog => 'Відмітити прийом';
+	@override String takenAt({required Object time}) => 'Прийнято о ${time}';
 }
 
 // Path: logs
@@ -409,6 +410,7 @@ extension on TranslationsUa {
 			'dashboard.title' => 'План на сьогодні',
 			'dashboard.empty' => 'На сьогодні курсів не заплановано.',
 			'dashboard.quickLog' => 'Відмітити прийом',
+			'dashboard.takenAt' => ({required Object time}) => 'Прийнято о ${time}',
 			'logs.title' => 'Історія',
 			'logs.tabs.intake' => 'Прийоми',
 			'logs.tabs.wellbeing' => 'Самопочуття',

@@ -103,7 +103,12 @@ class TimeSlotCard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(
-                            'Taken at ${_formatTakenAt(context, intake.takenAtUtc!)}',
+                            t.dashboard.takenAt(
+                              time: _formatTakenAt(
+                                context,
+                                intake.takenAtUtc!,
+                              ),
+                            ),
                             style: TextStyle(
                               color: colors.completedText,
                               fontSize: 12,
