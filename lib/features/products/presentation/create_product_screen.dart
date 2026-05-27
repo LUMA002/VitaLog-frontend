@@ -70,12 +70,6 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(t.products.createTitle),
-        actions: [
-          TextButton(
-            onPressed: isSubmitting ? null : _save,
-            child: Text(t.common.save),
-          ),
-        ],
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),

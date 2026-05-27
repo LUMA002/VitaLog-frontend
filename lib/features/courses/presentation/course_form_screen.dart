@@ -67,15 +67,6 @@ class _CourseFormScreenState extends ConsumerState<CourseFormScreen> {
         title: Text(
           widget.courseId == null ? t.courses.create : t.courses.edit,
         ),
-        actions: [
-          if (formAsync.value != null)
-            TextButton(
-              onPressed: formAsync.value!.isSubmitting
-                  ? null
-                  : () => _submit(context),
-              child: Text(t.common.save),
-            ),
-        ],
       ),
       body: formAsync.when(
         loading: () =>
