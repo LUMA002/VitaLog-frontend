@@ -115,8 +115,8 @@ class SettingsScreen extends ConsumerWidget {
               onSelectionChanged: (selected) {
                 final locale = selected.first;
                 LocaleSettings.setLocale(locale);
-                Intl.defaultLocale =
-                    locale == AppLocale.ua ? 'uk' : locale.languageCode;
+                syncIntlDefaultLocale();
+                ref.read(settingsProvider.notifier).persistAppLocale(locale);
               },
             ),
           ),

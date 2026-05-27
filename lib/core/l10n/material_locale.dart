@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../i18n/strings.g.dart';
+
+const _persistedLocaleCodes = {'en', 'ua'};
 
 /// Flutter Material/Cupertino system locale from the active slang locale.
 ///
@@ -14,3 +17,20 @@ Locale resolveMaterialLocale() => switch (LocaleSettings.currentLocale) {
 /// Prefer [resolveMaterialLocale]; falls back when [context] has no locale.
 Locale materialLocaleOf(BuildContext context) =>
     Localizations.maybeLocaleOf(context) ?? resolveMaterialLocale();
+
+void syncIntlDefaultLocale() {
+  Intl.defaultLocale = switch (LocaleSettings.currentLocale) {
+    AppLocale.ua => 'uk',
+    _ => LocaleSettings.currentLocale.languageCode,
+  };
+}
+
+Future<void> applySavedOrDeviceLocale(String? savedLanguageCode) async {
+  if (savedLanguageCode != null &&
+      _persistedLocaleCodes.contains(savedLanguageCode)) {
+    LocaleSettings.setLocaleRaw(savedLanguageCode);
+  } else {
+    await LocaleSettings.useDeviceLocale();
+  }
+  syncIntlDefaultLocale();
+}
