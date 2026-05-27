@@ -31,8 +31,9 @@ class NotificationService {
   final Ref _ref;
   // Not instantiated on web — flutter_local_notifications uses dart:io
   // internally, which is unavailable on the web compiler target.
-  final FlutterLocalNotificationsPlugin? _fln =
-      kIsWeb ? null : FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin? _fln = kIsWeb
+      ? null
+      : FlutterLocalNotificationsPlugin();
   bool _initialized = false;
 
   // ── Internal ──────────────────────────────────────────────────────────────
@@ -54,7 +55,7 @@ class NotificationService {
       tz.setLocalLocation(tz.UTC);
     }
 
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const android = AndroidInitializationSettings('ic_notification');
     const darwin = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -79,14 +80,17 @@ class NotificationService {
   Future<void> requestPermissions() async {
     if (!await _ensureInitialized()) return;
 
-    final android = _fln?.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final android = _fln
+        ?.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     await android?.requestNotificationsPermission();
     await android?.requestExactAlarmsPermission();
 
     await _fln
         ?.resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
+          IOSFlutterLocalNotificationsPlugin
+        >()
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
@@ -135,7 +139,7 @@ class NotificationService {
       // Epoch-days to match the integer storage format in Courses table.
       final epochDay =
           DateTime.utc(day.year, day.month, day.day).millisecondsSinceEpoch ~/
-              86400000;
+          86400000;
 
       for (final row in rows) {
         if (scheduled >= _kMaxSlots) break outer;

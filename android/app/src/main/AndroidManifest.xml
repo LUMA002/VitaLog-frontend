@@ -10,6 +10,10 @@
          qualify for the auto-grant policy; see https://developer.android.com/about/versions/14/changes/schedule-exact-alarms -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
+    <!-- Auto-granted only for apps whose core function is alarms; declared for
+         devices that treat exact-alarm policy separately from SCHEDULE_EXACT_ALARM. -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
     <!-- Required to reschedule alarms after device reboot. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
