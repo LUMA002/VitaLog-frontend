@@ -88,6 +88,8 @@ class TranslationsLogsUa implements TranslationsLogsEn {
 	@override String get title => 'Історія';
 	@override late final TranslationsLogsTabsUa tabs = TranslationsLogsTabsUa._(_root);
 	@override String get empty => 'Записів ще немає.';
+	@override String get deleteConfirmTitle => 'Видалити запис?';
+	@override String get deleteConfirmContent => 'Цю дію неможливо скасувати.';
 }
 
 // Path: wellbeing
@@ -122,6 +124,7 @@ class TranslationsCoursesUa implements TranslationsCoursesEn {
 	@override String get serving => 'порція';
 	@override String get servings => 'порцій';
 	@override String get deleteConfirmContent => 'Видалити цей курс? Дію неможливо скасувати.';
+	@override String get savedSuccess => 'Курс збережено';
 	@override late final TranslationsCoursesFieldsUa fields = TranslationsCoursesFieldsUa._(_root);
 }
 
@@ -146,6 +149,7 @@ class TranslationsProductsUa implements TranslationsProductsEn {
 	@override String get noIngredients => 'Інгредієнти ще не додані.';
 	@override String get ingredientsTitle => 'Інгредієнти';
 	@override String get noSpecificIngredients => 'Конкретні інгредієнти не вказані.';
+	@override String get savedSuccess => 'Продукт додано';
 	@override String get global => 'Загальний';
 	@override String get custom => 'Власний';
 }
@@ -309,6 +313,7 @@ class TranslationsSettingsNotificationsUa implements TranslationsSettingsNotific
 	// Translations
 	@override String get title => 'Сповіщення';
 	@override String get rebuild => 'Оновити розклад';
+	@override String get rebuildSuccess => 'Розклад успішно оновлено';
 }
 
 // Path: settings.developer
@@ -415,6 +420,8 @@ extension on TranslationsUa {
 			'logs.tabs.intake' => 'Прийоми',
 			'logs.tabs.wellbeing' => 'Самопочуття',
 			'logs.empty' => 'Записів ще немає.',
+			'logs.deleteConfirmTitle' => 'Видалити запис?',
+			'logs.deleteConfirmContent' => 'Цю дію неможливо скасувати.',
 			'wellbeing.title' => 'Додати запис',
 			'wellbeing.mood' => 'Настрій',
 			'wellbeing.energy' => 'Енергія',
@@ -431,6 +438,7 @@ extension on TranslationsUa {
 			'courses.serving' => 'порція',
 			'courses.servings' => 'порцій',
 			'courses.deleteConfirmContent' => 'Видалити цей курс? Дію неможливо скасувати.',
+			'courses.savedSuccess' => 'Курс збережено',
 			'courses.fields.product' => 'Продукт',
 			'courses.fields.servingSize' => 'Розмір порції',
 			'courses.fields.timeOfDay' => 'Час прийому',
@@ -450,6 +458,7 @@ extension on TranslationsUa {
 			'products.noIngredients' => 'Інгредієнти ще не додані.',
 			'products.ingredientsTitle' => 'Інгредієнти',
 			'products.noSpecificIngredients' => 'Конкретні інгредієнти не вказані.',
+			'products.savedSuccess' => 'Продукт додано',
 			'products.global' => 'Загальний',
 			'products.custom' => 'Власний',
 			'settings.title' => 'Налаштування',
@@ -472,6 +481,7 @@ extension on TranslationsUa {
 			'settings.language.ua' => 'Українська',
 			'settings.notifications.title' => 'Сповіщення',
 			'settings.notifications.rebuild' => 'Оновити розклад',
+			'settings.notifications.rebuildSuccess' => 'Розклад успішно оновлено',
 			'settings.developer.title' => 'Розробник',
 			'settings.developer.viewLogs' => 'Переглянути логи',
 			'settings.danger.title' => 'Небезпечна зона',

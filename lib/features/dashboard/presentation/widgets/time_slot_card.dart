@@ -10,8 +10,8 @@ import '../../application/scheduled_intake.dart';
 /// Displays a single scheduled supplement intake slot on the Dashboard.
 ///
 /// Visual state:
-/// - **Pending** → primary accent ring, pendingText colour.
-/// - **Taken**   → muted background, completedText colour + taken timestamp.
+/// - **Pending** -> primary accent ring dot, subtle neon green card outline.
+/// - **Taken**   -> dark green card bg, neon green border glow, glowing check dot.
 ///
 /// Tapping a pending card logs the intake.
 /// Tapping a taken card un-logs (soft-deletes) it.
@@ -41,10 +41,24 @@ class TimeSlotCard extends StatelessWidget {
     final subColor =
         intake.isTaken ? colors.completedText : colors.pendingText;
 
+    final cardShape = intake.isTaken
+        ? RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(AppRadii.card),
+            side: BorderSide(color: colors.completedBorder, width: 1.5),
+          )
+        : RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(AppRadii.card),
+            side: BorderSide(
+              color: colorScheme.primary.withAlpha(0x33),
+              width: 1,
+            ),
+          );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Card(
         color: cardColor,
+        shape: cardShape,
         child: InkWell(
           onTap: intake.isTaken ? onUnlog : onLog,
           borderRadius: const BorderRadius.all(AppRadii.card),
@@ -86,7 +100,8 @@ class TimeSlotCard extends StatelessWidget {
                               minWidth: 32,
                               minHeight: 32,
                             ),
-                            onPressed: () => ProductIngredientsBottomSheet.show(
+                            onPressed: () =>
+                                ProductIngredientsBottomSheet.show(
                               context,
                               productId: intake.productId,
                               productName: intake.productName,
@@ -167,13 +182,21 @@ class _StatusDot extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: colors.completed,
+          color: colorScheme.primary.withAlpha(0x1A),
           shape: BoxShape.circle,
+          border: Border.all(color: colors.completedBorder, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: colors.primaryGlow,
+              blurRadius: 8,
+              spreadRadius: 0,
+            ),
+          ],
         ),
         child: Icon(
           Icons.check_rounded,
           size: 18,
-          color: colors.completedText,
+          color: colorScheme.primary,
         ),
       );
     }
@@ -218,13 +241,18 @@ class _TimeBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: isTaken ? colors.completed : colors.primaryGlow,
+        color: isTaken
+            ? colorScheme.primary.withAlpha(0x15)
+            : colors.primaryGlow,
         borderRadius: const BorderRadius.all(AppRadii.pill),
+        border: isTaken
+            ? Border.all(color: colors.completedBorder, width: 1)
+            : null,
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: isTaken ? colors.completedText : colorScheme.primary,
+          color: colorScheme.primary,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
@@ -232,6 +260,8 @@ class _TimeBadge extends StatelessWidget {
     );
   }
 }
+
+// ── Reusable state views ──────────────────────────────────────────────────────
 
 /// Reusable empty-state widget used across multiple screens.
 class EmptyStateView extends StatelessWidget {

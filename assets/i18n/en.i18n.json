@@ -18,7 +18,9 @@
       "intake": "Intake",
       "wellbeing": "Wellbeing"
     },
-    "empty": "No logs yet."
+    "empty": "No logs yet.",
+    "deleteConfirmTitle": "Delete log?",
+    "deleteConfirmContent": "This action cannot be undone."
   },
   "wellbeing": {
     "title": "Add Entry",
@@ -39,6 +41,7 @@
     "serving": "serving",
     "servings": "servings",
     "deleteConfirmContent": "Delete this course? This cannot be undone.",
+    "savedSuccess": "Course saved",
     "fields": {
       "product": "Product",
       "servingSize": "Serving size",
@@ -62,6 +65,7 @@
     "noIngredients": "No ingredients added yet.",
     "ingredientsTitle": "Ingredients",
     "noSpecificIngredients": "No specific ingredients listed.",
+    "savedSuccess": "Product added",
     "global": "Global",
     "custom": "Custom"
   },
@@ -92,7 +96,8 @@
     },
     "notifications": {
       "title": "Notifications",
-      "rebuild": "Rebuild schedule"
+      "rebuild": "Rebuild schedule",
+      "rebuildSuccess": "Schedule rebuilt successfully"
     },
     "developer": {
       "title": "Developer",

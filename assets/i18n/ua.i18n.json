@@ -18,7 +18,9 @@
       "intake": "Прийоми",
       "wellbeing": "Самопочуття"
     },
-    "empty": "Записів ще немає."
+    "empty": "Записів ще немає.",
+    "deleteConfirmTitle": "Видалити запис?",
+    "deleteConfirmContent": "Цю дію неможливо скасувати."
   },
   "wellbeing": {
     "title": "Додати запис",
@@ -39,6 +41,7 @@
     "serving": "порція",
     "servings": "порцій",
     "deleteConfirmContent": "Видалити цей курс? Дію неможливо скасувати.",
+    "savedSuccess": "Курс збережено",
     "fields": {
       "product": "Продукт",
       "servingSize": "Розмір порції",
@@ -62,6 +65,7 @@
     "noIngredients": "Інгредієнти ще не додані.",
     "ingredientsTitle": "Інгредієнти",
     "noSpecificIngredients": "Конкретні інгредієнти не вказані.",
+    "savedSuccess": "Продукт додано",
     "global": "Загальний",
     "custom": "Власний"
   },
@@ -92,7 +96,8 @@
     },
     "notifications": {
       "title": "Сповіщення",
-      "rebuild": "Оновити розклад"
+      "rebuild": "Оновити розклад",
+      "rebuildSuccess": "Розклад успішно оновлено"
     },
     "developer": {
       "title": "Розробник",

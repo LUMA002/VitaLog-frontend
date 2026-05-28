@@ -84,10 +84,26 @@ class _CourseFormScreenState extends ConsumerState<CourseFormScreen> {
   }
 
   Future<void> _submit(BuildContext context) async {
+    final t = Translations.of(context);
     final saved = await ref
         .read(courseFormControllerProvider(widget.courseId).notifier)
         .submit();
     if (saved && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline_rounded,
+                color: Theme.of(context).colorScheme.primary,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              Text(t.courses.savedSuccess),
+            ],
+          ),
+        ),
+      );
       context.pop();
     }
   }

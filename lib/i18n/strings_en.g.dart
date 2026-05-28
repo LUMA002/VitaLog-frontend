@@ -115,6 +115,12 @@ class TranslationsLogsEn {
 
 	/// en: 'No logs yet.'
 	String get empty => 'No logs yet.';
+
+	/// en: 'Delete log?'
+	String get deleteConfirmTitle => 'Delete log?';
+
+	/// en: 'This action cannot be undone.'
+	String get deleteConfirmContent => 'This action cannot be undone.';
 }
 
 // Path: wellbeing
@@ -182,6 +188,9 @@ class TranslationsCoursesEn {
 	/// en: 'Delete this course? This cannot be undone.'
 	String get deleteConfirmContent => 'Delete this course? This cannot be undone.';
 
+	/// en: 'Course saved'
+	String get savedSuccess => 'Course saved';
+
 	late final TranslationsCoursesFieldsEn fields = TranslationsCoursesFieldsEn._(_root);
 }
 
@@ -234,6 +243,9 @@ class TranslationsProductsEn {
 
 	/// en: 'No specific ingredients listed.'
 	String get noSpecificIngredients => 'No specific ingredients listed.';
+
+	/// en: 'Product added'
+	String get savedSuccess => 'Product added';
 
 	/// en: 'Global'
 	String get global => 'Global';
@@ -489,6 +501,9 @@ class TranslationsSettingsNotificationsEn {
 
 	/// en: 'Rebuild schedule'
 	String get rebuild => 'Rebuild schedule';
+
+	/// en: 'Schedule rebuilt successfully'
+	String get rebuildSuccess => 'Schedule rebuilt successfully';
 }
 
 // Path: settings.developer
@@ -653,6 +668,8 @@ extension on Translations {
 			'logs.tabs.intake' => 'Intake',
 			'logs.tabs.wellbeing' => 'Wellbeing',
 			'logs.empty' => 'No logs yet.',
+			'logs.deleteConfirmTitle' => 'Delete log?',
+			'logs.deleteConfirmContent' => 'This action cannot be undone.',
 			'wellbeing.title' => 'Add Entry',
 			'wellbeing.mood' => 'Mood',
 			'wellbeing.energy' => 'Energy',
@@ -669,6 +686,7 @@ extension on Translations {
 			'courses.serving' => 'serving',
 			'courses.servings' => 'servings',
 			'courses.deleteConfirmContent' => 'Delete this course? This cannot be undone.',
+			'courses.savedSuccess' => 'Course saved',
 			'courses.fields.product' => 'Product',
 			'courses.fields.servingSize' => 'Serving size',
 			'courses.fields.timeOfDay' => 'Time of day',
@@ -688,6 +706,7 @@ extension on Translations {
 			'products.noIngredients' => 'No ingredients added yet.',
 			'products.ingredientsTitle' => 'Ingredients',
 			'products.noSpecificIngredients' => 'No specific ingredients listed.',
+			'products.savedSuccess' => 'Product added',
 			'products.global' => 'Global',
 			'products.custom' => 'Custom',
 			'settings.title' => 'Settings',
@@ -710,6 +729,7 @@ extension on Translations {
 			'settings.language.ua' => 'Ukrainian',
 			'settings.notifications.title' => 'Notifications',
 			'settings.notifications.rebuild' => 'Rebuild schedule',
+			'settings.notifications.rebuildSuccess' => 'Schedule rebuilt successfully',
 			'settings.developer.title' => 'Developer',
 			'settings.developer.viewLogs' => 'View logs',
 			'settings.danger.title' => 'Danger Zone',

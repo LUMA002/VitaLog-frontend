@@ -9,6 +9,7 @@ class SemanticColors extends ThemeExtension<SemanticColors> {
   const SemanticColors({
     required this.completed,
     required this.completedText,
+    required this.completedBorder,
     required this.pendingText,
     required this.timeText,
     required this.primaryGlow,
@@ -17,6 +18,7 @@ class SemanticColors extends ThemeExtension<SemanticColors> {
 
   final Color completed;
   final Color completedText;
+  final Color completedBorder;
   final Color pendingText;
   final Color timeText;
   final Color primaryGlow;
@@ -25,6 +27,7 @@ class SemanticColors extends ThemeExtension<SemanticColors> {
   static const defaults = SemanticColors(
     completed: AppColors.completed,
     completedText: AppColors.completedText,
+    completedBorder: AppColors.completedBorder,
     pendingText: AppColors.pendingText,
     timeText: AppColors.timeText,
     primaryGlow: AppColors.primaryGlow,
@@ -35,6 +38,7 @@ class SemanticColors extends ThemeExtension<SemanticColors> {
   SemanticColors copyWith({
     Color? completed,
     Color? completedText,
+    Color? completedBorder,
     Color? pendingText,
     Color? timeText,
     Color? primaryGlow,
@@ -43,6 +47,7 @@ class SemanticColors extends ThemeExtension<SemanticColors> {
     return SemanticColors(
       completed: completed ?? this.completed,
       completedText: completedText ?? this.completedText,
+      completedBorder: completedBorder ?? this.completedBorder,
       pendingText: pendingText ?? this.pendingText,
       timeText: timeText ?? this.timeText,
       primaryGlow: primaryGlow ?? this.primaryGlow,
@@ -56,6 +61,7 @@ class SemanticColors extends ThemeExtension<SemanticColors> {
     return SemanticColors(
       completed: Color.lerp(completed, other.completed, t)!,
       completedText: Color.lerp(completedText, other.completedText, t)!,
+      completedBorder: Color.lerp(completedBorder, other.completedBorder, t)!,
       pendingText: Color.lerp(pendingText, other.pendingText, t)!,
       timeText: Color.lerp(timeText, other.timeText, t)!,
       primaryGlow: Color.lerp(primaryGlow, other.primaryGlow, t)!,
@@ -99,13 +105,33 @@ abstract final class AppTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(AppRadii.r),
-            borderSide: BorderSide(color: AppColors.primary),
+            borderSide: BorderSide(color: AppColors.primary, width: 1.5),
           ),
           hintStyle: TextStyle(color: AppColors.mutedForeground),
           labelStyle: TextStyle(color: AppColors.mutedForeground),
         ),
         dividerColor: AppColors.border,
         textTheme: AppTypography.textTheme,
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: AppColors.cardElevated,
+          contentTextStyle: TextStyle(color: AppColors.foreground),
+          actionTextColor: AppColors.primary,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(AppRadii.r),
+            side: BorderSide(color: AppColors.completedBorder),
+          ),
+          elevation: 0,
+        ),
+        dialogTheme: const DialogThemeData(
+          backgroundColor: AppColors.cardElevated,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(AppRadii.card),
+            side: BorderSide(color: AppColors.border),
+          ),
+          elevation: 0,
+        ),
         extensions: const [SemanticColors.defaults],
       );
 }

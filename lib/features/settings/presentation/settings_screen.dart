@@ -127,8 +127,28 @@ class SettingsScreen extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
             title: Text(t.settings.notifications.rebuild),
-            onTap: () =>
-                ref.read(notificationServiceProvider).scheduleNextIntakes(),
+            onTap: () async {
+              await ref
+                  .read(notificationServiceProvider)
+                  .scheduleNextIntakes();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle_outline_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(t.settings.notifications.rebuildSuccess),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
           ),
           const Divider(height: 1),
 

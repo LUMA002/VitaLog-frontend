@@ -43,6 +43,7 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
   }
 
   Future<void> _save() async {
+    final t = Translations.of(context);
     final product = await ref
         .read(createProductControllerProvider.notifier)
         .submit(
@@ -50,6 +51,21 @@ class _CreateProductScreenState extends ConsumerState<CreateProductScreen> {
           description: _descriptionController.text,
         );
     if (product != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline_rounded,
+                color: Theme.of(context).colorScheme.primary,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              Text(t.products.savedSuccess),
+            ],
+          ),
+        ),
+      );
       Navigator.of(context).pop(product);
     }
   }

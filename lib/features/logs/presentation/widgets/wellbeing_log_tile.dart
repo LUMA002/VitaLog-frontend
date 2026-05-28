@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_theme.dart';
 import '../../../../domain/models/wellbeing_log.dart';
 import '../../../../i18n/strings.g.dart';
@@ -9,6 +8,7 @@ import '../../../../i18n/strings.g.dart';
 /// A swipe-to-delete tile for a single [WellbeingLog] entry.
 ///
 /// Wellbeing logs are local-only — swiping triggers a hard delete.
+/// A confirmation dialog is shown before the actual deletion occurs.
 class WellbeingLogTile extends StatelessWidget {
   const WellbeingLogTile({
     super.key,
@@ -30,7 +30,30 @@ class WellbeingLogTile extends StatelessWidget {
     return Dismissible(
       key: Key('wellbeing-${log.id}'),
       direction: DismissDirection.endToStart,
-      background: _DeleteBackground(),
+      background: const _DeleteBackground(),
+      confirmDismiss: (_) => showDialog<bool>(
+        context: context,
+        builder: (ctx) {
+          final dt = Translations.of(ctx);
+          return AlertDialog(
+            title: Text(dt.logs.deleteConfirmTitle),
+            content: Text(dt.logs.deleteConfirmContent),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(dt.common.cancel),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(ctx).colorScheme.error,
+                ),
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(dt.common.delete),
+              ),
+            ],
+          );
+        },
+      ),
       onDismissed: (_) => onDelete(),
       child: ListTile(
         contentPadding:
@@ -107,10 +130,22 @@ class _MoodEnergy extends StatelessWidget {
 }
 
 class _DeleteBackground extends StatelessWidget {
+  const _DeleteBackground();
+
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<SemanticColors>()!;
     return Container(
-      color: AppColors.destructive,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            colors.destructive.withAlpha(0x00),
+            colors.destructive,
+          ],
+        ),
+      ),
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.only(right: 20),
       child: const Icon(
