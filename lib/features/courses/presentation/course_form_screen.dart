@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/providers/repository_providers.dart';
 import '../../../app/theme/app_theme.dart';
@@ -410,9 +409,8 @@ class _DatePickerTile extends ConsumerWidget {
     final startDate =
         form?.startDateUtc ?? DateTime.utc(2020);
 
-    final locale = resolveMaterialLocale();
     final label = date != null
-        ? DateFormat.yMd(locale.toString()).format(date.toLocal())
+        ? formatDateShort(date.toLocal())
         : (isEndDate ? t.courses.fields.endDate : '—');
 
     return Card(

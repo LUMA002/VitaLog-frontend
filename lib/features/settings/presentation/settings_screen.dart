@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/providers/repository_providers.dart';
 import '../../../core/l10n/material_locale.dart';
@@ -62,9 +61,7 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: Text(
               lastSyncAsync.when(
                 data: (at) => at != null
-                    ? DateFormat.yMd(resolveMaterialLocale().toString())
-                        .add_jm()
-                        .format(at.toLocal())
+                    ? formatDateShortWithTime(at.toLocal())
                     : t.settings.sync.never,
                 loading: () => '…',
                 error: (_, _) => t.settings.sync.never,
@@ -112,11 +109,10 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ],
               selected: {currentLocale},
-              onSelectionChanged: (selected) {
+              onSelectionChanged: (selected) async {
                 final locale = selected.first;
-                LocaleSettings.setLocale(locale);
-                syncIntlDefaultLocale();
-                ref.read(settingsProvider.notifier).persistAppLocale(locale);
+                applyAppLocale(locale);
+                await ref.read(settingsProvider.notifier).persistAppLocale(locale);
               },
             ),
           ),

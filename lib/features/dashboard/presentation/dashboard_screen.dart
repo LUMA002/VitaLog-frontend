@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/providers/repository_providers.dart';
+import '../../../core/l10n/material_locale.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../i18n/strings.g.dart';
 import '../application/dashboard_controller.dart';
@@ -17,7 +17,7 @@ class DashboardScreen extends ConsumerWidget {
     final t = Translations.of(context);
     final scheduleAsync = ref.watch(dashboardScheduleProvider);
     final now = ref.watch(clockProvider).nowUtc().toLocal();
-    final dateLabel = DateFormat.yMMMMEEEEd().format(now);
+    final dateLabel = formatDateLong(now);
 
     return Scaffold(
       body: CustomScrollView(

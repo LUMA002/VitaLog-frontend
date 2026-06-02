@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_theme.dart';
+import '../../../../core/l10n/material_locale.dart';
 import '../../../../domain/models/wellbeing_log.dart';
 import '../../../../i18n/strings.g.dart';
 
@@ -24,8 +24,8 @@ class WellbeingLogTile extends StatelessWidget {
     final t = Translations.of(context);
     final colors = Theme.of(context).extension<SemanticColors>()!;
     final recordedLocal = log.recordedAtUtc.toLocal();
-    final dateLabel = DateFormat.yMMMd().format(recordedLocal);
-    final timeLabel = DateFormat.jm().format(recordedLocal);
+    final dateLabel = formatDateMedium(recordedLocal);
+    final timeLabel = formatTime(recordedLocal);
 
     return Dismissible(
       key: Key('wellbeing-${log.id}'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_theme.dart';
+import '../../../../core/l10n/material_locale.dart';
 import '../../../../domain/models/intake_log.dart';
 import '../../../../i18n/strings.g.dart';
 
@@ -30,7 +30,7 @@ class IntakeLogTile extends StatelessWidget {
       hour: local.hour,
       minute: local.minute,
     ).format(context);
-    final dateLabel = DateFormat.yMMMd().format(local);
+    final dateLabel = formatDateMedium(local);
 
     return Dismissible(
       key: Key('intake-${log.id}'),

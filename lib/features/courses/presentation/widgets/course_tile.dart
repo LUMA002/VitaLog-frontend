@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/l10n/material_locale.dart';
@@ -156,10 +155,9 @@ class CourseTile extends StatelessWidget {
   }
 
   String _formatDateRange(DateTime start, DateTime? end) {
-    final fmt = DateFormat.MMMd(resolveMaterialLocale().toString());
-    final startStr = fmt.format(start.toLocal());
+    final startStr = formatDateMonthDay(start.toLocal());
     if (end == null) return '$startStr →';
-    return '$startStr – ${fmt.format(end.toLocal())}';
+    return '$startStr – ${formatDateMonthDay(end.toLocal())}';
   }
 }
 
